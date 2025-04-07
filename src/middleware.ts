@@ -9,8 +9,8 @@ import { routing } from './libs/i18nNavigation';
 const intlMiddleware = createMiddleware(routing);
 
 const isProtectedRoute = createRouteMatcher([
-  '/dashboard(.*)',
-  '/:locale/dashboard(.*)',
+  // '/dashboard(.*)',
+  // '/:locale/dashboard(.*)',
 ]);
 
 const isAuthPage = createRouteMatcher([

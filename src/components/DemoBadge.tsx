@@ -4,7 +4,7 @@ export const DemoBadge = () => (
       href="https://github.com/ixartz/Next-js-Boilerplate"
     >
       <div className="rounded-md bg-gray-900 px-3 py-2 font-semibold text-gray-100">
-        <span className="text-gray-500">Demo of</span>
+        <span className="text-gray-500 dark:text-gray-300">Demo of</span>
         {` Next.js Boilerplate`}
       </div>
     </a>

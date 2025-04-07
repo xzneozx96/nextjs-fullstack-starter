@@ -117,7 +117,7 @@ const HowItWorks = () => {
   };
 
   return (
-    <section ref={sectionRef} className="py-32 relative overflow-hidden bg-gray-50">
+    <section ref={sectionRef} className="py-32 relative overflow-hidden bg-gray-50 dark:bg-gray-900" id="how-it-works">
       {/* Background elements */}
       <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-[#0F1629] to-transparent -z-10"></div>
       <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-[#0F1629] to-transparent -z-10"></div>
@@ -131,11 +131,11 @@ const HowItWorks = () => {
           animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.3 }}
         >
-          <p className="hover:bg-brand-100 bg-brand-50 group mx-auto flex w-fit items-center gap-4 rounded-full py-1 px-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:shadow-zinc-950">
+          <p className="hover:bg-brand-100 bg-brand-50 group mx-auto flex w-fit items-center gap-4 rounded-full py-1 px-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:bg-brand-500/[0.06] dark:text-brand-400">
             <span className="text-brand-500 text-sm">How it works</span>
           </p>
           <h2 className="text-title-md font-medium md:text-title-lg mb-4">Simple, effective, and powerful</h2>
-          <p className="text-xl text-gray-500">
+          <p className="text-xl text-gray-500 dark:text-gray-300">
             IELTS MentorPro streamlines the IELTS preparation process for both teachers and students.
           </p>
         </motion.div>
@@ -152,10 +152,10 @@ const HowItWorks = () => {
               <motion.div
                 key={feature.id}
                 variants={itemVariants}
-                className={`p-6 rounded-xl border transition-all cursor-pointer ${
+                className={`p-6 rounded-xl border dark:border-white/[0.05] transition-all cursor-pointer ${
                   activeFeature === index
-                    ? 'bg-brand-25 border-brand-500 shadow-md shadow-zinc-950/5'
-                    : 'bg-background'
+                    ? 'bg-brand-25 dark:bg-brand-500/[0.06] dark:text-brand-400 border-brand-500 shadow-md shadow-zinc-950/5'
+                    : 'bg-background dark:border-gray-800 dark:bg-white/[0.03]'
                 }`}
                 onClick={() => setActiveFeature(index)}
               >
@@ -163,7 +163,7 @@ const HowItWorks = () => {
                   <div>
                     <span
                       className={`w-12 h-12 rounded-lg flex items-center justify-center mr-4 transition-colors ${
-                        activeFeature === index ? 'bg-brand-500/[0.08] text-brand-500' : 'bg-gray-100 text-gray-500'
+                        activeFeature === index ? 'bg-brand-500/[0.08] text-brand-500' : 'bg-gray-100 text-gray-500 dark:text-gray-300 dark:bg-white/[0.05]'
                       }`}
                     >
                       {index + 1}
@@ -172,12 +172,12 @@ const HowItWorks = () => {
                   <div>
                     <h3
                       className={`font-medium text-lg mb-2 transition-colors ${
-                        activeFeature === index ? 'text-brand-500' : 'text-gray-800'
+                        activeFeature === index ? 'text-brand-500 dark:text-white' : 'text-gray-800 dark:text-white'
                       }`}
                     >
                       {feature.title}
                     </h3>
-                    <p className={cn('text-gray-500', activeFeature === index && 'mb-4 pb-4 border-b border-gray-300')}>{feature.description}</p>
+                    <p className={cn('text-gray-500 dark:text-gray-300', activeFeature === index && 'mb-4 pb-4 border-b border-gray-300 dark:border-gray-700')}>{feature.description}</p>
 
                     <AnimatePresence>
                       {/* {activeFeature === index && ( */}
@@ -192,7 +192,7 @@ const HowItWorks = () => {
                           {feature.details?.map(detail => (
                             <li key={detail} className="flex items-start">
                               <CheckSolidIcon className="w-5 h-5 text-brand-500 mr-2 flex-shrink-0 mt-0.5" />
-                              <span className="text-gray-500">{detail}</span>
+                              <span className="text-gray-500 dark:text-gray-300">{detail}</span>
                             </li>
                           ))}
                         </ul>

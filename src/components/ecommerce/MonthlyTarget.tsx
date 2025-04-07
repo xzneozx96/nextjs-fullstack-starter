@@ -80,7 +80,7 @@ export default function MonthlyTarget() {
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
               Monthly Target
             </h3>
-            <p className="mt-1 font-normal text-gray-500 text-theme-sm dark:text-gray-400">
+            <p className="mt-1 font-normal text-gray-500 dark:text-gray-300 text-theme-sm dark:text-gray-400">
               Target you’ve set for each month
             </p>
           </div>
@@ -100,14 +100,14 @@ export default function MonthlyTarget() {
               <DropdownItem
                 tag="a"
                 onItemClick={closeDropdown}
-                className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                className="flex w-full font-normal text-left text-gray-500 dark:text-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
                 View More
               </DropdownItem>
               <DropdownItem
                 tag="a"
                 onItemClick={closeDropdown}
-                className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                className="flex w-full font-normal text-left text-gray-500 dark:text-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
                 Delete
               </DropdownItem>
@@ -128,7 +128,7 @@ export default function MonthlyTarget() {
             +10%
           </span>
         </div>
-        <p className="mx-auto mt-10 w-full max-w-[380px] text-center text-sm text-gray-500 sm:text-base">
+        <p className="mx-auto mt-10 w-full max-w-[380px] text-center text-sm text-gray-500 dark:text-gray-300 sm:text-base">
           You earn $3287 today, it&apos;s higher than last month. Keep up your
           good work!
         </p>
@@ -136,7 +136,7 @@ export default function MonthlyTarget() {
 
       <div className="flex items-center justify-center gap-5 px-6 py-3.5 sm:gap-8 sm:py-5">
         <div>
-          <p className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm">
+          <p className="mb-1 text-center text-gray-500 dark:text-gray-300 text-theme-xs dark:text-gray-400 sm:text-sm">
             Target
           </p>
           <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
@@ -161,7 +161,7 @@ export default function MonthlyTarget() {
         <div className="w-px bg-gray-200 h-7 dark:bg-gray-800"></div>
 
         <div>
-          <p className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm">
+          <p className="mb-1 text-center text-gray-500 dark:text-gray-300 text-theme-xs dark:text-gray-400 sm:text-sm">
             Revenue
           </p>
           <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
@@ -186,7 +186,7 @@ export default function MonthlyTarget() {
         <div className="w-px bg-gray-200 h-7 dark:bg-gray-800"></div>
 
         <div>
-          <p className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm">
+          <p className="mb-1 text-center text-gray-500 dark:text-gray-300 text-theme-xs dark:text-gray-400 sm:text-sm">
             Today
           </p>
           <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">

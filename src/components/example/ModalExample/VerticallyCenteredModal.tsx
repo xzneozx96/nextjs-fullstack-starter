@@ -27,7 +27,7 @@ export default function VerticallyCenteredModal() {
           <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90 sm:text-title-sm">
             All Done! Success Confirmed
           </h4>
-          <p className="text-sm leading-6 text-gray-500 dark:text-gray-400">
+          <p className="text-sm leading-6 text-gray-500 dark:text-gray-300 dark:text-gray-400">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             Pellentesque euismod est quis mauris lacinia pharetra.
           </p>

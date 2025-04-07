@@ -19,8 +19,12 @@ export function HomeNav() {
       link: '#features',
     },
     {
-      name: 'Pricing',
-      link: '#pricing',
+      name: 'How it works',
+      link: '#how-it-works',
+    },
+    {
+      name: 'FAQs',
+      link: '#faqs',
     },
     {
       name: 'Contact',
@@ -31,7 +35,7 @@ export function HomeNav() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="relative w-full">
+    <div className="fixed top-0 left-0 right-0 z-50">
       <Navbar>
         {/* Desktop Navigation */}
         <NavBody>

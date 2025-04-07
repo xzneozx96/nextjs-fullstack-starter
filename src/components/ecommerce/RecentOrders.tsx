@@ -130,25 +130,25 @@ export default function RecentOrders() {
             <TableRow>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 dark:text-gray-300 text-start text-theme-xs dark:text-gray-400"
               >
                 Products
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 dark:text-gray-300 text-start text-theme-xs dark:text-gray-400"
               >
                 Category
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 dark:text-gray-300 text-start text-theme-xs dark:text-gray-400"
               >
                 Price
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 dark:text-gray-300 text-start text-theme-xs dark:text-gray-400"
               >
                 Status
               </TableCell>
@@ -175,19 +175,19 @@ export default function RecentOrders() {
                       <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
                         {product.name}
                       </p>
-                      <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                      <span className="text-gray-500 dark:text-gray-300 text-theme-xs dark:text-gray-400">
                         {product.variants}
                       </span>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                <TableCell className="py-3 text-gray-500 dark:text-gray-300 text-theme-sm dark:text-gray-400">
                   {product.price}
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                <TableCell className="py-3 text-gray-500 dark:text-gray-300 text-theme-sm dark:text-gray-400">
                   {product.category}
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                <TableCell className="py-3 text-gray-500 dark:text-gray-300 text-theme-sm dark:text-gray-400">
                   <Badge
                     size="sm"
                     color={

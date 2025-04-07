@@ -74,13 +74,13 @@ const faqHeadline: FaqProps = {
 
 const Faq = () => {
   return (
-    <section className="py-32">
+    <section className="py-32" id="faqs">
       <div className="container space-y-16 mx-auto">
         <div className="mx-auto flex max-w-3xl flex-col text-left md:text-center">
           <h2 className="mb-3 text-title-md 2xl:text-title-lg font-medium md:mb-4 lg:mb-6">
             {faqHeadline.heading}
           </h2>
-          <p className="text-muted-foreground lg:text-lg">{faqHeadline.description}</p>
+          <p className="text-gray-500 dark:text-gray-300 lg:text-lg">{faqHeadline.description}</p>
         </div>
         <Accordion
           type="single"
@@ -90,19 +90,19 @@ const Faq = () => {
           {faqItems.map(item => (
             <AccordionItem key={item.id} value={item.id}>
               <AccordionTrigger className="transition-opacity duration-200 hover:no-underline hover:opacity-60">
-                <div className="font-medium text-gray-800 sm:py-1 lg:py-2 lg:text-lg">
+                <div className="font-medium text-gray-800 sm:py-1 lg:py-2 lg:text-lg dark:text-white">
                   {item.question}
                 </div>
               </AccordionTrigger>
               <AccordionContent className="sm:mb-1 lg:mb-2">
-                <div className="text-muted-foreground lg:text-lg">
+                <div className="text-gray-500 dark:text-gray-300 lg:text-lg">
                   {item.answer}
                 </div>
               </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
-        <div className="mx-auto flex max-w-4xl flex-col items-center rounded-lg bg-brand-500 text-white p-4 text-center md:rounded-xl md:p-6 lg:p-8">
+        <div className="mx-auto flex max-w-4xl flex-col items-center rounded-lg bg-brand-500 text-white p-4 text-center md:rounded-xl md:p-6 lg:p-8" id="contact">
           <div className="relative mb-12">
             <Image
               width={32}

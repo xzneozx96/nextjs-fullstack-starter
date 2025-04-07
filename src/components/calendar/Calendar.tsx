@@ -168,7 +168,7 @@ const Calendar: React.FC = () => {
             <h5 className="mb-2 font-semibold text-gray-800 modal-title text-theme-xl dark:text-white/90 lg:text-2xl">
               {selectedEvent ? 'Edit Event' : 'Add Event'}
             </h5>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-gray-500 dark:text-gray-300 dark:text-gray-400">
               Plan your next big moment: schedule or edit an event to stay on
               track
             </p>

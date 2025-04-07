@@ -50,7 +50,7 @@ const features: FeatureItem[] = [
 
 const Feature = () => {
   return (
-    <section className="py-32">
+    <section className="py-32" id="features">
       <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, filter: 'blur(12px)', y: 12 }}
@@ -64,7 +64,7 @@ const Feature = () => {
           className="flex w-full flex-col items-center"
         >
           <div className="flex flex-col items-center space-y-4 text-center sm:space-y-6 md:max-w-3xl md:text-center">
-            <p className="hover:bg-brand-100 bg-brand-50 group mx-auto flex w-fit items-center gap-4 rounded-full py-1 px-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:shadow-zinc-950">
+            <p className="hover:bg-brand-100 bg-brand-50 group mx-auto flex w-fit items-center gap-4 rounded-full py-1 px-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:bg-brand-500/[0.06] dark:text-brand-400">
               <span className="text-brand-500 text-sm">How can we help you</span>
             </p>
             <motion.h2
@@ -92,7 +92,7 @@ const Feature = () => {
                 bounce: 0.3,
                 duration: 1.5,
               }}
-              className="text-muted-foreground md:max-w-2xl"
+              className="text-gray-500 dark:text-gray-300 md:max-w-2xl"
             >
               IELTS MentorPro combines AI technology with expert teaching methods to provide the most effective IELTS preparation experience.
             </motion.p>
@@ -114,7 +114,7 @@ const Feature = () => {
                   </span>
                 </div>
                 <h2 className="text-lg font-medium md:text-2xl mb-2">{features?.[0]?.title}</h2>
-                <p className="text-muted-foreground">{features?.[0]?.description}</p>
+                <p className="text-gray-500 dark:text-gray-300">{features?.[0]?.description}</p>
                 <Image
                   width={500}
                   height={500}
@@ -136,7 +136,7 @@ const Feature = () => {
                   </span>
                 </div>
                 <h2 className="text-lg font-medium md:text-2xl mb-2">{features?.[1]?.title}</h2>
-                <p className="text-muted-foreground">{features?.[1]?.description}</p>
+                <p className="text-gray-500 dark:text-gray-300">{features?.[1]?.description}</p>
                 <Image
                   width={500}
                   height={500}
@@ -160,7 +160,7 @@ const Feature = () => {
                   </span>
                 </div>
                 <h2 className="text-lg font-medium md:text-2xl mb-2">{features?.[2]?.title}</h2>
-                <p className="text-muted-foreground">{features?.[2]?.description}</p>
+                <p className="text-gray-500 dark:text-gray-300">{features?.[2]?.description}</p>
                 <Image
                   width={500}
                   height={500}
@@ -182,7 +182,7 @@ const Feature = () => {
                   </span>
                 </div>
                 <h2 className="text-lg font-medium md:text-2xl mb-2">{features?.[3]?.title}</h2>
-                <p className="text-muted-foreground">{features?.[3]?.description}</p>
+                <p className="text-gray-500 dark:text-gray-300">{features?.[3]?.description}</p>
                 <Image
                   width={500}
                   height={500}

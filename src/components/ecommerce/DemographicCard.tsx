@@ -37,13 +37,13 @@ export default function DemographicCard() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full font-normal text-left text-gray-500 dark:text-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full font-normal text-left text-gray-500 dark:text-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -67,7 +67,7 @@ export default function DemographicCard() {
               <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
                 USA
               </p>
-              <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+              <span className="block text-gray-500 dark:text-gray-300 text-theme-xs dark:text-gray-400">
                 2,379 Customers
               </span>
             </div>
@@ -98,7 +98,7 @@ export default function DemographicCard() {
               <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
                 France
               </p>
-              <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+              <span className="block text-gray-500 dark:text-gray-300 text-theme-xs dark:text-gray-400">
                 589 Customers
               </span>
             </div>

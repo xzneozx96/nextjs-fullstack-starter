@@ -100,7 +100,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                               tabIndex={0}
                               role="button"
                               aria-label="Remove option"
-                              className="pl-2 text-gray-500 cursor-pointer group-hover:text-gray-400 dark:text-gray-400"
+                              className="pl-2 text-gray-500 dark:text-gray-300 cursor-pointer group-hover:text-gray-400 dark:text-gray-400"
                             >
                               <svg
                                 className="fill-current"

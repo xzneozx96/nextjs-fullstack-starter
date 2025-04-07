@@ -101,7 +101,7 @@ const AppHeader: React.FC = () => {
               src="./images/logo/logo-dark.svg"
               alt="Logo"
             />
-            <span className="text-lg font-bold dark:text-white align-middle ml-3">IELTS AI Tutor</span>
+            <span className="text-lg font-bold dark:text-white align-middle ml-3">IELTS MentorPro</span>
           </Link>
 
           <button

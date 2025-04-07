@@ -1,4 +1,5 @@
 import {
+  AcademicCapIcon,
   ArchiveBoxIcon,
   ArrowDownIcon,
   ArrowLeftIcon,
@@ -43,6 +44,7 @@ import {
   PlayIcon,
   PlusIcon,
   RectangleGroupIcon,
+  RocketLaunchIcon,
   ShoppingBagIcon,
   Square2StackIcon,
   Squares2X2Icon,
@@ -63,6 +65,7 @@ import {
 } from '@heroicons/react/24/solid';
 
 export {
+  AcademicCapIcon,
   ArrowLeftIcon as AngleLeftIcon,
   ArrowRightIcon as AngleRightIcon,
   ArrowDownIcon,
@@ -116,6 +119,7 @@ export {
   ChartPieIcon as PieChartIcon,
   BoltIcon as PlugInIcon,
   PlusIcon,
+  RocketLaunchIcon,
   ShoppingBagIcon as ShoppingCartIcon,
   Square2StackSolidIcon as SquareIcon,
   Squares2X2Icon as SquaresIcon,

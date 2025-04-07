@@ -14,10 +14,10 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 const isAuthPage = createRouteMatcher([
-  '/sign-in(.*)',
-  '/:locale/sign-in(.*)',
-  '/sign-up(.*)',
-  '/:locale/sign-up(.*)',
+  '/signin(.*)',
+  '/:locale/signin(.*)',
+  '/signup(.*)',
+  '/:locale/signup(.*)',
 ]);
 
 // Improve security with Arcjet
@@ -63,7 +63,7 @@ export default async function middleware(
         const locale
           = req.nextUrl.pathname.match(/(\/.*)\/dashboard/)?.at(1) ?? '';
 
-        const signInUrl = new URL(`${locale}/sign-in`, req.url);
+        const signInUrl = new URL(`${locale}/signin`, req.url);
 
         await auth.protect({
           // `unauthenticatedUrl` is needed to avoid error: "Unable to find `next-intl` locale because the middleware didn't run on this request"

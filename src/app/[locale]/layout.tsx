@@ -5,16 +5,18 @@ import { ThemeProvider } from '@/context/ThemeContext';
 import { routing } from '@/libs/i18nNavigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
-import { Inter } from 'next/font/google';
+import { Be_Vietnam_Pro } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import NextTopLoader from 'nextjs-toploader';
 import '@/styles/global.css';
 
 // Initialize Inter font
-const inter = Inter({
+const beVietnamPro = Be_Vietnam_Pro({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
+  weight: ['400', '500', '600', '700'], // Common weights you might need
+
 });
 
 export const metadata: Metadata = {
@@ -65,8 +67,8 @@ export default async function RootLayout(props: {
   // which dynamically adds a `style` attribute to the body tag.
 
   return (
-    <html lang={locale} className={inter.variable}>
-      <body suppressHydrationWarning className={`${inter.className} dark:bg-gray-900`}>
+    <html lang={locale} className={beVietnamPro.variable}>
+      <body suppressHydrationWarning className={`${beVietnamPro.className} dark:bg-gray-900`}>
         <NextIntlClientProvider
           locale={locale}
           messages={messages}

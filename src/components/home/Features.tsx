@@ -64,7 +64,7 @@ const Feature = () => {
           className="flex w-full flex-col items-center"
         >
           <div className="flex flex-col items-center space-y-4 text-center sm:space-y-6 md:max-w-3xl md:text-center">
-            <p className="hover:bg-brand-100 bg-brand-50 group mx-auto flex w-fit items-center gap-4 rounded-full py-1 px-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:bg-brand-500/[0.06] dark:text-brand-400">
+            <p className="hover:bg-brand-100 bg-brand-50 group mx-auto flex w-fit items-center gap-4 rounded-full py-1 px-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:bg-brand-500/[0.12] dark:text-brand-400">
               <span className="text-brand-500 text-sm">How can we help you</span>
             </p>
             <motion.h2

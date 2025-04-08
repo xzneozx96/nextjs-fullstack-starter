@@ -74,7 +74,7 @@ const faqHeadline: FaqProps = {
 
 const Faq = () => {
   return (
-    <section className="py-32" id="faqs">
+    <section className="py-16 lg:py-32" id="faqs">
       <div className="container space-y-16 mx-auto">
         <div className="mx-auto flex max-w-3xl flex-col text-left md:text-center">
           <h2 className="mb-3 text-title-md 2xl:text-title-lg font-medium md:mb-4 lg:mb-6">

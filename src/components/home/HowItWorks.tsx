@@ -117,7 +117,7 @@ const HowItWorks = () => {
   };
 
   return (
-    <section ref={sectionRef} className="py-32 relative overflow-hidden bg-gray-50 dark:bg-gray-900" id="how-it-works">
+    <section ref={sectionRef} className="py-16 lg:py-32 relative overflow-hidden bg-gray-50 dark:bg-gray-900" id="how-it-works">
       {/* Background elements */}
       <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-[#0F1629] to-transparent -z-10"></div>
       <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-[#0F1629] to-transparent -z-10"></div>
@@ -131,7 +131,7 @@ const HowItWorks = () => {
           animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.3 }}
         >
-          <p className="hover:bg-brand-100 bg-brand-50 group mx-auto flex w-fit items-center gap-4 rounded-full py-1 px-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:bg-brand-500/[0.06] dark:text-brand-400">
+          <p className="hover:bg-brand-100 bg-brand-50 group mx-auto flex w-fit items-center gap-4 rounded-full py-1 px-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:bg-brand-500/[0.12] dark:text-brand-400">
             <span className="text-brand-500 text-sm">How it works</span>
           </p>
           <h2 className="text-title-md font-medium md:text-title-lg mb-4">Simple, effective, and powerful</h2>

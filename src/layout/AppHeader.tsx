@@ -2,7 +2,7 @@
 import { ThemeToggleButton } from '@/components/common/ThemeToggleButton';
 import NotificationDropdown from '@/components/header/NotificationDropdown';
 import UserDropdown from '@/components/header/UserDropdown';
-import { useSidebar } from '@/context/SidebarContext';
+import { useSidebar } from '@/contexts/SidebarContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useRef, useState } from 'react';
@@ -101,7 +101,7 @@ const AppHeader: React.FC = () => {
               src="./images/logo/logo-dark.svg"
               alt="Logo"
             />
-            <span className="text-lg font-bold dark:text-white align-middle ml-3">IELTS MentorPro</span>
+            <span className="text-lg font-medium dark:text-white align-middle ml-3">IELTS MentorPro</span>
           </Link>
 
           <button

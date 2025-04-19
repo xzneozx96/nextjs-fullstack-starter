@@ -79,7 +79,7 @@ export default function ModalBasedAlerts() {
               </svg>
             </span>
           </div>
-          <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90 sm:text-title-sm">
+          <h4 className="mb-2 text-2xl font-medium text-gray-800 dark:text-white/90 sm:text-title-sm">
             Well Done!
           </h4>
           <p className="text-sm leading-6 text-gray-500 dark:text-gray-300 dark:text-gray-400">
@@ -139,7 +139,7 @@ export default function ModalBasedAlerts() {
             </span>
           </div>
 
-          <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90 sm:text-title-sm">
+          <h4 className="mb-2 text-2xl font-medium text-gray-800 dark:text-white/90 sm:text-title-sm">
             Information Alert!
           </h4>
           <p className="text-sm leading-6 text-gray-500 dark:text-gray-300 dark:text-gray-400">
@@ -199,7 +199,7 @@ export default function ModalBasedAlerts() {
             </span>
           </div>
 
-          <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90 sm:text-title-sm">
+          <h4 className="mb-2 text-2xl font-medium text-gray-800 dark:text-white/90 sm:text-title-sm">
             Warning Alert!
           </h4>
           <p className="text-sm leading-6 text-gray-500 dark:text-gray-300 dark:text-gray-400">
@@ -259,7 +259,7 @@ export default function ModalBasedAlerts() {
             </span>
           </div>
 
-          <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90 sm:text-title-sm">
+          <h4 className="mb-2 text-2xl font-medium text-gray-800 dark:text-white/90 sm:text-title-sm">
             Danger Alert!
           </h4>
           <p className="text-sm leading-6 text-gray-500 dark:text-gray-300 dark:text-gray-400">

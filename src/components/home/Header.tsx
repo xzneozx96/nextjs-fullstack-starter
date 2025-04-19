@@ -9,6 +9,7 @@ import {
   NavBody,
   NavItems,
 } from '@/components/ui/resizable-header';
+import Link from 'next/link';
 import { useState } from 'react';
 import Button from '../ui/button/Button';
 
@@ -42,7 +43,9 @@ export function HomeNav() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <Button>Get Started</Button>
+            <Link href="/mock-test">
+              <Button>Get Started</Button>
+            </Link>
           </div>
         </NavBody>
 
@@ -85,9 +88,11 @@ export function HomeNav() {
               >
                 Book a call
               </NavbarButton> */}
-              <Button variant="primary" className="w-full">
-                Login
-              </Button>
+              <Link href="/mock-test" className="w-full">
+                <Button variant="primary" className="w-full">
+                  Get Started
+                </Button>
+              </Link>
             </div>
           </MobileNavMenu>
         </MobileNav>

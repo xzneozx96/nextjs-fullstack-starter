@@ -34,7 +34,7 @@ export const CounterForm = () => {
     <form onSubmit={handleIncrement}>
       <p>{t('presentation')}</p>
       <div>
-        <label className="text-sm font-bold text-gray-700" htmlFor="increment">
+        <label className="text-sm font-medium text-gray-700" htmlFor="increment">
           {t('label_increment')}
           <input
             id="increment"
@@ -51,7 +51,7 @@ export const CounterForm = () => {
 
       <div className="mt-2">
         <button
-          className="rounded-sm bg-blue-500 px-5 py-1 font-bold text-white hover:bg-blue-600 focus:outline-hidden focus:ring-3 focus:ring-blue-300/50 disabled:pointer-events-none disabled:opacity-50"
+          className="rounded-sm bg-blue-500 px-5 py-1 font-medium text-white hover:bg-blue-600 focus:outline-hidden focus:ring-3 focus:ring-blue-300/50 disabled:pointer-events-none disabled:opacity-50"
           type="submit"
           disabled={form.formState.isSubmitting}
         >

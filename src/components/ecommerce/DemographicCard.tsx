@@ -21,7 +21,7 @@ export default function DemographicCard() {
     <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
       <div className="flex justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
+          <h3 className="text-lg font-medium text-gray-800 dark:text-white/90">
             Customers Demographic
           </h3>
         </div>
@@ -64,7 +64,7 @@ export default function DemographicCard() {
               />
             </div>
             <div>
-              <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
+              <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
                 USA
               </p>
               <span className="block text-gray-500 dark:text-gray-300 text-theme-xs dark:text-gray-400">
@@ -95,7 +95,7 @@ export default function DemographicCard() {
               />
             </div>
             <div>
-              <p className="font-semibold text-gray-800 text-theme-sm dark:text-white/90">
+              <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
                 France
               </p>
               <span className="block text-gray-500 dark:text-gray-300 text-theme-xs dark:text-gray-400">

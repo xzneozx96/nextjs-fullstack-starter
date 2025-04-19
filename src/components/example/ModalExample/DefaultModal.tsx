@@ -10,7 +10,7 @@ export default function DefaultModal() {
   const { isOpen, openModal, closeModal } = useModal();
   const handleSave = () => {
     // Handle save logic here
-    console.warn('Saving changes...');
+    console.log('Saving changes...');
     closeModal();
   };
   return (
@@ -24,7 +24,7 @@ export default function DefaultModal() {
           onClose={closeModal}
           className="max-w-[600px] p-5 lg:p-10"
         >
-          <h4 className="font-semibold text-gray-800 mb-7 text-title-sm dark:text-white/90">
+          <h4 className="font-medium text-gray-800 mb-7 text-title-sm dark:text-white/90">
             Modal Heading
           </h4>
           <p className="text-sm leading-6 text-gray-500 dark:text-gray-300 dark:text-gray-400">

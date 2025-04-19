@@ -1,22 +1,21 @@
 import type { Metadata } from 'next';
 import { PostHogProvider } from '@/components/analytics/PostHogProvider';
-import { SidebarProvider } from '@/context/SidebarContext';
-import { ThemeProvider } from '@/context/ThemeContext';
+import { SidebarProvider } from '@/contexts/SidebarContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import { routing } from '@/libs/i18nNavigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
-import { Be_Vietnam_Pro } from 'next/font/google';
+import { Lexend_Deca } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import NextTopLoader from 'nextjs-toploader';
 import '@/styles/global.css';
 
-// Initialize Inter font
-const beVietnamPro = Be_Vietnam_Pro({
+// Initialize Lexend Deca font
+const lexendDeca = Lexend_Deca({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-lexend',
   weight: ['400', '500', '600', '700'], // Common weights you might need
-
 });
 
 export const metadata: Metadata = {
@@ -67,8 +66,8 @@ export default async function RootLayout(props: {
   // which dynamically adds a `style` attribute to the body tag.
 
   return (
-    <html lang={locale} className={beVietnamPro.variable}>
-      <body suppressHydrationWarning className={`${beVietnamPro.className} dark:bg-gray-900`}>
+    <html lang={locale} className={lexendDeca.variable}>
+      <body suppressHydrationWarning className={`${lexendDeca.className} dark:bg-gray-900`}>
         <NextIntlClientProvider
           locale={locale}
           messages={messages}

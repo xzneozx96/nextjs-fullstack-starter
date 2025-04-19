@@ -26,6 +26,7 @@ storybook-static
 
 # cache
 .swc/
+.eslintcache
 
 # production
 /build

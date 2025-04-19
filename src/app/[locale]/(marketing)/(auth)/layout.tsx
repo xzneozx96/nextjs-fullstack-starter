@@ -1,7 +1,7 @@
 import GridShape from '@/components/common/GridShape';
 import ThemeTogglerTwo from '@/components/common/ThemeTogglerTwo';
 
-import { ThemeProvider } from '@/context/ThemeContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -29,7 +29,7 @@ export default function AuthLayout({
                     alt="Logo"
                     className="inline-block"
                   />
-                  <span className="text-2xl font-bold text-white align-middle ml-3">IELTS MentorPro</span>
+                  <span className="text-2xl font-medium text-white align-middle ml-3">IELTS MentorPro</span>
                 </Link>
                 <p className="text-center text-gray-400 dark:text-white/60">
                   Advanced AI-powered IELTS Preparation and Tutoring Platform

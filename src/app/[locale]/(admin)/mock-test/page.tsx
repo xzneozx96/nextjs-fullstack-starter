@@ -1,13 +1,12 @@
 'use client';
 
+import type { SkillType, TestType } from '@/types/question-bank';
 import Button from '@/components/ui/button/Button';
-import { AcademicCapIcon, AngleLeftIcon, BookOpenIcon, FileEditIcon, MicrophoneIcon } from '@/icons';
+import { testingSkills } from '@/data/testing-skills';
+import { AcademicCapIcon, AngleLeftIcon, BookOpenIcon, Check } from '@/icons';
+import { useRouter } from '@/libs/i18nNavigation';
 import { motion } from 'framer-motion';
-import { Check, Headphones } from 'lucide-react';
 import { useState } from 'react';
-
-type TestType = 'full' | 'skill';
-type SkillType = 'speaking' | 'listening' | 'writing' | 'reading';
 
 const CardOption = ({
   selected,
@@ -24,7 +23,7 @@ const CardOption = ({
 }) => {
   return (
     <motion.div
-      className={`relative px-6 py-10 rounded-lg border cursor-pointer transition-all ${selected ? 'border-blue-500 bg-blue-50' : 'hover:border-gray-300'}`}
+      className={`relative px-6 py-10 rounded-lg border cursor-pointer transition-all ${selected ? 'border-blue-500 bg-blue-50' : 'hover:shadow-md'}`}
       onClick={onClick}
     >
       <div className="flex items-start gap-4">
@@ -44,22 +43,37 @@ const CardOption = ({
 };
 
 export default function MockTestPage() {
+  const router = useRouter();
   const [step, setStep] = useState<1 | 2>(1);
   const [selectedTestType, setSelectedTestType] = useState<TestType | null>(null);
   const [selectedSkill, setSelectedSkill] = useState<SkillType | null>(null);
 
   const handleTestTypeSelect = (type: TestType) => {
     setSelectedTestType(type);
-    if (type === 'full') {
-      // Redirect to tests list
-    } else {
+    if (type !== 'full') {
       setStep(2);
+    }
+  };
+
+  const handleConfirmTestType = () => {
+    if (selectedTestType === 'full') {
+      // Redirect to full-test route
+      router.push('/mock-test/topics/full-test');
+      return;
+    }
+
+    if (selectedTestType === 'skill' && !selectedSkill) {
+      return;
+    }
+
+    if (selectedTestType === 'skill' && selectedSkill) {
+      // Redirect to skill test
+      router.push(`/mock-test/topics/${selectedSkill}`);
     }
   };
 
   const handleSkillSelect = (skill: SkillType) => {
     setSelectedSkill(skill);
-    // Redirect to skill test
   };
 
   const goBack = () => {
@@ -79,7 +93,7 @@ export default function MockTestPage() {
               className="space-y-8"
             >
               <div className="space-y-1">
-                <h1 className="text-2xl font-semibold text-gray-900">Test Preparation</h1>
+                <h1 className="text-2xl font-medium text-gray-900">Test Preparation</h1>
                 <p className="text-gray-500">Which type of test do you want to practice?</p>
               </div>
 
@@ -109,7 +123,7 @@ export default function MockTestPage() {
                     <Button
                       variant="primary"
                       className="px-6"
-                      onClick={() => handleTestTypeSelect('full')}
+                      onClick={() => handleConfirmTestType()}
                     >
                       Continue
                     </Button>
@@ -134,7 +148,7 @@ export default function MockTestPage() {
                   >
                     <AngleLeftIcon className="size-4" />
                   </Button>
-                  <h1 className="text-2xl font-semibold text-gray-900">Test Preparation</h1>
+                  <h1 className="text-2xl font-medium text-gray-900">Test Preparation</h1>
                 </div>
                 <p className="text-gray-500">Please select which skill you want to practice</p>
               </div>
@@ -142,12 +156,7 @@ export default function MockTestPage() {
               <div>
                 <h2 className="text-lg font-medium mb-4">Which skill do you want to practice?</h2>
                 <div className="grid gap-4">
-                  {[
-                    { skill: 'speaking', icon: MicrophoneIcon, description: 'Practice speaking tasks and improve fluency' },
-                    { skill: 'listening', icon: Headphones, description: 'Improve listening comprehension skills' },
-                    { skill: 'writing', icon: FileEditIcon, description: 'Develop academic and general writing skills' },
-                    { skill: 'reading', icon: BookOpenIcon, description: 'Enhance reading strategies and comprehension' },
-                  ].map(({ skill, icon, description }) => (
+                  {testingSkills.map(({ skill, icon, description }) => (
                     <CardOption
                       key={skill}
                       selected={selectedSkill === skill}
@@ -164,7 +173,7 @@ export default function MockTestPage() {
                     <Button
                       variant="primary"
                       className="px-6"
-                      onClick={() => handleSkillSelect(selectedSkill)}
+                      onClick={() => handleConfirmTestType()}
                     >
                       Continue
                     </Button>

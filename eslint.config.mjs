@@ -52,6 +52,7 @@ export default antfu({
     'react/prefer-destructuring-assignment': 'off', // Vscode doesn't support automatically destructuring, it's a pain to add a new variable
     'node/prefer-global/process': 'off', // Allow using `process.env`
     'test/padding-around-all': 'error', // Add padding in test files
-    'test/prefer-lowercase-title': 'off', // Allow using uppercase titles in test titles
+    'test/prefer-lowercase-title': 'off', // Allow using uppercase titles in test titles,
+    'no-console': 'off', // Disallow console
   },
 });

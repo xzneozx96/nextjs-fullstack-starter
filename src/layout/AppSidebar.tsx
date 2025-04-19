@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSidebar } from '../context/SidebarContext';
+import { useSidebar } from '../contexts/SidebarContext';
 import {
   BoxCubeIcon,
   CalenderIcon,
@@ -328,7 +328,7 @@ const AppSidebar: React.FC = () => {
                     width={32}
                     height={32}
                   />
-                  <span className="text-lg font-bold dark:text-white align-middle ml-3">IELTS MentorPro</span>
+                  <span className="text-lg font-medium dark:text-white align-middle ml-3">IELTS MentorPro</span>
                 </>
               )
             : (

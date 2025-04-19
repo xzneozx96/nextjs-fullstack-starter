@@ -48,7 +48,7 @@ const Footer = () => {
             src="./images/logo/logo-dark.svg"
             alt="Logo"
           />
-          <span className="text-lg font-bold dark:text-white align-middle ml-3">IELTS MentorPro</span>
+          <span className="text-lg font-medium dark:text-white align-middle ml-3">IELTS MentorPro</span>
         </Link>
 
         <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">

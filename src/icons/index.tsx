@@ -66,6 +66,8 @@ import {
   StarIcon,
 } from '@heroicons/react/24/solid';
 
+import { Check, Headphones } from 'lucide-react';
+
 export {
   AcademicCapIcon,
   ArrowLeftIcon as AngleLeftIcon,
@@ -87,6 +89,7 @@ export {
   ChartBarIcon,
   ChartPieIcon,
   ChatBubbleBottomCenterTextIcon as ChatIcon,
+  Check,
   CheckIcon,
   CheckSolidIcon,
   Square2StackIcon as CheckSquareIcon,
@@ -107,6 +110,7 @@ export {
   GlobeAltIcon as GlobeIcon,
   Squares2X2Icon as GridIcon,
   RectangleGroupIcon as GroupIcon,
+  Headphones,
   HomeIcon,
   EllipsisHorizontalIcon as HorizontaLDots,
   SquaresPlusIcon as LayoutIcon,

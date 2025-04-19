@@ -17,7 +17,7 @@ export default function EcommerceMetrics() {
             <span className="text-sm text-gray-500 dark:text-gray-300 dark:text-gray-400">
               Customers
             </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+            <h4 className="mt-2 font-medium text-gray-800 text-title-sm dark:text-white/90">
               3,782
             </h4>
           </div>
@@ -39,7 +39,7 @@ export default function EcommerceMetrics() {
             <span className="text-sm text-gray-500 dark:text-gray-300 dark:text-gray-400">
               Orders
             </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+            <h4 className="mt-2 font-medium text-gray-800 text-title-sm dark:text-white/90">
               5,359
             </h4>
           </div>

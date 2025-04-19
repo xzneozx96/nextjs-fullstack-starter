@@ -5,7 +5,7 @@ import ComponentCard from '../../common/ComponentCard';
 
 const DropzoneComponent: React.FC = () => {
   const onDrop = (acceptedFiles: File[]) => {
-    console.warn('Files dropped:', acceptedFiles);
+    console.log('Files dropped:', acceptedFiles);
     // Handle file uploads here
   };
 
@@ -56,7 +56,7 @@ const DropzoneComponent: React.FC = () => {
             </div>
 
             {/* Text Content */}
-            <h4 className="mb-3 font-semibold text-gray-800 text-theme-xl dark:text-white/90">
+            <h4 className="mb-3 font-medium text-gray-800 text-theme-xl dark:text-white/90">
               {isDragActive ? 'Drop Files Here' : 'Drag & Drop Files Here'}
             </h4>
 

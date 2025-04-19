@@ -95,21 +95,21 @@ export default function Hero() {
                   }}
                   className="mt-12 flex flex-col items-center justify-center gap-4 md:flex-row"
                 >
-                  <Button
-                    key={1}
-                  >
-                    <Link href="#link">
+                  <Link href="/mock-test">
+                    <Button
+                      key={1}
+                    >
                       <span className="text-nowrap">Take a Mock Test</span>
-                    </Link>
-                  </Button>
-                  <Button
-                    key={2}
-                    variant="outline"
-                  >
-                    <Link href="#link">
+                    </Button>
+                  </Link>
+                  <Link href="#link">
+                    <Button
+                      key={2}
+                      variant="outline"
+                    >
                       <span className="text-nowrap">Get started as a Teacher</span>
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
                 </AnimatedGroup>
               </div>
             </div>

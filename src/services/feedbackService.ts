@@ -1,4 +1,5 @@
-import { IELTS_FEEDBACK_PROMPT } from '@/data/ai-prompts';
+import type { Message } from '@/types/vapi-conversation';
+import { IELTS_FEEDBACK_PROMPT, IELTS_TRANSCRIPT_ORGANIZE_PROMPT } from '@/data/ai-prompts';
 import { openai } from '@/libs/OpenAI';
 
 export type FeedbackResponse = {
@@ -12,6 +13,27 @@ export type FeedbackParams = {
   questions: string;
   transcript: string;
 };
+
+export async function organizeTranscript(transcript: Message[]) {
+  try {
+    // Replace the placeholders in the prompt
+    const prompt = IELTS_TRANSCRIPT_ORGANIZE_PROMPT
+      .replace('{{transcript}}', JSON.stringify(transcript));
+
+    const result = await openai.responses.create({
+      model: 'gpt-4o-mini',
+      input: prompt,
+      reasoning: {
+        effort: 'medium',
+      },
+    });
+
+    return result.output_text || '';
+  } catch (error) {
+    console.error('Error organizing transcript:', error);
+    throw error;
+  }
+}
 
 /**
  * Generates feedback for a speaking test based on the conversation transcript

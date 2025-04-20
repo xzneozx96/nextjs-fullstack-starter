@@ -11,11 +11,11 @@ import { generateFeedback } from '@/services/feedbackService';
 import { MessageRoleEnum, MessageTypeEnum } from '@/types/vapi-conversation';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { MarkdownRenderer } from '../ui/markdown/MarkdownRenderer';
 import { VapiConversation } from './VapiConversation';
 
-export const FeedbackContent = () => {
+function FeedbackContentMain() {
   const { messages, setMessages, feedbackText, setFeedbackText, isLoading, setIsLoading } = useFeedback();
   const searchParams = useSearchParams();
   const topicId = searchParams.get('topicId');
@@ -182,3 +182,11 @@ export const FeedbackContent = () => {
     </div>
   );
 };
+
+export function FeedbackContent() {
+  return (
+    <Suspense fallback={null}>
+      <FeedbackContentMain />
+    </Suspense>
+  );
+}

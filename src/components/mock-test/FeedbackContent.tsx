@@ -129,6 +129,8 @@ function FeedbackContentMain() {
       }, 0);
 
       return () => clearTimeout(timer);
+    } else {
+      return () => {};
     }
   }, [messages]);
 

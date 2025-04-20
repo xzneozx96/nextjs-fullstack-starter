@@ -20,38 +20,52 @@ export const MarkdownRenderer = ({ content, className }: MarkdownRendererProps) 
         components={{
           h1: ({ node, children, ...props }) => children
             ? (
-                <h1 className="text-2xl font-bold my-4 pb-2 border-b border-gray-200 dark:border-gray-800" {...props}>
+                <h1
+                  className="text-xl sm:text-2xl font-bold my-3 sm:my-4 pb-1 sm:pb-2 border-b
+                  border-gray-200 dark:border-gray-800"
+                  {...props}
+                >
                   {children}
                 </h1>
               )
             : null,
           h2: ({ node, children, ...props }) => children
             ? (
-                <h2 className="text-xl font-bold my-4 pb-1" {...props}>
+                <h2 className="text-lg sm:text-xl font-bold my-3 sm:my-4 pb-1" {...props}>
                   {children}
                 </h2>
               )
             : null,
           h3: ({ node, children, ...props }) => children
             ? (
-                <h3 className="text-lg font-bold my-3" {...props}>
+                <h3 className="text-base sm:text-lg font-bold my-2 sm:my-3" {...props}>
                   {children}
                 </h3>
               )
             : null,
           h4: ({ node, children, ...props }) => children
             ? (
-                <h4 className="text-base font-bold my-2" {...props}>
+                <h4 className="text-sm sm:text-base font-bold my-1 sm:my-2" {...props}>
                   {children}
                 </h4>
               )
             : null,
-          p: ({ node, ...props }) => <p className="my-3 leading-relaxed" {...props} />,
-          ul: ({ node, ...props }) => <ul className="list-disc pl-6 my-3 space-y-1" {...props} />,
-          ol: ({ node, ...props }) => <ol className="list-decimal pl-6 my-3 space-y-1" {...props} />,
+          p: ({ node, ...props }) => (
+            <p className="text-sm sm:text-base my-2 sm:my-3 leading-relaxed" {...props} />
+          ),
+          ul: ({ node, ...props }) => (
+            <ul className="text-sm sm:text-base list-disc pl-4 sm:pl-6 my-2 sm:my-3 space-y-1" {...props} />
+          ),
+          ol: ({ node, ...props }) => (
+            <ol className="text-sm sm:text-base list-decimal pl-4 sm:pl-6 my-2 sm:my-3 space-y-1" {...props} />
+          ),
           li: ({ node, ...props }) => <li className="pl-1" {...props} />,
           blockquote: ({ node, ...props }) => (
-            <blockquote className="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic my-4 py-1 text-gray-700 dark:text-gray-300" {...props} />
+            <blockquote
+              className="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic my-2 sm:my-4 py-1
+              text-sm sm:text-base text-gray-700 dark:text-gray-300"
+              {...props}
+            />
           ),
           a: ({ node, href, ...props }) => (
             <a
@@ -76,9 +90,15 @@ export const MarkdownRenderer = ({ content, className }: MarkdownRendererProps) 
           tbody: ({ node, ...props }) => <tbody className="divide-y divide-gray-200 dark:divide-gray-700" {...props} />,
           tr: ({ node, ...props }) => <tr className="hover:bg-gray-50 dark:hover:bg-gray-900/50" {...props} />,
           th: ({ node, ...props }) => (
-            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" {...props} />
+            <th
+              className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500
+              dark:text-gray-400 uppercase tracking-wider"
+              {...props}
+            />
           ),
-          td: ({ node, ...props }) => <td className="px-4 py-3 whitespace-normal text-sm" {...props} />,
+          td: ({ node, ...props }) => (
+            <td className="px-2 sm:px-4 py-2 sm:py-3 whitespace-normal text-xs sm:text-sm" {...props} />
+          ),
         }}
       >
         {safeContent}

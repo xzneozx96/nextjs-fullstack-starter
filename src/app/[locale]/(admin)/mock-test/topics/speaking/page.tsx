@@ -12,36 +12,44 @@ export default function TestsListPage() {
   const speakingTopics = typedMockData.topics;
 
   return (
-    <div className="container mx-auto py-20">
-      <div className="text-center mb-10">
-        <h1 className="text-title-md font-medium text-gray-800 mb-4">IELTS Speaking Topics</h1>
-        <p className="text-gray-500 max-w-2xl mx-auto">
+    <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16 lg:py-20">
+      <div className="text-center mb-6 sm:mb-8 md:mb-10">
+        <h1 className="text-2xl sm:text-3xl md:text-title-md font-medium text-gray-800 mb-3 sm:mb-4">
+          IELTS Speaking Topics
+        </h1>
+        <p className="text-sm sm:text-base text-gray-500 max-w-2xl mx-auto">
           Select a topic to practice your IELTS speaking skills. Each topic includes common questions
           and vocabulary that might appear in your IELTS speaking test.
         </p>
       </div>
 
-      {/* Grid layout with 5 items per row on large screens */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      {/* Grid layout with responsive columns */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
         {speakingTopics.map(topic => (
           <Link
             key={topic.id}
             href={`/mock-test/topics/speaking/${topic.id}`}
             className="block group"
           >
-            <div className="h-full border rounded-xl p-6 transition-all duration-300 hover:shadow-md flex flex-col">
-              <div className="mb-4">
-                <span className={cn('flex size-12 items-center justify-center rounded-full text-blue-500 bg-blue-500/[0.08]')}>
-                  <MicrophoneIcon className="size-5" />
+            <div className="h-full border rounded-xl p-4 sm:p-5 md:p-6 transition-all
+              duration-300 hover:shadow-md flex flex-col"
+            >
+              <div className="mb-3 sm:mb-4">
+                <span className={cn(
+                  'flex size-10 sm:size-12 items-center justify-center rounded-full',
+                  'text-blue-500 bg-blue-500/[0.08]',
+                )}
+                >
+                  <MicrophoneIcon className="size-4 sm:size-5" />
                 </span>
               </div>
-              <h3 className="font-medium text-lg mb-2 transition-colors">
+              <h3 className="font-medium text-base sm:text-lg mb-1 sm:mb-2 transition-colors">
                 {topic.title}
               </h3>
-              <p className="text-sm text-gray-500 flex-grow">
+              <p className="text-xs sm:text-sm text-gray-500 flex-grow">
                 {topic.description}
               </p>
-              <div className="mt-8 text-sm text-blue-600 font-medium">
+              <div className="mt-4 sm:mt-6 md:mt-8 text-xs sm:text-sm text-blue-600 font-medium">
                 Practice Now →
               </div>
             </div>

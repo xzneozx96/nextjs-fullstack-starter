@@ -79,35 +79,45 @@ export default function SpeakingTopicPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-20">
-      <div className="mb-10">
-        <Link href="/mock-test/topics/speaking" className="text-blue-600 inline-flex items-center gap-1">
-          <ChevronLeftIcon className="size-5" />
+    <div className="container px-4 sm:px-6 md:px-8 max-w-4xl mx-auto py-6 sm:py-8 md:py-10 lg:py-16">
+      <div className="mb-6 sm:mb-8 md:mb-10">
+        <Link
+          href="/mock-test/topics/speaking"
+          className="text-blue-600 inline-flex items-center gap-1 text-sm sm:text-base"
+        >
+          <ChevronLeftIcon className="size-4 sm:size-5" />
           Back to Topics
         </Link>
       </div>
 
-      <div className="flex items-center gap-4 mb-8">
-        <span className={cn('flex size-12 items-center justify-center rounded-full text-blue-500 bg-blue-500/[0.08]')}>
-          <MicrophoneIcon className="size-5" />
+      <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <span>
+          <span
+            className={cn(
+              'flex size-10 sm:size-12 items-center justify-center rounded-full',
+              'text-blue-500 bg-blue-500/[0.08]',
+            )}
+          >
+            <MicrophoneIcon className="size-4 sm:size-5" />
+          </span>
         </span>
         <div>
-          <h1 className="text-title-sm font-medium text-gray-800">{topic.title}</h1>
-          <p className="text-gray-500">{topic.description}</p>
+          <h1 className="text-xl sm:text-2xl md:text-title-sm font-medium text-gray-800">{topic.title}</h1>
+          <p className="text-sm sm:text-base text-gray-500">{topic.description}</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-        <div className="border rounded-xl p-6">
-          <h2 className="text-xl font-medium mb-4">Questions</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8 md:mb-10">
+        <div className="border rounded-xl p-3 sm:p-4 lg:p-6">
+          <h2 className="text-lg sm:text-xl font-medium mb-3 sm:mb-4">Questions</h2>
 
           {part1Questions.length > 0 && (
-            <div className="mb-6">
-              <h3 className="font-medium text-blue-600 mb-2">Part 1 - Introduction & Interview</h3>
-              <ul className="space-y-3">
+            <div className="mb-4 sm:mb-6">
+              <h3 className="font-medium text-blue-600 mb-2 text-sm sm:text-base">Part 1 - Introduction & Interview</h3>
+              <ul className="space-y-2 sm:space-y-3">
                 {part1Questions.map(question => (
-                  <li key={question.questionId} className="flex gap-2">
-                    <span className="text-blue-500 font-medium">•</span>
+                  <li key={question.questionId} className="flex gap-2 text-sm sm:text-base">
+                    <span className="text-blue-500 font-medium flex-shrink-0">•</span>
                     <span>{question.questionText}</span>
                   </li>
                 ))}
@@ -116,12 +126,12 @@ export default function SpeakingTopicPage() {
           )}
 
           {part2Questions.length > 0 && (
-            <div className="mb-6">
-              <h3 className="font-medium text-green-600 mb-2">Part 2 - Individual Long Turn</h3>
-              <ul className="space-y-3">
+            <div className="mb-4 sm:mb-6">
+              <h3 className="font-medium text-green-600 mb-2 text-sm sm:text-base">Part 2 - Individual Long Turn</h3>
+              <ul className="space-y-2 sm:space-y-3">
                 {part2Questions.map(question => (
-                  <li key={question.questionId} className="flex gap-2">
-                    <span className="text-green-500 font-medium">•</span>
+                  <li key={question.questionId} className="flex gap-2 text-sm sm:text-base">
+                    <span className="text-green-500 font-medium flex-shrink-0">•</span>
                     <span>{question.questionText}</span>
                   </li>
                 ))}
@@ -131,11 +141,11 @@ export default function SpeakingTopicPage() {
 
           {part3Questions.length > 0 && (
             <div>
-              <h3 className="font-medium text-purple-600 mb-2">Part 3 - Discussion</h3>
-              <ul className="space-y-3">
+              <h3 className="font-medium text-purple-600 mb-2 text-sm sm:text-base">Part 3 - Discussion</h3>
+              <ul className="space-y-2 sm:space-y-3">
                 {part3Questions.map(question => (
-                  <li key={question.questionId} className="flex gap-2">
-                    <span className="text-purple-500 font-medium">•</span>
+                  <li key={question.questionId} className="flex gap-2 text-sm sm:text-base">
+                    <span className="text-purple-500 font-medium flex-shrink-0">•</span>
                     <span>{question.questionText}</span>
                   </li>
                 ))}
@@ -144,13 +154,13 @@ export default function SpeakingTopicPage() {
           )}
         </div>
 
-        <div className="border rounded-xl p-6">
-          <h2 className="text-xl font-medium mb-4">Key Vocabulary</h2>
+        <div className="border rounded-xl p-3 sm:p-4 lg:p-6">
+          <h2 className="text-lg sm:text-xl font-medium mb-3 sm:mb-4">Key Vocabulary</h2>
           <div className="flex flex-wrap gap-2">
             {vocabulary.map(word => (
               <span
                 key={word}
-                className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700"
+                className="px-2 sm:px-3 py-1 bg-gray-100 rounded-full text-xs sm:text-sm text-gray-700"
               >
                 {word}
               </span>
@@ -159,16 +169,17 @@ export default function SpeakingTopicPage() {
         </div>
       </div>
 
-      <div className="border rounded-xl p-6 bg-blue-50">
-        <h2 className="text-xl font-medium mb-4">Practice This Topic</h2>
-        <p className="text-gray-600 mb-6">
-          Ready to practice speaking on this topic? Our AI tutor will ask you questions and provide feedback on your responses.
+      <div className="border rounded-xl p-4 sm:p-6 bg-blue-50">
+        <h2 className="text-lg sm:text-xl font-medium mb-3 sm:mb-4">Practice This Topic</h2>
+        <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+          Ready to practice speaking on this topic? Our AI tutor will ask you questions and provide
+          feedback on your responses.
         </p>
-        <div className="flex gap-4">
-          <Button variant="primary" className="px-6" onClick={handleStartPractice}>
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <Button variant="primary" className="w-full sm:w-auto px-4 sm:px-6" onClick={handleStartPractice}>
             Start Practice Session
           </Button>
-          <Button variant="outline" className="px-6">
+          <Button variant="outline" className="w-full sm:w-auto px-4 sm:px-6">
             View Sample Answers
           </Button>
         </div>

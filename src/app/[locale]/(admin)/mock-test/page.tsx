@@ -23,7 +23,7 @@ const CardOption = ({
 }) => {
   return (
     <motion.div
-      className={`relative px-6 py-10 rounded-lg border cursor-pointer transition-all ${selected ? 'border-blue-500 bg-blue-50' : 'hover:shadow-md'}`}
+      className={`relative px-4 lg:px-6 py-4 lg:py-10 rounded-lg border cursor-pointer transition-all ${selected ? 'border-blue-500 bg-blue-50' : 'hover:shadow-md'}`}
       onClick={onClick}
     >
       <div className="flex items-start gap-4">
@@ -84,7 +84,7 @@ export default function MockTestPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-8 py-20">
+    <div className="container max-w-2xl mx-auto px-4 py-10 lg:py-20">
       {step === 1
         ? (
             <motion.div

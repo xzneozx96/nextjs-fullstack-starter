@@ -57,6 +57,8 @@ function FeedbackContentMain() {
 
       return () => clearTimeout(timer);
     }
+
+    return () => {};
   }, [topicId]);
 
   useEffect(() => {

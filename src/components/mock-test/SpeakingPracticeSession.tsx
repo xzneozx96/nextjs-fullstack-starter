@@ -2,6 +2,7 @@
 
 import type { QuestionBank, Topic } from '@/types/question-bank';
 import { CALL_STATUS, useVapi } from '@/hooks/useVapi';
+import { MessageTypeEnum } from '@/types/vapi-conversation';
 import Link from 'next/link';
 // import { useUser } from '@clerk/nextjs';
 import { useEffect, useRef } from 'react';
@@ -181,8 +182,9 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
               <Button
                 variant="outline"
                 onClick={() => {
-                // Store messages in localStorage for the feedback page
-                  localStorage.setItem('speakingMessages', JSON.stringify(messages));
+                  // Store messages in localStorage for the feedback page
+                  const transcript = messages.filter(msg => msg.type === MessageTypeEnum.TRANSCRIPT).map(({ role, transcript }) => ({ role, transcript }));
+                  localStorage.setItem('speakingMessages', JSON.stringify(transcript));
                 }}
               >
                 View Feedback

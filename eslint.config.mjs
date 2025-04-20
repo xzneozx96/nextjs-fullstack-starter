@@ -53,6 +53,7 @@ export default antfu({
     'node/prefer-global/process': 'off', // Allow using `process.env`
     'test/padding-around-all': 'error', // Add padding in test files
     'test/prefer-lowercase-title': 'off', // Allow using uppercase titles in test titles,
-    'no-console': 'off', // Disallow console
+    'no-console': 'off', // Disallow console,
+    'max-len': ['warn', { code: 160, tabWidth: 2 }],
   },
 });

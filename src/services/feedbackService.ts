@@ -118,25 +118,25 @@ export async function generateFeedback(params: FeedbackParams) {
       // .replace('{{part3Transcript}}', part3Transcript);
 
     // Create a streaming response from OpenAI
-    // const stream = await openai.chat.completions.create({
-    //   model: openaiModels.default,
-    //   messages: [
-    //     {
-    //       role: 'user',
-    //       content: prompt,
-    //     },
-    //   ],
-    //   stream: true,
-    // });
-
-    const stream = await openai.responses.create({
-      model: openaiModels.reasoning,
-      input: prompt,
-      reasoning: {
-        effort: 'medium',
-      },
+    const stream = await openai.chat.completions.create({
+      model: openaiModels.default,
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
       stream: true,
     });
+
+    // const stream = await openai.responses.create({
+    //   model: openaiModels.reasoning,
+    //   input: prompt,
+    //   reasoning: {
+    //     effort: 'medium',
+    //   },
+    //   stream: true,
+    // });
 
     return stream;
   } catch (error) {

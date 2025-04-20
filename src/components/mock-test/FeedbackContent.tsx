@@ -101,8 +101,17 @@ function FeedbackContentMain() {
   // Function to process streaming response
   const processStreamingResponse = useCallback(async (stream: any): Promise<void> => {
     let accumulatedContent = '';
+
+    // process response from reasoning model
+    // for await (const chunk of stream) {
+    //   const content = chunk.type === 'response.output_text.delta' ? chunk.delta : '';
+    //   accumulatedContent += content;
+    //   setFeedbackText(accumulatedContent);
+    // }
+
+    // process response from normal model
     for await (const chunk of stream) {
-      const content = chunk.type === 'response.output_text.delta' ? chunk.delta : '';
+      const content = chunk.choices[0]?.delta?.content || '';
       accumulatedContent += content;
       setFeedbackText(accumulatedContent);
     }

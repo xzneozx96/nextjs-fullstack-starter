@@ -2,43 +2,60 @@
 
 import type { FeedbackParams } from '@/services/feedbackService';
 import type { QuestionBank, Topic } from '@/types/question-bank';
-import type { Message } from '@/types/vapi-conversation';
+import type { Message, TranscriptMessage } from '@/types/vapi-conversation';
 import { mockQuestions } from '@/data/mock-questions';
-import { useFeedback } from '@/hooks/useAISpeakingFeedback';
+import { useAISpeakingFeedback } from '@/hooks/useAISpeakingFeedback';
 import { ChevronLeftIcon, MicrophoneIcon } from '@/icons';
-import { cn } from '@/libs/utils';
 import { generateFeedback } from '@/services/feedbackService';
 import { MessageRoleEnum, MessageTypeEnum } from '@/types/vapi-conversation';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { MarkdownRenderer } from '../ui/markdown/MarkdownRenderer';
 import { VapiConversation } from './VapiConversation';
 
 function FeedbackContentMain() {
-  const { messages, setMessages, feedbackText, setFeedbackText, isLoading, setIsLoading } = useFeedback();
+  const {
+    messages,
+    setMessages,
+    feedbackText,
+    processedFeedback,
+    setFeedbackText,
+    isLoading,
+    setIsLoading,
+  } = useAISpeakingFeedback();
   const searchParams = useSearchParams();
   const topicId = searchParams.get('topicId');
   const [topic, setTopic] = useState<Topic | null>(null);
   const [questions, setQuestions] = useState<QuestionBank[]>([]);
+  const [hasError, setHasError] = useState(false);
+  const [attemptCount, setAttemptCount] = useState(0);
+  const maxAttempts = 2; // Maximum number of retry attempts
 
   // Reference to the feedback container for auto-scrolling
   const feedbackContainerRef = useRef<HTMLDivElement>(null);
 
   // Load topic and questions data
   useEffect(() => {
-    if (topicId) {
-      // Find the topic
-      const typedMockData = mockQuestions as unknown as { topics: Topic[]; questions: QuestionBank[] };
-      const foundTopic = typedMockData.topics.find(t => t.id === topicId);
+    if (!topicId) {
+      return;
+    }
 
-      if (foundTopic) {
+    // Find the topic
+    const typedMockData = mockQuestions as unknown as { topics: Topic[]; questions: QuestionBank[] };
+    const foundTopic = typedMockData.topics.find(t => t.id === topicId);
+
+    if (foundTopic) {
+      // Update state in the next tick to avoid direct setState in useEffect
+      const timer = setTimeout(() => {
         setTopic(foundTopic);
 
         // Get questions for this topic
         const topicQuestions = typedMockData.questions.filter(q => q.topicId === topicId);
         setQuestions(topicQuestions);
-      }
+      }, 0);
+
+      return () => clearTimeout(timer);
     }
   }, [topicId]);
 
@@ -55,62 +72,136 @@ function FeedbackContentMain() {
     }
   }, [setMessages]);
 
-  // Auto-scroll effect when feedbackText changes
+  // Auto-scroll effect when processedFeedback changes
   useEffect(() => {
-    if (feedbackContainerRef.current && feedbackText) {
+    if (feedbackContainerRef.current && processedFeedback) {
       const container = feedbackContainerRef.current;
       container.scrollTop = container.scrollHeight;
     }
-  }, [feedbackText]);
+  }, [processedFeedback]);
 
+  // Helper function to format questions by part
+  const formatQuestionsByPart = useCallback((part: string): string => {
+    return questions
+      .filter(q => q.part === part)
+      .map(q => q.questionText)
+      .join('\n');
+  }, [questions]);
+
+  // Helper function to format transcript messages
+  const formatTranscript = useCallback((messages: TranscriptMessage[]): string => {
+    return messages
+      .map((msg) => {
+        const role = msg.role === MessageRoleEnum.ASSISTANT ? 'Examiner' : 'Student';
+        return `${role}: ${msg.transcript}`;
+      })
+      .join('\n');
+  }, []);
+
+  // Function to process streaming response
+  const processStreamingResponse = useCallback(async (stream: any): Promise<void> => {
+    let accumulatedContent = '';
+    for await (const chunk of stream) {
+      const content = chunk.type === 'response.output_text.delta' ? chunk.delta : '';
+      accumulatedContent += content;
+      setFeedbackText(accumulatedContent);
+    }
+  }, [setFeedbackText]);
+
+  // Reset error state when messages change
   useEffect(() => {
-    // Generate feedback when messages are loaded
+    if (messages.length > 0) {
+      // Use setTimeout to avoid direct setState in useEffect
+      const timer = setTimeout(() => {
+        setHasError(false);
+        setAttemptCount(0);
+      }, 0);
+
+      return () => clearTimeout(timer);
+    }
+  }, [messages]);
+
+  // Generate feedback when messages are loaded
+  useEffect(() => {
+    // Skip if we already have feedback, are loading, have an error, or exceeded retry attempts
+    if (feedbackText || isLoading || hasError || attemptCount >= maxAttempts) {
+      return;
+    }
+
+    // Skip if we don't have necessary data
+    if (!messages.length || !topic) {
+      return;
+    }
+
     const fetchFeedback = async () => {
-      if (messages.length > 0 && !feedbackText && !isLoading && topic) {
-        setIsLoading(true);
-        try {
-          // Extract transcripts from the messages
-          const transcript = messages
-            .filter(msg => msg.type === MessageTypeEnum.TRANSCRIPT)
-            .map((msg) => {
-              const role = msg.role === MessageRoleEnum.ASSISTANT ? 'Examiner' : 'Student';
+      setIsLoading(true);
+      setAttemptCount(prev => prev + 1);
 
-              const transcript = msg.transcript;
+      try {
+        // This is a placeholder for the actual implementation
+        // The commented code below shows what would be implemented
+        // when the API integration is ready
 
-              return `${role}: ${transcript}`;
-            })
-            .join('\n');
+        // Format the questions for each part
+        const part1Questions = formatQuestionsByPart('part1');
+        const part2Questions = formatQuestionsByPart('part2');
+        const part3Questions = formatQuestionsByPart('part3');
 
-          // Format the questions as a bulleted list
-          const formattedQuestions = questions.map(q => q.questionText).map(q => `    + ${q}`).join('\n');
+        // Extract only events whose type are 'transcript' from VAPI conversation
+        const transcriptMessages = messages.filter(msg => msg.type === MessageTypeEnum.TRANSCRIPT);
 
-          // Prepare feedback parameters
-          const feedbackParams: FeedbackParams = {
-            topic: `${topic.title}`,
-            questions: formattedQuestions,
-            transcript,
-          };
+        // Organize the transcript into part 1, 2, 3
+        // const organizedTranscript = await organizeTranscript(transcriptMessages);
 
-          const stream = await generateFeedback(feedbackParams);
+        // // Extract transcript into speaking parts
+        // const part1Transcript = formatTranscript(organizedTranscript.part1);
+        // const part2Transcript = formatTranscript(organizedTranscript.part2);
+        // const part3Transcript = formatTranscript(organizedTranscript.part3);
 
-          // Process the streaming response
-          for await (const chunk of stream) {
-            const content = chunk.choices[0]?.delta?.content || '';
-            setFeedbackText((prev: string) => prev + content);
-          }
-        } catch (error) {
-          console.error('Error generating feedback:', error);
-        } finally {
-          setIsLoading(false);
-        }
+        // Extract full transcript
+        const fullTranscript = formatTranscript(transcriptMessages);
+
+        // Prepare feedback parameters
+        const feedbackParams: FeedbackParams = {
+          topic: topic.title,
+          part1Questions,
+          part2Questions,
+          part3Questions,
+          fullTranscript,
+          // part1Transcript,
+          // part2Transcript,
+          // part3Transcript,
+        };
+
+        // Generate and process feedback
+        const stream = await generateFeedback(feedbackParams);
+        await processStreamingResponse(stream);
+      } catch (error) {
+        console.error('Error generating feedback:', error);
+        setHasError(true); // Mark as error to prevent retries
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchFeedback();
-  }, [messages, feedbackText, isLoading, setFeedbackText, setIsLoading, topic, questions]);
+  }, [
+    messages,
+    feedbackText,
+    isLoading,
+    hasError,
+    attemptCount,
+    maxAttempts,
+    topic,
+    formatQuestionsByPart,
+    formatTranscript,
+    processStreamingResponse,
+    setIsLoading,
+    setFeedbackText,
+  ]);
 
   return (
-    <div className="container mx-auto py-12 flex flex-col h-screen overflow-hidden">
+    <div className="px-12 py-8 flex flex-col h-screen overflow-hidden">
       {/* Header */}
       <div>
         <div className="mb-8">
@@ -123,7 +214,7 @@ function FeedbackContentMain() {
         </div>
 
         <div className="flex items-center gap-4 mb-8">
-          <span className={cn('flex size-12 items-center justify-center rounded-full text-blue-500 bg-blue-500/[0.08]')}>
+          <span className="flex size-12 items-center justify-center rounded-full text-blue-500 bg-blue-500/[0.08]">
             <MicrophoneIcon className="size-5" />
           </span>
           <div>
@@ -136,7 +227,7 @@ function FeedbackContentMain() {
       {/* Main content - takes all available space */}
       <div className="flex flex-1 overflow-hidden">
         {/* Conversation History - 50% width */}
-        <div className="w-1/2 flex flex-col p-4">
+        <div className="w-2/5 flex flex-col p-4">
           <h2 className="text-lg font-medium mb-3">Conversation History</h2>
           <div className="flex-1 overflow-auto bg-card/90 border rounded-xl p-4">
             <div className="space-y-4">
@@ -154,7 +245,7 @@ function FeedbackContentMain() {
         </div>
 
         {/* AI Feedback - 50% width */}
-        <div className="w-1/2 flex flex-col p-4">
+        <div className="w-3/5 flex flex-col p-4">
           <h2 className="text-lg font-medium mb-3">AI Feedback</h2>
           <div
             ref={feedbackContainerRef}
@@ -163,13 +254,13 @@ function FeedbackContentMain() {
             {isLoading && !feedbackText
               ? (
                   <div className="flex flex-col items-center justify-center h-full">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+                    <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-500 mb-3"></div>
                     <p className="text-muted-foreground">Generating feedback...</p>
                   </div>
                 )
-              : feedbackText
+              : processedFeedback
                 ? (
-                    <MarkdownRenderer content={feedbackText} />
+                    <MarkdownRenderer content={processedFeedback} />
                   )
                 : (
                     <p className="text-muted-foreground text-center py-8">

@@ -1,6 +1,7 @@
 export const openaiModels = {
   default: 'gpt-4o-mini',
   reasoning: 'o4-mini',
+  marketSurvey: 'gpt-3.5-turbo', // Cheapest model with web search capability
 };
 
 export const IELTS_FEEDBACK_PROMPT = `

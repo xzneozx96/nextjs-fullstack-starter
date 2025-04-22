@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import ComponentCard from '@/components/common/ComponentCard';
-import PageBreadcrumb from '@/components/common/PageBreadCrumb';
-import BasicTableOne from '@/components/tables/BasicTableOne';
+import ComponentCard from '@/shared/components/common/ComponentCard';
+import PageBreadcrumb from '@/shared/components/common/PageBreadCrumb';
+import BasicTableOne from '@/shared/components/tables/BasicTableOne';
 import React from 'react';
 
 export const metadata: Metadata = {

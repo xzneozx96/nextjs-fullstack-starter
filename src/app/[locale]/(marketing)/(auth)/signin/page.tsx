@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import SignInForm from '@/components/auth/SignInForm';
+import SignInForm from '@/shared/components/auth/SignInForm';
 
 export const metadata: Metadata = {
   title: 'Next.js SignIn Page | TailAdmin - Next.js Dashboard Template',

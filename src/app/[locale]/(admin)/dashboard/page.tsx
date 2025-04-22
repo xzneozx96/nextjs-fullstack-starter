@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
-import DemographicCard from '@/components/ecommerce/DemographicCard';
-import EcommerceMetrics from '@/components/ecommerce/EcommerceMetrics';
-import MonthlySalesChart from '@/components/ecommerce/MonthlySalesChart';
-import MonthlyTarget from '@/components/ecommerce/MonthlyTarget';
-import RecentOrders from '@/components/ecommerce/RecentOrders';
-import StatisticsChart from '@/components/ecommerce/StatisticsChart';
+import DemographicCard from '@/shared/components/ecommerce/DemographicCard';
+import EcommerceMetrics from '@/shared/components/ecommerce/EcommerceMetrics';
+import MonthlySalesChart from '@/shared/components/ecommerce/MonthlySalesChart';
+import MonthlyTarget from '@/shared/components/ecommerce/MonthlyTarget';
+import RecentOrders from '@/shared/components/ecommerce/RecentOrders';
+import StatisticsChart from '@/shared/components/ecommerce/StatisticsChart';
 import React from 'react';
 
 export const metadata: Metadata = {

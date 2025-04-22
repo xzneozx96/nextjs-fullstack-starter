@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import UserAddressCard from '@/components/user-profile/UserAddressCard';
-import UserInfoCard from '@/components/user-profile/UserInfoCard';
-import UserMetaCard from '@/components/user-profile/UserMetaCard';
+import UserAddressCard from '@/shared/components/user-profile/UserAddressCard';
+import UserInfoCard from '@/shared/components/user-profile/UserInfoCard';
+import UserMetaCard from '@/shared/components/user-profile/UserMetaCard';
 import React from 'react';
 
 export const metadata: Metadata = {

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { PostHogProvider } from '@/components/analytics/PostHogProvider';
-import { SidebarProvider } from '@/contexts/SidebarContext';
-import { ThemeProvider } from '@/contexts/ThemeContext';
-import { routing } from '@/libs/i18nNavigation';
+import { routing } from '@/core/config/i18nNavigation';
+import { PostHogProvider } from '@/shared/components/analytics/PostHogProvider';
+import { SidebarProvider } from '@/shared/contexts/SidebarContext';
+import { ThemeProvider } from '@/shared/contexts/ThemeContext';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Lexend_Deca } from 'next/font/google';

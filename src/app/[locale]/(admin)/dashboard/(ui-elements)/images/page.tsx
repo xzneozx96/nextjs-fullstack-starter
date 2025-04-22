@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import ComponentCard from '@/components/common/ComponentCard';
-import PageBreadcrumb from '@/components/common/PageBreadCrumb';
-import ResponsiveImage from '@/components/ui/images/ResponsiveImage';
-import ThreeColumnImageGrid from '@/components/ui/images/ThreeColumnImageGrid';
-import TwoColumnImageGrid from '@/components/ui/images/TwoColumnImageGrid';
+import ComponentCard from '@/shared/components/common/ComponentCard';
+import PageBreadcrumb from '@/shared/components/common/PageBreadCrumb';
+import ResponsiveImage from '@/shared/components/ui/images/ResponsiveImage';
+import ThreeColumnImageGrid from '@/shared/components/ui/images/ThreeColumnImageGrid';
+import TwoColumnImageGrid from '@/shared/components/ui/images/TwoColumnImageGrid';
 import React from 'react';
 
 export const metadata: Metadata = {

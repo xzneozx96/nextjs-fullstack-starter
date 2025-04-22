@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import PageBreadcrumb from '@/components/common/PageBreadCrumb';
-import Badge from '@/components/ui/badge/Badge';
-import { PlusIcon } from '@/icons';
+import PageBreadcrumb from '@/shared/components/common/PageBreadCrumb';
+import Badge from '@/shared/components/ui/badge/Badge';
+import { PlusIcon } from '@/shared/icons';
 import React from 'react';
 
 export const metadata: Metadata = {

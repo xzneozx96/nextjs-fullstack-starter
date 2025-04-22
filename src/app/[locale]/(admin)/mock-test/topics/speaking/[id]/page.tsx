@@ -1,14 +1,14 @@
 'use client';
 
-import type { QuestionBank, Topic } from '@/types/question-bank';
-import SpeakingPracticeSession from '@/components/mock-test/SpeakingPracticeSession';
-import Button from '@/components/ui/button/Button';
-import { mockQuestions } from '@/data/mock-questions';
+import type { QuestionBank, Topic } from '@/features/mock-test/types/question-bank';
+import SpeakingPracticeSession from '@/features/mock-test/components/SpeakingPracticeSession';
+import { mockQuestions } from '@/features/mock-test/constants/mock-questions';
+import Button from '@/shared/components/ui/button/Button';
 import {
   ChevronLeftIcon,
   MicrophoneIcon,
-} from '@/icons';
-import { cn } from '@/libs/utils';
+} from '@/shared/icons';
+import { cn } from '@/shared/libs/utils';
 import Link from 'next/link';
 import { notFound, useParams } from 'next/navigation';
 import { useState } from 'react';

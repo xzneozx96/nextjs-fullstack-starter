@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import BarChartOne from '@/components/charts/bar/BarChartOne';
-import ComponentCard from '@/components/common/ComponentCard';
-import PageBreadcrumb from '@/components/common/PageBreadCrumb';
+import BarChartOne from '@/shared/components/charts/bar/BarChartOne';
+import ComponentCard from '@/shared/components/common/ComponentCard';
+import PageBreadcrumb from '@/shared/components/common/PageBreadCrumb';
 import React from 'react';
 
 export const metadata: Metadata = {

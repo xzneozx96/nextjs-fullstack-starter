@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import ComponentCard from '@/components/common/ComponentCard';
-import PageBreadcrumb from '@/components/common/PageBreadCrumb';
-import Alert from '@/components/ui/alert/Alert';
+import ComponentCard from '@/shared/components/common/ComponentCard';
+import PageBreadcrumb from '@/shared/components/common/PageBreadCrumb';
+import Alert from '@/shared/components/ui/alert/Alert';
 import React from 'react';
 
 export const metadata: Metadata = {

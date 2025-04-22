@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
-import { Faq } from '@/components/home/FAQs';
-import { Feature } from '@/components/home/Features';
-import { Footer } from '@/components/home/Footer';
-import { HomeNav } from '@/components/home/Header';
-import Hero from '@/components/home/Hero';
-import { HowItWorks } from '@/components/home/HowItWorks';
+import { Faq } from '@/shared/components/home/FAQs';
+import { Feature } from '@/shared/components/home/Features';
+import { Footer } from '@/shared/components/home/Footer';
+import { HomeNav } from '@/shared/components/home/Header';
+import Hero from '@/shared/components/home/Hero';
+import { HowItWorks } from '@/shared/components/home/HowItWorks';
 import React from 'react';
 
 export const metadata: Metadata = {

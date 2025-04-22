@@ -1,7 +1,7 @@
-import GridShape from '@/components/common/GridShape';
-import ThemeTogglerTwo from '@/components/common/ThemeTogglerTwo';
+import GridShape from '@/shared/components/common/GridShape';
+import ThemeTogglerTwo from '@/shared/components/common/ThemeTogglerTwo';
 
-import { ThemeProvider } from '@/contexts/ThemeContext';
+import { ThemeProvider } from '@/shared/contexts/ThemeContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';

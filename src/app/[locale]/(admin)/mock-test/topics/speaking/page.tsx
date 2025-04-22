@@ -1,9 +1,9 @@
-import type { Topic } from '@/types/question-bank';
-import { mockQuestions } from '@/data/mock-questions';
+import type { Topic } from '@/features/mock-test/types/question-bank';
+import { mockQuestions } from '@/features/mock-test/constants/mock-questions';
 import {
   MicrophoneIcon,
-} from '@/icons';
-import { cn } from '@/libs/utils';
+} from '@/shared/icons';
+import { cn } from '@/shared/libs/utils';
 import Link from 'next/link';
 
 export default function TestsListPage() {
@@ -24,7 +24,7 @@ export default function TestsListPage() {
       </div>
 
       {/* Grid layout with responsive columns */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
         {speakingTopics.map(topic => (
           <Link
             key={topic.id}

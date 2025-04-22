@@ -1,10 +1,10 @@
 'use client';
 
-import ComponentCard from '@/components/common/ComponentCard';
-import PageBreadcrumb from '@/components/common/PageBreadCrumb';
-import TaskDetails from '@/components/project-monitoring/TaskDetails';
-import TaskList from '@/components/project-monitoring/TaskList';
-import { ProjectProvider, useProjectContext } from '@/contexts/ProjectContext';
+import TaskDetails from '@/features/project-monitoring-demo/components/TaskDetails';
+import TaskList from '@/features/project-monitoring-demo/components/TaskList';
+import { ProjectProvider, useProjectContext } from '@/features/project-monitoring-demo/contexts/ProjectContext';
+import ComponentCard from '@/shared/components/common/ComponentCard';
+import PageBreadcrumb from '@/shared/components/common/PageBreadCrumb';
 import React from 'react';
 
 /**

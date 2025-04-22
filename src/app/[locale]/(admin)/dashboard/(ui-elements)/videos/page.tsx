@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import PageBreadcrumb from '@/components/common/PageBreadCrumb';
-import VideosExample from '@/components/ui/video/VideosExample';
+import PageBreadcrumb from '@/shared/components/common/PageBreadCrumb';
+import VideosExample from '@/shared/components/ui/video/VideosExample';
 import React from 'react';
 
 export const metadata: Metadata = {

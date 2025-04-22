@@ -1,7 +1,7 @@
 'use client';
 
-import { FeedbackContent } from '@/components/mock-test/FeedbackContent';
-import { FeedbackProvider } from '@/contexts/FeedbackContext';
+import { FeedbackContent } from '@/features/mock-test/components/FeedbackContent';
+import { FeedbackProvider } from '@/features/mock-test/contexts/FeedbackContext';
 
 export default function FeedbackPage() {
   return (

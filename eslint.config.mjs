@@ -21,7 +21,7 @@ export default antfu({
   },
 
   ignores: [
-    'migrations/**/*',
+    'src/core/drizzle/migrations/**/*',
     'next-env.d.ts',
   ],
 }, jsxA11y.flatConfigs.recommended, {
@@ -55,6 +55,6 @@ export default antfu({
     'test/prefer-lowercase-title': 'off', // Allow using uppercase titles in test titles,
     'no-console': 'off', // Disallow console,
     'no-alert': 'off',
-    'max-len': ['warn', { code: 120, tabWidth: 2 }],
+    'max-len': ['off', { code: 120, tabWidth: 2 }],
   },
 });

@@ -1,11 +1,11 @@
 'use client';
 
-import type { SkillType, TestType } from '@/types/question-bank';
-import Button from '@/components/ui/button/Button';
-import { testingSkills } from '@/data/testing-skills';
-import { AcademicCapIcon, AngleLeftIcon, BookOpenIcon, Check } from '@/icons';
-import { useRouter } from '@/libs/i18nNavigation';
+import type { SkillType, TestType } from '@/features/mock-test/types/question-bank';
+import { testingSkills } from '@/features/mock-test/constants/testing-skills';
+import Button from '@/shared/components/ui/button/Button';
+import { AcademicCapIcon, AngleLeftIcon, BookOpenIcon, Check } from '@/shared/icons';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const CardOption = ({

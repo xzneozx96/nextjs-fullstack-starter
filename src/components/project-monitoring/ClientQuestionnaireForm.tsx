@@ -1,6 +1,6 @@
 import { useProjectContext } from '@/contexts/ProjectContext';
 import { openRouter } from '@/libs/OpenRouter';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { MarkdownRenderer } from '../ui/markdown/MarkdownRenderer';
 import ModelSelector from '../ui/model-selector';
 import AIContentApproval from './AIContentApproval';
@@ -32,7 +32,7 @@ const ClientQuestionnaireForm: React.FC = () => {
   };
 
   // Function to process streaming response
-  const processQuestionnaireResponse = useCallback(async (stream: any): Promise<void> => {
+  const processQuestionnaireResponse = async (stream: any): Promise<void> => {
     let accumulatedContent = '';
 
     try {
@@ -55,9 +55,9 @@ const ClientQuestionnaireForm: React.FC = () => {
       console.error('Error processing stream:', error);
       setQuestionnaireError('Error processing response stream');
     }
-  }, [setClientQuestionnaireFormData, setFormSubmitted, setQuestionnaireError]);
+  };
 
-  const handleGenerateQuestionnaire = useCallback(async () => {
+  const handleGenerateQuestionnaire = async () => {
     // Validate form
     if (
       clientQuestionnaireFormData.selectedStaff.length === 0
@@ -119,7 +119,7 @@ const ClientQuestionnaireForm: React.FC = () => {
     } finally {
       setIsGeneratingQuestionnaire(false);
     }
-  }, [clientQuestionnaireFormData, processQuestionnaireResponse, updateSubtaskStatus, meetingObjectivesFormData.meetingGoals, selectedModel, setClientQuestionnaireFormData]);
+  };
 
   // Handle approval of the questionnaire content
   const handleApproveQuestionnaire = () => {

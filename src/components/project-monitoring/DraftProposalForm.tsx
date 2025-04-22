@@ -1,6 +1,6 @@
 import { useProjectContext } from '@/contexts/ProjectContext';
 import { openRouter } from '@/libs/OpenRouter';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { MarkdownRenderer } from '../ui/markdown/MarkdownRenderer';
 import ModelSelector from '../ui/model-selector';
 import AIContentApproval from './AIContentApproval';
@@ -20,11 +20,14 @@ const DraftProposalForm: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setDraftProposalFormData({ [name]: value });
+    // Use the correct way to update the form data
+    setDraftProposalFormData({
+      [name]: value,
+    });
   };
 
   // Function to process streaming response
-  const processProposalResponse = useCallback(async (stream: any): Promise<void> => {
+  const processProposalResponse = async (stream: any): Promise<void> => {
     let accumulatedContent = '';
 
     try {
@@ -47,11 +50,12 @@ const DraftProposalForm: React.FC = () => {
       console.error('Error processing stream:', error);
       setProposalError('Error processing response stream');
     }
-  }, [setDraftProposalFormData, setFormSubmitted, setProposalError]);
+  };
 
-  const handleGenerateProposal = useCallback(async () => {
+  const handleGenerateProposal = async () => {
     // Validate form
-    if (!draftProposalFormData.clientName || !draftProposalFormData.goal || !draftProposalFormData.proposalLocation || !draftProposalFormData.proposalTime) {
+    const { clientName, goal, proposalLocation, proposalTime } = draftProposalFormData;
+    if (!clientName || !goal || !proposalLocation || !proposalTime) {
       alert('Please fill out all required fields');
       return;
     }
@@ -106,7 +110,7 @@ const DraftProposalForm: React.FC = () => {
     } finally {
       setIsGeneratingProposal(false);
     }
-  }, [draftProposalFormData, processProposalResponse, updateSubtaskStatus, selectedModel, setDraftProposalFormData]);
+  };
 
   // Handle approval of the proposal content
   const handleApproveProposal = () => {

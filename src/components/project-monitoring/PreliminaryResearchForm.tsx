@@ -1,6 +1,6 @@
 import { useProjectContext } from '@/contexts/ProjectContext';
 import { openRouter } from '@/libs/OpenRouter';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { MarkdownRenderer } from '../ui/markdown/MarkdownRenderer';
 import ModelSelector from '../ui/model-selector';
 import AIContentApproval from './AIContentApproval';
@@ -26,7 +26,7 @@ const PreliminaryResearchForm: React.FC = () => {
   };
 
   // Function to process streaming response
-  const processResearchResponse = useCallback(async (stream: any): Promise<void> => {
+  const processResearchResponse = async (stream: any): Promise<void> => {
     let accumulatedContent = '';
 
     try {
@@ -49,9 +49,9 @@ const PreliminaryResearchForm: React.FC = () => {
       console.error('Error processing stream:', error);
       setResearchError('Error processing response stream');
     }
-  }, [setPreliminaryResearchFormData, setFormSubmitted, setResearchError]);
+  };
 
-  const handleGenerateResearch = useCallback(async () => {
+  const handleGenerateResearch = async () => {
     // Validate form
     if (!preliminaryResearchFormData.clientName || !preliminaryResearchFormData.clientDomain || !preliminaryResearchFormData.clientLocation) {
       alert('Please fill out all required fields');
@@ -109,7 +109,7 @@ const PreliminaryResearchForm: React.FC = () => {
     } finally {
       setIsGeneratingResearch(false);
     }
-  }, [preliminaryResearchFormData, processResearchResponse, updateSubtaskStatus, selectedModel, setPreliminaryResearchFormData]);
+  };
 
   // Handle approval of the research content
   const handleApproveResearch = () => {

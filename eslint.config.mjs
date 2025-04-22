@@ -54,6 +54,7 @@ export default antfu({
     'test/padding-around-all': 'error', // Add padding in test files
     'test/prefer-lowercase-title': 'off', // Allow using uppercase titles in test titles,
     'no-console': 'off', // Disallow console,
+    'no-alert': 'off',
     'max-len': ['warn', { code: 120, tabWidth: 2 }],
   },
 });

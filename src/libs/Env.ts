@@ -17,6 +17,7 @@ export const Env = createEnv({
     NEXT_PUBLIC_VAPI_API_KEY: z.string().min(1),
     NEXT_PUBLIC_VAPI_ASSISTANT_ID: z.string().min(1),
     NEXT_PUBLIC_OPENAI_API_KEY: z.string().min(1),
+    NEXT_PUBLIC_OPENROUTER_API_KEY: z.string().min(1).optional(),
   },
   shared: {
     NODE_ENV: z.enum(['test', 'development', 'production']).optional(),
@@ -37,5 +38,6 @@ export const Env = createEnv({
     NEXT_PUBLIC_VAPI_API_KEY: process.env.NEXT_PUBLIC_VAPI_API_KEY,
     NEXT_PUBLIC_VAPI_ASSISTANT_ID: process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID,
     NEXT_PUBLIC_OPENAI_API_KEY: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    NEXT_PUBLIC_OPENROUTER_API_KEY: process.env.NEXT_PUBLIC_OPENROUTER_API_KEY,
   },
 });

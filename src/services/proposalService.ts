@@ -1,6 +1,7 @@
-import { openai } from '@/libs/OpenAI';
+import { openRouter } from '@/libs/OpenRouter';
 
 export type ProposalParams = {
+  model: string;
   clientBusiness: string;
   clientIndustry: string;
   clientChallenges: string;
@@ -145,13 +146,13 @@ export async function generateProposal(params: ProposalParams) {
     // Create a promise that will be rejected after the timeout
     const timeoutPromise = new Promise((_, reject) => {
       timeoutId = setTimeout(() => {
-        reject(new Error('OpenAI API request timed out after 45 seconds'));
+        reject(new Error('OpenRouter API request timed out after 45 seconds'));
       }, TIMEOUT_MS);
     });
 
-    // Create a streaming response from OpenAI using gpt-4o-mini
-    const apiPromise = openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Using the cheapest model that supports complex tasks
+    // Create a streaming response using OpenRouter
+    const apiPromise = openRouter.completions.create({
+      model: params.model,
       messages: [
         {
           role: 'system',
@@ -185,7 +186,7 @@ export async function generateProposal(params: ProposalParams) {
     if (error.status === 429) {
       throw new Error('Rate limit exceeded. Please try again later.');
     } else if (error.status >= 500) {
-      throw new Error('OpenAI server error. Please try again later.');
+      throw new Error('OpenRouter server error. Please try again later.');
     } else if (error.message.includes('timed out')) {
       throw new Error('Request timed out. Please try with a simpler query.');
     } else {

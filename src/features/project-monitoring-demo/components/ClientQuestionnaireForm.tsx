@@ -19,6 +19,7 @@ const ClientQuestionnaireForm: React.FC = () => {
   } = useProjectContext();
 
   const [isGeneratingQuestionnaire, setIsGeneratingQuestionnaire] = useState(false);
+  const [isAIEditing, setIsAIEditing] = useState(false);
   const [questionnaireError, setQuestionnaireError] = useState<string | null>(null);
   const [_, setFormSubmitted] = useState(false);
 
@@ -41,11 +42,14 @@ const ClientQuestionnaireForm: React.FC = () => {
         // Extract the content from the chunk
         const content = chunk.choices[0]?.delta?.content || '';
 
-        // Append the content to the accumulated content
-        accumulatedContent += content;
+        // Only update if there's actual content
+        if (content) {
+          // Append the content to the accumulated content
+          accumulatedContent += content;
 
-        // Update the state with the accumulated content
-        setClientQuestionnaireFormData({ questionnaireResult: accumulatedContent });
+          // Update the state with the accumulated content
+          setClientQuestionnaireFormData({ questionnaireResult: accumulatedContent });
+        }
       }
 
       // When the stream is complete, mark form as submitted
@@ -138,6 +142,73 @@ const ClientQuestionnaireForm: React.FC = () => {
   // Handle editing of the questionnaire content
   const handleEditQuestionnaire = (editedContent: string) => {
     setClientQuestionnaireFormData({ questionnaireResult: editedContent });
+  };
+
+  // Handle AI editing of the questionnaire content
+  const handleAIEditQuestionnaire = async (instructions: string) => {
+    // Show loading state
+    setIsAIEditing(true);
+    setQuestionnaireError(null);
+
+    // Set a timeout to prevent infinite loops
+    const timeoutId = setTimeout(() => {
+      setIsAIEditing(false);
+      setQuestionnaireError('The request is taking longer than expected. It has been cancelled to prevent excessive API usage.');
+    }, 60000); // 60 seconds timeout
+
+    try {
+      // Get meeting objectives from step 1.3
+      const meetingObjectives = meetingObjectivesFormData.meetingGoals;
+
+      // Create a streaming response using OpenRouter
+      const stream = await openRouter.completions.create({
+        model: selectedModel,
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a professional business analyst specializing in creating comprehensive client questionnaires. Your task is to edit and improve the questionnaire based on the user\'s instructions.',
+          },
+          {
+            role: 'user',
+            content: `Here is the current questionnaire:\n\n${clientQuestionnaireFormData.questionnaireResult}\n\nThe meeting has the following objectives:\n${meetingObjectives}\n\nPlease edit this questionnaire based on the following instructions:\n${instructions}\n\nProvide the complete edited questionnaire in your response.`,
+          },
+        ],
+        stream: true,
+      });
+
+      // Clear the timeout since we got a response
+      clearTimeout(timeoutId);
+
+      // Process the streaming response
+      let accumulatedContent = '';
+
+      try {
+        // Process the stream
+        for await (const chunk of stream) {
+          // Extract the content from the chunk
+          const content = chunk.choices[0]?.delta?.content || '';
+
+          // Only update if there's actual content
+          if (content) {
+            // Append the content to the accumulated content
+            accumulatedContent += content;
+
+            // Update the state with the accumulated content
+            setClientQuestionnaireFormData({ questionnaireResult: accumulatedContent });
+          }
+        }
+      } catch (error) {
+        console.error('Error processing stream:', error);
+        setQuestionnaireError('Error processing response stream');
+      }
+    } catch (error) {
+      // Clear the timeout
+      clearTimeout(timeoutId);
+      console.error('Error editing questionnaire with AI:', error);
+      setQuestionnaireError(`Error editing questionnaire with AI: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsAIEditing(false);
+    }
   };
 
   // If approved, show success message and the questionnaire content
@@ -246,7 +317,9 @@ const ClientQuestionnaireForm: React.FC = () => {
               title="Client Questionnaire"
               onApprove={handleApproveQuestionnaire}
               onEdit={handleEditQuestionnaire}
+              onAIEdit={handleAIEditQuestionnaire}
               isApproved={clientQuestionnaireFormData.isApproved}
+              isAIEditing={isAIEditing}
             />
           </div>
         )}

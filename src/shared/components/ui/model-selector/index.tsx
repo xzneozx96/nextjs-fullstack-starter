@@ -6,9 +6,9 @@ export type ModelOption = {
 };
 
 export const modelOptions: ModelOption[] = [
-  { id: 'gpt-4o-mini', label: 'ChatGPT 4o-mini' },
-  { id: 'gpt-4o', label: 'ChatGPT 4o' },
-  { id: 'deepseek-chat-v3-0324:free', label: 'Deepseek V3' },
+  { id: 'openai/gpt-4o-mini', label: 'ChatGPT 4o-mini' },
+  { id: 'openai/gpt-4o', label: 'ChatGPT 4o' },
+  { id: 'deepseek/deepseek-chat-v3-0324', label: 'Deepseek V3' },
 ];
 
 type ModelSelectorProps = {

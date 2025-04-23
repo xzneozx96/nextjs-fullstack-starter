@@ -115,7 +115,7 @@ export const initialSubtasks: SubTask[] = [
     input: 'Client information and research prompt',
     inputType: 'ai-prompt',
     inputDetails: 'Enter client name, domain, and location to generate preliminary research',
-    inputTemplate: 'Our client is {client\'s name}, working in {client\'s domain} and located in {client\'s location}. Perform preliminary research on the current market landscape, potential competitors, and conduct a SWOT analysis.',
+    inputTemplate: 'Our client is {name}, working in {domain} and located in {location}. Perform preliminary research on the current market landscape, potential competitors, and conduct a SWOT analysis.',
     output: 'Preliminary research report with SWOT analysis',
     deadline: '2023-06-08',
     assignee: 'Research Team',

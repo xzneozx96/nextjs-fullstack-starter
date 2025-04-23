@@ -17,6 +17,7 @@ const PreliminaryResearchForm: React.FC = () => {
   } = useProjectContext();
 
   const [isGeneratingResearch, setIsGeneratingResearch] = useState(false);
+  const [isAIEditing, setIsAIEditing] = useState(false);
   const [researchError, setResearchError] = useState<string | null>(null);
   const [_, setFormSubmitted] = useState(false);
 
@@ -35,11 +36,14 @@ const PreliminaryResearchForm: React.FC = () => {
         // Extract the content from the chunk
         const content = chunk.choices[0]?.delta?.content || '';
 
-        // Append the content to the accumulated content
-        accumulatedContent += content;
+        // Only update if there's actual content
+        if (content) {
+          // Append the content to the accumulated content
+          accumulatedContent += content;
 
-        // Update the state with the accumulated content
-        setPreliminaryResearchFormData({ researchResult: accumulatedContent });
+          // Update the state with the accumulated content
+          setPreliminaryResearchFormData({ researchResult: accumulatedContent });
+        }
       }
 
       // When the stream is complete, mark form as submitted
@@ -69,9 +73,9 @@ const PreliminaryResearchForm: React.FC = () => {
 
     // Replace placeholders in the prompt template
     const prompt = preliminaryResearchFormData.promptTemplate
-      .replace('{client\'s name}', preliminaryResearchFormData.clientName)
-      .replace('{client\'s domain}', preliminaryResearchFormData.clientDomain)
-      .replace('{client\'s location}', preliminaryResearchFormData.clientLocation);
+      .replace('{name}', preliminaryResearchFormData.clientName)
+      .replace('{domain}', preliminaryResearchFormData.clientDomain)
+      .replace('{location}', preliminaryResearchFormData.clientLocation);
 
     // Set a timeout to prevent infinite loops
     const timeoutId = setTimeout(() => {
@@ -128,6 +132,70 @@ const PreliminaryResearchForm: React.FC = () => {
   // Handle editing of the research content
   const handleEditResearch = (editedContent: string) => {
     setPreliminaryResearchFormData({ researchResult: editedContent });
+  };
+
+  // Handle AI editing of the research content
+  const handleAIEditResearch = async (instructions: string) => {
+    // Show loading state
+    setIsAIEditing(true);
+    setResearchError(null);
+
+    // Set a timeout to prevent infinite loops
+    const timeoutId = setTimeout(() => {
+      setIsAIEditing(false);
+      setResearchError('The request is taking longer than expected. It has been cancelled to prevent excessive API usage.');
+    }, 60000); // 60 seconds timeout
+
+    try {
+      // Create a streaming response using OpenRouter
+      const stream = await openRouter.completions.create({
+        model: selectedModel,
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a professional business analyst specializing in market research and competitive analysis. Your task is to edit and improve the content based on the user\'s instructions.',
+          },
+          {
+            role: 'user',
+            content: `Here is the current content:\n\n${preliminaryResearchFormData.researchResult}\n\nPlease edit this content based on the following instructions:\n${instructions}\n\nProvide the complete edited content in your response.`,
+          },
+        ],
+        stream: true,
+      });
+
+      // Clear the timeout since we got a response
+      clearTimeout(timeoutId);
+
+      // Process the streaming response
+      let accumulatedContent = '';
+
+      try {
+        // Process the stream
+        for await (const chunk of stream) {
+          // Extract the content from the chunk
+          const content = chunk.choices[0]?.delta?.content || '';
+
+          // Only update if there's actual content
+          if (content) {
+            // Append the content to the accumulated content
+            accumulatedContent += content;
+
+            // Update the state with the accumulated content
+            setPreliminaryResearchFormData({ researchResult: accumulatedContent });
+          }
+        }
+      } catch (error) {
+        console.error('Error processing stream:', error);
+        setResearchError('Error processing response stream');
+      }
+    } catch (error) {
+      // Clear the timeout
+      clearTimeout(timeoutId);
+      console.error('Error editing research with AI:', error);
+      setResearchError(`Error editing research with AI: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsAIEditing(false);
+    }
   };
 
   // If approved, show success message and the research content
@@ -259,7 +327,9 @@ const PreliminaryResearchForm: React.FC = () => {
               title="Preliminary Research Results"
               onApprove={handleApproveResearch}
               onEdit={handleEditResearch}
+              onAIEdit={handleAIEditResearch}
               isApproved={preliminaryResearchFormData.isApproved}
+              isAIEditing={isAIEditing}
             />
           </div>
         )}

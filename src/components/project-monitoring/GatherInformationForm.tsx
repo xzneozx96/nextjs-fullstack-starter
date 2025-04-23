@@ -106,7 +106,7 @@ const GatherInformationForm: React.FC = () => {
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-              rows={3}
+              rows={4}
               placeholder="Describe the client's business, products/services, and market position"
             />
           </div>
@@ -145,7 +145,7 @@ const GatherInformationForm: React.FC = () => {
             onChange={handleChange}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-            rows={3}
+            rows={4}
             placeholder="Describe the key challenges and pain points the client is facing"
           />
         </div>
@@ -164,7 +164,7 @@ const GatherInformationForm: React.FC = () => {
             onChange={handleChange}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-            rows={3}
+            rows={4}
             placeholder="List the technologies, systems, and platforms currently used by the client"
           />
         </div>

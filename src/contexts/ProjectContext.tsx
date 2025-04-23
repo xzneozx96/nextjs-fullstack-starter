@@ -89,7 +89,7 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     clientName: '',
     clientDomain: '',
     clientLocation: '',
-    promptTemplate: 'Our client is {client\'s name}, working in {client\'s domain} and located in {client\'s location}. Perform preliminary research on the current market landscape, potential competitors, and conduct a SWOT analysis.',
+    promptTemplate: 'Our client is {name}, working in {domain} and located in {location}. Perform preliminary research on the current market landscape, potential competitors, and conduct a SWOT analysis.',
     researchResult: '',
     isApproved: false,
   });
@@ -113,7 +113,7 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
   });
 
   const [draftProposalFormData, setDraftProposalFormDataState] = useState<DraftProposalFormData>({
-    promptTemplate: 'Generate a draft proposal to complete the {goal}, including an implementation roadmap tailored for {client\'s name}.',
+    promptTemplate: 'Generate a draft proposal to complete the {goal}, including an implementation roadmap tailored for {name}.',
     clientName: '',
     goal: '',
     proposalLocation: '',
@@ -124,27 +124,81 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   // Partial update functions for form data
   const setAssembleTeamFormData = useCallback((data: Partial<AssembleTeamFormData>) => {
-    setAssembleTeamFormDataState(prev => ({ ...prev, ...data }));
+    // Use a function to update state to avoid infinite loops
+    setAssembleTeamFormDataState((prev) => {
+      // Check if the new data is different from the previous data
+      const hasChanges = Object.entries(data).some(
+        ([key, value]) => prev[key as keyof AssembleTeamFormData] !== value,
+      );
+
+      // Only update if there are actual changes
+      return hasChanges ? { ...prev, ...data } : prev;
+    });
   }, []);
 
   const setPreliminaryResearchFormData = useCallback((data: Partial<PreliminaryResearchFormData>) => {
-    setPreliminaryResearchFormDataState(prev => ({ ...prev, ...data }));
+    // Use a function to update state to avoid infinite loops
+    setPreliminaryResearchFormDataState((prev) => {
+      // Check if the new data is different from the previous data
+      const hasChanges = Object.entries(data).some(
+        ([key, value]) => prev[key as keyof PreliminaryResearchFormData] !== value,
+      );
+
+      // Only update if there are actual changes
+      return hasChanges ? { ...prev, ...data } : prev;
+    });
   }, []);
 
   const setMeetingObjectivesFormData = useCallback((data: Partial<MeetingObjectivesFormData>) => {
-    setMeetingObjectivesFormDataState(prev => ({ ...prev, ...data }));
+    // Use a function to update state to avoid infinite loops
+    setMeetingObjectivesFormDataState((prev) => {
+      // Check if the new data is different from the previous data
+      const hasChanges = Object.entries(data).some(
+        ([key, value]) => prev[key as keyof MeetingObjectivesFormData] !== value,
+      );
+
+      // Only update if there are actual changes
+      return hasChanges ? { ...prev, ...data } : prev;
+    });
   }, []);
 
   const setClientQuestionnaireFormData = useCallback((data: Partial<ClientQuestionnaireFormData>) => {
-    setClientQuestionnaireFormDataState(prev => ({ ...prev, ...data }));
+    // Use a function to update state to avoid infinite loops
+    setClientQuestionnaireFormDataState((prev) => {
+      // Check if the new data is different from the previous data
+      const hasChanges = Object.entries(data).some(
+        ([key, value]) => prev[key as keyof ClientQuestionnaireFormData] !== value,
+      );
+
+      // Only update if there are actual changes
+      return hasChanges ? { ...prev, ...data } : prev;
+    });
   }, []);
 
   const setPresentationDeckFormData = useCallback((data: Partial<PresentationDeckFormData>) => {
-    setPresentationDeckFormDataState(prev => ({ ...prev, ...data }));
+    // Use a function to update state to avoid infinite loops
+    setPresentationDeckFormDataState((prev) => {
+      // Check if the new data is different from the previous data
+      const hasChanges = Object.entries(data).some(
+        ([key, value]) => prev[key as keyof PresentationDeckFormData] !== value,
+      );
+
+      // Only update if there are actual changes
+      return hasChanges ? { ...prev, ...data } : prev;
+    });
   }, []);
 
   const setDraftProposalFormData = useCallback((data: Partial<DraftProposalFormData>) => {
-    setDraftProposalFormDataState(prev => ({ ...prev, ...data }));
+    // Use a function to update state to avoid infinite loops
+    setDraftProposalFormDataState((prev) => {
+      // Check if the new data is different from the previous data
+      const hasChanges = Object.entries(data).some(
+        ([key, value]) => prev[key as keyof DraftProposalFormData] !== value,
+      );
+
+      // Only update if there are actual changes
+      return hasChanges ? { ...prev, ...data } : prev;
+    });
   }, []);
 
   // Legacy state (keeping for compatibility)

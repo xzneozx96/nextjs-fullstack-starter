@@ -8,7 +8,9 @@ type AIContentApprovalProps = {
   title: string;
   onApprove: () => void;
   onEdit: (editedContent: string) => void;
+  onAIEdit?: (instructions: string) => void;
   isApproved: boolean;
+  isAIEditing?: boolean;
 };
 
 const AIContentApproval: React.FC<AIContentApprovalProps> = ({
@@ -18,11 +20,16 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
   title,
   onApprove,
   onEdit,
+  onAIEdit,
   isApproved,
+  isAIEditing = false,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isAIEditModalOpen, setIsAIEditModalOpen] = useState(false);
+  const [aiEditInstructions, setAIEditInstructions] = useState('');
   const [editedContent, setEditedContent] = useState(content);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const instructionsRef = useRef<HTMLTextAreaElement>(null);
 
   // Update edited content when original content changes (e.g., during streaming)
   React.useEffect(() => {
@@ -41,6 +48,38 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
   const handleStartEditing = () => {
     setIsEditing(true);
     setEditedContent(content);
+  };
+
+  const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+
+  const handleOpenAIEditModal = (event: React.MouseEvent) => {
+    // Calculate position relative to the button
+    const buttonRect = event.currentTarget.getBoundingClientRect();
+    setPopupPosition({
+      top: buttonRect.top - 10, // Position slightly above the button
+      left: buttonRect.left - 300 + buttonRect.width, // Align right edge with button
+    });
+
+    setIsAIEditModalOpen(true);
+    setAIEditInstructions('');
+    // Focus the instructions textarea when the modal opens
+    setTimeout(() => {
+      if (instructionsRef.current) {
+        instructionsRef.current.focus();
+      }
+    }, 100);
+  };
+
+  const handleCloseAIEditModal = () => {
+    setIsAIEditModalOpen(false);
+    setAIEditInstructions('');
+  };
+
+  const handleSubmitAIEdit = () => {
+    if (onAIEdit && aiEditInstructions.trim()) {
+      onAIEdit(aiEditInstructions.trim());
+      setIsAIEditModalOpen(false);
+    }
   };
 
   const handleSaveEdit = () => {
@@ -118,12 +157,14 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
             ? (
                 <>
                   <button
+                    type="button"
                     onClick={handleCancelEdit}
                     className="px-3 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800 dark:text-gray-300"
                   >
                     Cancel
                   </button>
                   <button
+                    type="button"
                     onClick={handleSaveEdit}
                     className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
                   >
@@ -133,27 +174,99 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
               )
             : (
                 <>
+                  {onAIEdit && (
+                    <button
+                      type="button"
+                      onClick={e => handleOpenAIEditModal(e)}
+                      className="px-3 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800 dark:text-gray-300 flex items-center"
+                      disabled={isApproved || isAIEditing}
+                    >
+                      {isAIEditing
+                        ? (
+                            <>
+                              <div className="animate-spin mr-2 h-4 w-4 border-t-2 border-b-2 border-blue-500 rounded-full"></div>
+                              AI Editing...
+                            </>
+                          )
+                        : (
+                            <>Ask AI to Edit</>
+                          )}
+                    </button>
+                  )}
                   <button
+                    type="button"
                     onClick={handleStartEditing}
                     className="px-3 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800 dark:text-gray-300"
-                    disabled={isApproved}
+                    disabled={isApproved || isAIEditing}
                   >
-                    Edit
+                    Edit Manually
                   </button>
                   <button
+                    type="button"
                     onClick={onApprove}
                     className={`px-3 py-1.5 text-sm rounded-md ${
                       isApproved
                         ? 'bg-green-600 text-white'
                         : 'bg-blue-600 text-white hover:bg-blue-700'
                     }`}
-                    disabled={isApproved}
+                    disabled={isApproved || isAIEditing}
                   >
                     {isApproved ? 'Approved' : 'Approve & Continue'}
                   </button>
                 </>
               )}
         </div>
+      )}
+
+      {/* AI Edit Modal - Popup style */}
+      {isAIEditModalOpen && (
+        <>
+          {/* Backdrop to capture clicks outside the popup */}
+          <div
+            className="fixed inset-0 z-40"
+            onClick={handleCloseAIEditModal}
+            role="button"
+            tabIndex={0}
+            aria-label="Close popup"
+            onKeyDown={e => e.key === 'Escape' && handleCloseAIEditModal()}
+          />
+          <div className="fixed z-50" style={{ top: `${popupPosition.top}px`, left: `${popupPosition.left}px` }}>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-96 flex flex-col border border-gray-200 dark:border-gray-700">
+              <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">Ask AI to Edit Content</h3>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Provide instructions for AI to modify the content.
+                </p>
+              </div>
+              <div className="p-3">
+                <textarea
+                  ref={instructionsRef}
+                  value={aiEditInstructions}
+                  onChange={e => setAIEditInstructions(e.target.value)}
+                  placeholder="Example: Make it more concise, add a section about market trends, fix the formatting issues, etc."
+                  className="w-full h-32 p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-2">
+                <button
+                  type="button"
+                  onClick={handleCloseAIEditModal}
+                  className="px-3 py-1.5 text-xs border border-gray-300 rounded-md hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800 dark:text-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSubmitAIEdit}
+                  className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={!aiEditInstructions.trim()}
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

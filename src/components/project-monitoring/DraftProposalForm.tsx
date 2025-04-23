@@ -15,6 +15,7 @@ const DraftProposalForm: React.FC = () => {
   } = useProjectContext();
 
   const [isGeneratingProposal, setIsGeneratingProposal] = useState(false);
+  const [isAIEditing, setIsAIEditing] = useState(false);
   const [proposalError, setProposalError] = useState<string | null>(null);
   const [_, setFormSubmitted] = useState(false);
 
@@ -36,11 +37,14 @@ const DraftProposalForm: React.FC = () => {
         // Extract the content from the chunk
         const content = chunk.choices[0]?.delta?.content || '';
 
-        // Append the content to the accumulated content
-        accumulatedContent += content;
+        // Only update if there's actual content
+        if (content) {
+          // Append the content to the accumulated content
+          accumulatedContent += content;
 
-        // Update the state with the accumulated content
-        setDraftProposalFormData({ proposalResult: accumulatedContent });
+          // Update the state with the accumulated content
+          setDraftProposalFormData({ proposalResult: accumulatedContent });
+        }
       }
 
       // When the stream is complete, mark form as submitted
@@ -71,7 +75,7 @@ const DraftProposalForm: React.FC = () => {
 
     // Replace placeholders in the prompt template
     const prompt = draftProposalFormData.promptTemplate
-      .replace('{client\'s name}', draftProposalFormData.clientName)
+      .replace('{name}', draftProposalFormData.clientName)
       .replace('{goal}', draftProposalFormData.goal);
 
     // Set a timeout to prevent infinite loops
@@ -128,6 +132,70 @@ const DraftProposalForm: React.FC = () => {
     setDraftProposalFormData({ proposalResult: editedContent });
   };
 
+  // Handle AI editing of the proposal content
+  const handleAIEditProposal = async (instructions: string) => {
+    // Show loading state
+    setIsAIEditing(true);
+    setProposalError(null);
+
+    // Set a timeout to prevent infinite loops
+    const timeoutId = setTimeout(() => {
+      setIsAIEditing(false);
+      setProposalError('The request is taking longer than expected. It has been cancelled to prevent excessive API usage.');
+    }, 60000); // 60 seconds timeout
+
+    try {
+      // Create a streaming response using OpenRouter
+      const stream = await openRouter.completions.create({
+        model: selectedModel,
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a professional business consultant specializing in creating comprehensive project proposals. Your task is to edit and improve the proposal based on the user\'s instructions.',
+          },
+          {
+            role: 'user',
+            content: `Here is the current proposal:\n\n${draftProposalFormData.proposalResult}\n\nPlease edit this proposal based on the following instructions:\n${instructions}\n\nProvide the complete edited proposal in your response.`,
+          },
+        ],
+        stream: true,
+      });
+
+      // Clear the timeout since we got a response
+      clearTimeout(timeoutId);
+
+      // Process the streaming response
+      let accumulatedContent = '';
+
+      try {
+        // Process the stream
+        for await (const chunk of stream) {
+          // Extract the content from the chunk
+          const content = chunk.choices[0]?.delta?.content || '';
+
+          // Only update if there's actual content
+          if (content) {
+            // Append the content to the accumulated content
+            accumulatedContent += content;
+
+            // Update the state with the accumulated content
+            setDraftProposalFormData({ proposalResult: accumulatedContent });
+          }
+        }
+      } catch (error) {
+        console.error('Error processing stream:', error);
+        setProposalError('Error processing response stream');
+      }
+    } catch (error) {
+      // Clear the timeout
+      clearTimeout(timeoutId);
+      console.error('Error editing proposal with AI:', error);
+      setProposalError(`Error editing proposal with AI: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsAIEditing(false);
+    }
+  };
+
   // If approved, show success message and the proposal content
   if (draftProposalFormData.isApproved) {
     return (
@@ -166,7 +234,7 @@ const DraftProposalForm: React.FC = () => {
             value={draftProposalFormData.promptTemplate}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-            rows={3}
+            rows={4}
             placeholder="Enter prompt template for proposal generation"
           />
         </div>
@@ -197,13 +265,13 @@ const DraftProposalForm: React.FC = () => {
             {' '}
             <span className="text-red-500">*</span>
           </label>
-          <input
-            type="text"
+          <textarea
             id="goal"
             name="goal"
             value={draftProposalFormData.goal}
             onChange={handleChange}
             required
+            rows={4}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
             placeholder="Enter project goal"
           />
@@ -275,7 +343,9 @@ const DraftProposalForm: React.FC = () => {
               title="Draft Proposal"
               onApprove={handleApproveProposal}
               onEdit={handleEditProposal}
+              onAIEdit={handleAIEditProposal}
               isApproved={draftProposalFormData.isApproved}
+              isAIEditing={isAIEditing}
             />
           </div>
         )}

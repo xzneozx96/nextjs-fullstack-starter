@@ -143,8 +143,8 @@ const ProposalSection: React.FC<ProposalSectionProps> = ({ surveyCompleted }) =>
             <button
               type="button"
               className={`
-                px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700
-                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+                px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700
+                focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50
               `}
               onClick={handleGenerateProposal}
               disabled={isGeneratingProposal}

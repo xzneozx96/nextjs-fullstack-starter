@@ -45,7 +45,7 @@ const StaffSelectionInput: React.FC<StaffSelectionInputProps> = ({ selectedStaff
       <div className="relative">
         <input
           type="text"
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+          className="w-full p-2 border border-amber-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 dark:bg-gray-800 dark:border-amber-700 dark:text-white"
           placeholder="Search staff by name or role..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
@@ -75,7 +75,7 @@ const StaffSelectionInput: React.FC<StaffSelectionInputProps> = ({ selectedStaff
                     >
                       <input
                         type="checkbox"
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                        className="rounded border-amber-300 text-amber-600 focus:ring-amber-500 dark:bg-gray-700 dark:border-amber-600"
                         checked={selectedStaff.includes(staff.id)}
                         onChange={() => handleStaffToggle(staff.id)}
                       />
@@ -107,12 +107,12 @@ const StaffSelectionInput: React.FC<StaffSelectionInputProps> = ({ selectedStaff
                 staff && (
                   <div
                     key={staff.id}
-                    className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-500"
+                    className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-500"
                   >
                     {staff.name}
                     <button
                       type="button"
-                      className="ml-1.5 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                      className="ml-1.5 text-amber-600 hover:text-amber-800 dark:text-amber-400 dark:hover:text-amber-300"
                       onClick={() => handleStaffToggle(staff.id)}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">

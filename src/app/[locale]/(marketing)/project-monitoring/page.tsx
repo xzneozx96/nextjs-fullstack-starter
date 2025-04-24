@@ -4,7 +4,7 @@ import TaskDetails from '@/features/project-monitoring-demo/components/TaskDetai
 import TaskList from '@/features/project-monitoring-demo/components/TaskList';
 import { ProjectProvider, useProjectContext } from '@/features/project-monitoring-demo/contexts/ProjectContext';
 import ComponentCard from '@/shared/components/common/ComponentCard';
-import PageBreadcrumb from '@/shared/components/common/PageBreadCrumb';
+import Image from 'next/image';
 import React from 'react';
 
 /**
@@ -17,18 +17,31 @@ export default function ProjectMonitoring() {
   return (
     <ProjectProvider>
       <div className="container mx-auto px-4 py-10">
-        <PageBreadcrumb pageTitle="Project Monitoring Dashboard" />
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+            Project Monitoring Dashboard
+          </h2>
+          <div className="flex-shrink-0">
+            <Image
+              src="/images/mvv-logo.png"
+              alt="MVV Logo"
+              width={120}
+              height={120}
+              className="object-contain"
+            />
+          </div>
+        </div>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
           {/* Left Panel - Task List */}
           <div className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-120px)] lg:overflow-y-auto">
-            <ComponentCard title="Project Tasks">
+            <ComponentCard title="Project Tasks" className="border-amber-200 dark:border-amber-800">
               <ProjectTaskList />
             </ComponentCard>
           </div>
 
           {/* Right Panel - Task Details */}
           <div className="lg:col-span-7">
-            <ComponentCard title="Task Details">
+            <ComponentCard title="Task Details" className="border-amber-200 dark:border-amber-800">
               <ProjectTaskDetails />
             </ComponentCard>
           </div>

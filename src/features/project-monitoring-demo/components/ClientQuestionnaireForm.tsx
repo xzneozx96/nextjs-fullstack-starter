@@ -215,7 +215,7 @@ const ClientQuestionnaireForm: React.FC = () => {
   if (clientQuestionnaireFormData.isApproved) {
     return (
       <div className="mt-6 border-t pt-4 border-gray-200 dark:border-gray-700">
-        <div className="p-4 mb-4 bg-green-50 border border-green-200 rounded-lg text-green-800 dark:bg-green-900/30 dark:border-green-800 dark:text-green-500">
+        <div className="p-4 mb-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-500">
           <p className="text-sm">Questionnaire approved! You can now proceed to the next task.</p>
         </div>
 
@@ -265,7 +265,7 @@ const ClientQuestionnaireForm: React.FC = () => {
             value={clientQuestionnaireFormData.deadline}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+            className="w-full px-3 py-2 border border-amber-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 dark:bg-gray-800 dark:border-amber-700 dark:text-white"
           />
         </div>
 
@@ -282,7 +282,7 @@ const ClientQuestionnaireForm: React.FC = () => {
             value={clientQuestionnaireFormData.promptTemplate}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+            className="w-full px-3 py-2 border border-amber-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 dark:bg-gray-800 dark:border-amber-700 dark:text-white"
             rows={4}
             placeholder="Enter prompt template for questionnaire generation"
           />
@@ -293,7 +293,7 @@ const ClientQuestionnaireForm: React.FC = () => {
           <div className="flex items-center">
             <button
               type="button"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50"
               onClick={handleGenerateQuestionnaire}
               disabled={isGeneratingQuestionnaire}
             >

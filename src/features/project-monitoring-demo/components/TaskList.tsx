@@ -17,15 +17,15 @@ const TaskList: React.FC<TaskListProps> = ({
   onTaskSelect,
 }) => {
   return (
-    <div className="overflow-hidden rounded-xl bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden rounded-xl bg-amber-50/30 dark:border-amber-800/30 dark:bg-amber-900/10">
       <div className="max-w-full overflow-x-auto">
         <Table>
           {/* Table Header */}
-          <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+          <TableHeader className="border-b border-amber-200 dark:border-amber-800/30">
             <TableRow>
               <TableCell
                 isHeader
-                className="px-5 py-3 font-medium text-gray-500 dark:text-gray-400 text-start text-theme-xs"
+                className="px-5 py-3 font-medium text-amber-800 dark:text-amber-300 text-start text-theme-xs"
               >
                 Task
               </TableCell>
@@ -33,16 +33,16 @@ const TaskList: React.FC<TaskListProps> = ({
           </TableHeader>
 
           {/* Table Body */}
-          <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+          <TableBody className="divide-y divide-amber-100 dark:divide-amber-800/20">
             {tasks.map(task => (
               <React.Fragment key={task.id}>
                 <TableRow
                   onClick={() => onTaskSelect(task)}
-                  className={`cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 ${
-                    selectedTask?.id === task.id ? 'bg-gray-50 dark:bg-gray-800' : ''
+                  className={`cursor-pointer hover:bg-amber-100/50 dark:hover:bg-amber-800/20 ${
+                    selectedTask?.id === task.id ? 'bg-amber-100/70 dark:bg-amber-800/30' : ''
                   }`}
                 >
-                  <TableCell className="px-5 py-4 text-start font-medium text-gray-800 dark:text-white/90">
+                  <TableCell className="px-5 py-4 text-start font-medium text-amber-900 dark:text-amber-100">
                     <div className="flex items-center justify-between w-full">
                       <div className="flex items-center gap-2">
                         {task.id}
@@ -61,11 +61,11 @@ const TaskList: React.FC<TaskListProps> = ({
                     <TableRow
                       key={subtask.id}
                       onClick={() => onTaskSelect(subtask)}
-                      className={`cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 ${
-                        selectedTask?.id === subtask.id ? 'bg-gray-50 dark:bg-gray-800' : ''
+                      className={`cursor-pointer hover:bg-amber-100/50 dark:hover:bg-amber-800/20 ${
+                        selectedTask?.id === subtask.id ? 'bg-amber-100/70 dark:bg-amber-800/30' : ''
                       }`}
                     >
-                      <TableCell className="px-5 py-4 text-start pl-10 text-gray-800 dark:text-white/90">
+                      <TableCell className="px-5 py-4 text-start pl-10 text-amber-900 dark:text-amber-100">
                         <div className="flex items-center justify-between w-full">
                           <div className="flex items-center gap-2">
                             {subtask.id}

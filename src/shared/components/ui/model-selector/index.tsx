@@ -27,7 +27,7 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
       value={selectedModel}
       onChange={e => onChange(e.target.value)}
       disabled={disabled}
-      className="ml-2 px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+      className="ml-2 px-2 py-1 text-sm border border-amber-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 dark:bg-gray-800 dark:border-amber-700 dark:text-white"
     >
       {modelOptions.map(model => (
         <option key={model.id} value={model.id}>

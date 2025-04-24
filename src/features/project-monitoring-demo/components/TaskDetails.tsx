@@ -20,20 +20,20 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
-        return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-500';
+        return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-500';
       case 'in-progress':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-500';
+        return 'bg-amber-200 text-amber-800 dark:bg-amber-800/40 dark:text-amber-400';
       case 'pending':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400';
+        return 'bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-300';
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400';
+        return 'bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-300';
     }
   };
 
   if (!selectedTask) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-gray-500 dark:text-gray-400">Select a task to view details</p>
+        <p className="text-amber-700 dark:text-amber-400">Select a task to view details</p>
       </div>
     );
   }
@@ -42,40 +42,40 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
     <div className="space-y-6">
       {/* Task Header */}
       <div>
-        <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+        <h3 className="text-xl font-semibold text-amber-900 dark:text-amber-200">
           {selectedTask.id}
           {' '}
           {selectedTask.name}
         </h3>
-        <p className="mt-1 text-gray-600 dark:text-gray-400">{selectedTask.description}</p>
+        <p className="mt-1 text-amber-800 dark:text-amber-300">{selectedTask.description}</p>
       </div>
 
       {/* Task Details */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* Assignee */}
-        <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-          <h4 className="mb-2 font-medium text-gray-700 dark:text-gray-300">Assignee</h4>
-          <p className="text-gray-600 dark:text-gray-400">{selectedTask.assignee}</p>
+        <div className="rounded-lg border border-amber-200 p-4 dark:border-amber-700 bg-amber-50/50 dark:bg-amber-900/10">
+          <h4 className="mb-2 font-medium text-amber-800 dark:text-amber-300">Assignee</h4>
+          <p className="text-amber-700 dark:text-amber-400">{selectedTask.assignee}</p>
         </div>
 
         {/* Status */}
-        <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-          <h4 className="mb-2 font-medium text-gray-700 dark:text-gray-300">Status</h4>
+        <div className="rounded-lg border border-amber-200 p-4 dark:border-amber-700 bg-amber-50/50 dark:bg-amber-900/10">
+          <h4 className="mb-2 font-medium text-amber-800 dark:text-amber-300">Status</h4>
           <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${getStatusColor(selectedTask.status)}`}>
             {selectedTask.status.charAt(0).toUpperCase() + selectedTask.status.slice(1)}
           </span>
         </div>
 
         {/* Deadline */}
-        <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-          <h4 className="mb-2 font-medium text-gray-700 dark:text-gray-300">Deadline</h4>
-          <p className="text-gray-600 dark:text-gray-400">{selectedTask.deadline}</p>
+        <div className="rounded-lg border border-amber-200 p-4 dark:border-amber-700 bg-amber-50/50 dark:bg-amber-900/10">
+          <h4 className="mb-2 font-medium text-amber-800 dark:text-amber-300">Deadline</h4>
+          <p className="text-amber-700 dark:text-amber-400">{selectedTask.deadline}</p>
         </div>
 
         {/* Input Required */}
-        <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-          <h4 className="mb-2 font-medium text-gray-700 dark:text-gray-300">Input Required</h4>
-          <p className="text-gray-600 dark:text-gray-400">{selectedTask.input}</p>
+        <div className="rounded-lg border border-amber-200 p-4 dark:border-amber-700 bg-amber-50/50 dark:bg-amber-900/10">
+          <h4 className="mb-2 font-medium text-amber-800 dark:text-amber-300">Input Required</h4>
+          <p className="text-amber-700 dark:text-amber-400">{selectedTask.input}</p>
         </div>
       </div>
 
@@ -106,16 +106,16 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
 
       {/* Input Details */}
       {selectedTask.inputDetails && (
-        <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-          <h4 className="mb-2 font-medium text-gray-700 dark:text-gray-300">Input Details</h4>
-          <p className="text-gray-600 dark:text-gray-400">{selectedTask.inputDetails}</p>
+        <div className="rounded-lg border border-amber-200 p-4 dark:border-amber-700 bg-amber-50/50 dark:bg-amber-900/10">
+          <h4 className="mb-2 font-medium text-amber-800 dark:text-amber-300">Input Details</h4>
+          <p className="text-amber-700 dark:text-amber-400">{selectedTask.inputDetails}</p>
         </div>
       )}
 
       {/* Expected Output */}
-      <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-        <h4 className="mb-2 font-medium text-gray-700 dark:text-gray-300">Expected Output</h4>
-        <p className="text-gray-600 dark:text-gray-400">{selectedTask.output}</p>
+      <div className="rounded-lg border border-amber-200 p-4 dark:border-amber-700 bg-amber-50/50 dark:bg-amber-900/10">
+        <h4 className="mb-2 font-medium text-amber-800 dark:text-amber-300">Expected Output</h4>
+        <p className="text-amber-700 dark:text-amber-400">{selectedTask.output}</p>
       </div>
     </div>
   );

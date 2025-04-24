@@ -166,7 +166,7 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
                   <button
                     type="button"
                     onClick={handleSaveEdit}
-                    className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    className="px-3 py-1.5 text-sm bg-amber-600 text-white rounded-md hover:bg-amber-700"
                   >
                     Save Changes
                   </button>
@@ -184,7 +184,7 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
                       {isAIEditing
                         ? (
                             <>
-                              <div className="animate-spin mr-2 h-4 w-4 border-t-2 border-b-2 border-blue-500 rounded-full"></div>
+                              <div className="animate-spin mr-2 h-4 w-4 border-t-2 border-b-2 border-amber-500 rounded-full"></div>
                               AI Editing...
                             </>
                           )
@@ -206,8 +206,8 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
                     onClick={onApprove}
                     className={`px-3 py-1.5 text-sm rounded-md ${
                       isApproved
-                        ? 'bg-green-600 text-white'
-                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                        ? 'bg-amber-700 text-white'
+                        : 'bg-amber-600 text-white hover:bg-amber-700'
                     }`}
                     disabled={isApproved || isAIEditing}
                   >
@@ -244,7 +244,7 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
                   value={aiEditInstructions}
                   onChange={e => setAIEditInstructions(e.target.value)}
                   placeholder="Example: Make it more concise, add a section about market trends, fix the formatting issues, etc."
-                  className="w-full h-32 p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="w-full h-32 p-2 text-sm border border-amber-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 dark:bg-gray-700 dark:border-amber-600 dark:text-white"
                 />
               </div>
               <div className="p-3 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-2">
@@ -258,7 +258,7 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
                 <button
                   type="button"
                   onClick={handleSubmitAIEdit}
-                  className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-3 py-1.5 text-xs bg-amber-600 text-white rounded-md hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={!aiEditInstructions.trim()}
                 >
                   Submit

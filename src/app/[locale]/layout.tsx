@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { routing } from '@/core/config/i18nNavigation';
 import { PostHogProvider } from '@/shared/components/analytics/PostHogProvider';
+import { ToastProvider } from '@/shared/components/ui/toast/ToastContainer';
 import { SidebarProvider } from '@/shared/contexts/SidebarContext';
 import { ThemeProvider } from '@/shared/contexts/ThemeContext';
 import { NextIntlClientProvider } from 'next-intl';
@@ -75,9 +76,11 @@ export default async function RootLayout(props: {
           <PostHogProvider>
             <NextTopLoader height={5} color="#465fff" />
             <ThemeProvider>
-              <SidebarProvider>
-                {props.children}
-              </SidebarProvider>
+              <ToastProvider>
+                <SidebarProvider>
+                  {props.children}
+                </SidebarProvider>
+              </ToastProvider>
             </ThemeProvider>
           </PostHogProvider>
         </NextIntlClientProvider>

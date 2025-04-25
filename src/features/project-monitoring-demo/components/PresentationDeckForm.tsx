@@ -1,4 +1,5 @@
 import { useProjectContext } from '@/features/project-monitoring-demo/contexts/ProjectContext';
+import { useToast } from '@/shared/components/ui/toast/ToastContainer';
 import React, { useState } from 'react';
 import StaffSelectionInput from './StaffSelectionInput';
 
@@ -9,20 +10,56 @@ const PresentationDeckForm: React.FC = () => {
     setPresentationDeckFormData,
     subtasks,
     setSelectedTask,
+    isPreviousTasksCompleted,
+    resetTaskState,
+    resetSubsequentTasks,
   } = useProjectContext();
+
+  // Access toast functionality
+  const { showToast } = useToast();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [file, setFile] = useState<File | null>(null);
 
   const handleStaffChange = (selectedStaff: string[]) => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.5')) {
+      showToast({
+        message: 'You must complete all previous tasks before editing this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     setPresentationDeckFormData({ selectedStaff });
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.5')) {
+      showToast({
+        message: 'You must complete all previous tasks before editing this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     setPresentationDeckFormData({ deadline: e.target.value });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.5')) {
+      showToast({
+        message: 'You must complete all previous tasks before editing this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
       // Store the file name in the form data
@@ -33,9 +70,23 @@ const PresentationDeckForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.5')) {
+      showToast({
+        message: 'You must complete all previous tasks before submitting this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     // Validate form
     if (presentationDeckFormData.selectedStaff.length === 0 || !presentationDeckFormData.deadline || !file) {
-      alert('Please fill out all required fields');
+      showToast({
+        message: 'Please fill out all required fields',
+        type: 'error',
+        duration: 3000,
+      });
       return;
     }
 
@@ -54,14 +105,42 @@ const PresentationDeckForm: React.FC = () => {
 
   const handleDownloadTemplate = () => {
     // In a real app, this would download a template file
-    alert('In a real application, this would download a presentation template file.');
+    showToast({
+      message: 'In a real application, this would download a presentation template file.',
+      type: 'info',
+      duration: 3000,
+    });
   };
 
   if (formSubmitted) {
     return (
       <div className="mt-6 border-t pt-4 border-gray-200 dark:border-gray-700">
         <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-500">
-          <p className="text-sm">Presentation deck uploaded successfully! You can now proceed to the next task.</p>
+          <div className="flex justify-between items-center">
+            <p className="text-sm">Presentation deck uploaded successfully! You can now proceed to the next task.</p>
+            <button
+              type="button"
+              onClick={() => {
+                // Reset form submission state
+                setFormSubmitted(false);
+
+                // Reset task status
+                resetTaskState('1.5');
+
+                // Reset all subsequent tasks
+                resetSubsequentTasks('1.5');
+
+                showToast({
+                  message: 'Editing mode activated. All subsequent tasks have been reset.',
+                  type: 'info',
+                  duration: 3000,
+                });
+              }}
+              className="px-3 py-1.5 text-xs border border-amber-300 rounded-md hover:bg-amber-100 dark:border-amber-600 dark:hover:bg-amber-800/30 dark:text-amber-300"
+            >
+              Edit Presentation
+            </button>
+          </div>
         </div>
         <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
           <h6 className="text-sm font-semibold text-gray-800 dark:text-white mb-2">Uploaded File:</h6>

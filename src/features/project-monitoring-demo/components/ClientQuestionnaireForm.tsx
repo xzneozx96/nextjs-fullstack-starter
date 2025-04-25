@@ -2,6 +2,7 @@ import { openRouter } from '@/core/ai/OpenRouter';
 import { useProjectContext } from '@/features/project-monitoring-demo/contexts/ProjectContext';
 import { MarkdownRenderer } from '@/shared/components/ui/markdown/MarkdownRenderer';
 import ModelSelector from '@/shared/components/ui/model-selector';
+import { useToast } from '@/shared/components/ui/toast/ToastContainer';
 import React, { useState } from 'react';
 import AIContentApproval from './AIContentApproval';
 import StaffSelectionInput from './StaffSelectionInput';
@@ -16,7 +17,14 @@ const ClientQuestionnaireForm: React.FC = () => {
     setSelectedTask,
     selectedModel,
     setSelectedModel,
+    isPreviousTasksCompleted,
+    resetTaskState,
+    resetSubsequentTasks,
+    resetTaskApproval,
   } = useProjectContext();
+
+  // Access toast functionality
+  const { showToast } = useToast();
 
   const [isGeneratingQuestionnaire, setIsGeneratingQuestionnaire] = useState(false);
   const [isAIEditing, setIsAIEditing] = useState(false);
@@ -24,11 +32,31 @@ const ClientQuestionnaireForm: React.FC = () => {
   const [_, setFormSubmitted] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.4')) {
+      showToast({
+        message: 'You must complete all previous tasks before editing this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     const { name, value } = e.target;
     setClientQuestionnaireFormData({ [name]: value });
   };
 
   const handleStaffChange = (selectedStaff: string[]) => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.4')) {
+      showToast({
+        message: 'You must complete all previous tasks before editing this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     setClientQuestionnaireFormData({ selectedStaff });
   };
 
@@ -62,13 +90,27 @@ const ClientQuestionnaireForm: React.FC = () => {
   };
 
   const handleGenerateQuestionnaire = async () => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.4')) {
+      showToast({
+        message: 'You must complete all previous tasks before generating a questionnaire.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     // Validate form
     if (
       clientQuestionnaireFormData.selectedStaff.length === 0
       || !clientQuestionnaireFormData.deadline
       || !clientQuestionnaireFormData.promptTemplate
     ) {
-      alert('Please fill out all required fields');
+      showToast({
+        message: 'Please fill out all required fields',
+        type: 'error',
+        duration: 3000,
+      });
       return;
     }
 
@@ -141,11 +183,57 @@ const ClientQuestionnaireForm: React.FC = () => {
 
   // Handle editing of the questionnaire content
   const handleEditQuestionnaire = (editedContent: string) => {
+    // If the content was previously approved, reset subsequent tasks
+    if (clientQuestionnaireFormData.isApproved) {
+      // Reset approval state
+      resetTaskApproval('1.4');
+
+      // Reset task status
+      resetTaskState('1.4');
+
+      // Reset all subsequent tasks
+      resetSubsequentTasks('1.4');
+
+      showToast({
+        message: 'Content edited. All subsequent tasks have been reset.',
+        type: 'info',
+        duration: 3000,
+      });
+    }
+
     setClientQuestionnaireFormData({ questionnaireResult: editedContent });
   };
 
   // Handle AI editing of the questionnaire content
   const handleAIEditQuestionnaire = async (instructions: string) => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.4')) {
+      showToast({
+        message: 'You must complete all previous tasks before editing this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
+    // If the content was previously approved, reset subsequent tasks
+    if (clientQuestionnaireFormData.isApproved) {
+      // Reset approval state
+      resetTaskApproval('1.4');
+
+      // Reset task status
+      resetTaskState('1.4');
+
+      // Reset all subsequent tasks
+      resetSubsequentTasks('1.4');
+
+      showToast({
+        message: 'Content being edited. All subsequent tasks have been reset.',
+        type: 'info',
+        duration: 3000,
+      });
+    }
+
     // Show loading state
     setIsAIEditing(true);
     setQuestionnaireError(null);
@@ -211,12 +299,36 @@ const ClientQuestionnaireForm: React.FC = () => {
     }
   };
 
-  // If approved, show success message and the questionnaire content
+  // If approved, show success message and the questionnaire content with edit button
   if (clientQuestionnaireFormData.isApproved) {
     return (
       <div className="mt-6 border-t pt-4 border-gray-200 dark:border-gray-700">
         <div className="p-4 mb-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-500">
-          <p className="text-sm">Questionnaire approved! You can now proceed to the next task.</p>
+          <div className="flex justify-between items-center">
+            <p className="text-sm">Questionnaire approved! You can now proceed to the next task.</p>
+            <button
+              type="button"
+              onClick={() => {
+                // Reset approval state
+                resetTaskApproval('1.4');
+
+                // Reset task status
+                resetTaskState('1.4');
+
+                // Reset all subsequent tasks
+                resetSubsequentTasks('1.4');
+
+                showToast({
+                  message: 'Editing mode activated. All subsequent tasks have been reset.',
+                  type: 'info',
+                  duration: 3000,
+                });
+              }}
+              className="px-3 py-1.5 text-xs border border-amber-300 rounded-md hover:bg-amber-100 dark:border-amber-600 dark:hover:bg-amber-800/30 dark:text-amber-300"
+            >
+              Edit Questionnaire
+            </button>
+          </div>
         </div>
 
         {/* Display the approved questionnaire content */}

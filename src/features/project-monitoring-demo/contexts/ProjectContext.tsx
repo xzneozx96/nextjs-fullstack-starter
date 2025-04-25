@@ -69,6 +69,12 @@ type ProjectContextType = {
   updateTaskStatus: (taskId: string, status: TaskStatus) => void;
   updateSubtaskStatus: (subtaskId: string, status: TaskStatus) => void;
   updateParentTaskStatus: () => void;
+
+  // New functions for task editing and validation
+  isPreviousTasksCompleted: (taskId: string) => boolean;
+  resetTaskState: (taskId: string) => void;
+  resetSubsequentTasks: (taskId: string) => void;
+  resetTaskApproval: (taskId: string) => void;
 };
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -362,6 +368,131 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     }, 100);
   }, [subtasks, tasks]);
 
+  // Check if all previous tasks are completed
+  const isPreviousTasksCompleted = useCallback((taskId: string): boolean => {
+    // Get the task or subtask
+    const task = subtasks.find(s => s.id === taskId) || tasks.find(t => t.id === taskId);
+    if (!task) {
+      return true;
+    } // If task not found, return true to avoid blocking
+
+    // For main tasks, check if all previous tasks are completed
+    if (!('parentId' in task)) {
+      const taskIndex = tasks.findIndex(t => t.id === taskId);
+      if (taskIndex <= 0) {
+        return true;
+      } // First task or invalid task, no previous tasks
+
+      // Check all previous tasks
+      for (let i = 0; i < taskIndex; i++) {
+        if (tasks[i]?.status !== 'completed') {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // For subtasks, check if all previous subtasks in the same parent are completed
+    const parentId = task.parentId;
+    const parentSubtasks = subtasks.filter(s => s.parentId === parentId);
+    const subtaskIndex = parentSubtasks.findIndex(s => s.id === taskId);
+
+    if (subtaskIndex <= 0) {
+      return true;
+    } // First subtask or invalid subtask, no previous subtasks
+
+    // Check all previous subtasks
+    for (let i = 0; i < subtaskIndex; i++) {
+      if (parentSubtasks[i]?.status !== 'completed') {
+        return false;
+      }
+    }
+    return true;
+  }, [subtasks, tasks]);
+
+  // Reset a task's state
+  const resetTaskState = useCallback((taskId: string) => {
+    // Reset a task's status to 'pending'
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+      updateTaskStatus(taskId, 'pending');
+    }
+
+    // Reset a subtask's status to 'pending'
+    const subtask = subtasks.find(s => s.id === taskId);
+    if (subtask) {
+      updateSubtaskStatus(taskId, 'pending');
+    }
+  }, [tasks, subtasks, updateTaskStatus, updateSubtaskStatus]);
+
+  // Reset all subsequent tasks
+  const resetSubsequentTasks = useCallback((taskId: string) => {
+    // Get the task or subtask
+    const task = subtasks.find(s => s.id === taskId) || tasks.find(t => t.id === taskId);
+    if (!task) {
+      return;
+    }
+
+    // For main tasks, reset all subsequent tasks
+    if (!('parentId' in task)) {
+      const taskIndex = tasks.findIndex(t => t.id === taskId);
+      if (taskIndex < 0) {
+        return;
+      } // Invalid task
+
+      // Reset all subsequent tasks
+      for (let i = taskIndex + 1; i < tasks.length; i++) {
+        updateTaskStatus(tasks[i]?.id || '', 'pending');
+
+        // Also reset all subtasks of this task
+        const taskSubtasks = subtasks.filter(s => s.parentId === tasks[i]?.id);
+        taskSubtasks.forEach((s) => {
+          updateSubtaskStatus(s.id, 'pending');
+        });
+      }
+    } else {
+      // For subtasks, reset all subsequent subtasks in the same parent
+      const parentId = task.parentId;
+      const parentSubtasks = subtasks.filter(s => s.parentId === parentId);
+      const subtaskIndex = parentSubtasks.findIndex(s => s.id === taskId);
+
+      if (subtaskIndex < 0) {
+        return;
+      } // Invalid subtask
+
+      // Reset all subsequent subtasks
+      for (let i = subtaskIndex + 1; i < parentSubtasks.length; i++) {
+        updateSubtaskStatus(parentSubtasks[i]?.id || '', 'pending');
+      }
+
+      // Also reset all subsequent main tasks
+      const parentTaskIndex = tasks.findIndex(t => t.id === parentId);
+      if (parentTaskIndex >= 0) {
+        for (let i = parentTaskIndex + 1; i < tasks.length; i++) {
+          updateTaskStatus(tasks[i]?.id || '', 'pending');
+
+          // Also reset all subtasks of these tasks
+          const taskSubtasks = subtasks.filter(s => s.parentId === tasks[i]?.id);
+          taskSubtasks.forEach((s) => {
+            updateSubtaskStatus(s.id, 'pending');
+          });
+        }
+      }
+    }
+  }, [tasks, subtasks, updateTaskStatus, updateSubtaskStatus]);
+
+  // Reset a task's approval state
+  const resetTaskApproval = useCallback((taskId: string) => {
+    // Reset approval state based on task ID
+    if (taskId === '1.2') {
+      setPreliminaryResearchFormData({ isApproved: false });
+    } else if (taskId === '1.4') {
+      setClientQuestionnaireFormData({ isApproved: false });
+    } else if (taskId === '1.6') {
+      setDraftProposalFormData({ isApproved: false });
+    }
+  }, [setPreliminaryResearchFormData, setClientQuestionnaireFormData, setDraftProposalFormData]);
+
   const value = useMemo(() => ({
     tasks,
     subtasks,
@@ -411,6 +542,12 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     updateTaskStatus,
     updateSubtaskStatus,
     updateParentTaskStatus,
+
+    // New functions for task editing and validation
+    isPreviousTasksCompleted,
+    resetTaskState,
+    resetSubsequentTasks,
+    resetTaskApproval,
   }), [
     tasks,
     subtasks,
@@ -452,6 +589,10 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     updateParentTaskStatus,
     selectedModel,
     setSelectedModel,
+    isPreviousTasksCompleted,
+    resetTaskState,
+    resetSubsequentTasks,
+    resetTaskApproval,
   ]);
 
   return (

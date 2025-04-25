@@ -1,4 +1,5 @@
 import { useProjectContext } from '@/features/project-monitoring-demo/contexts/ProjectContext';
+import { useToast } from '@/shared/components/ui/toast/ToastContainer';
 import React, { useState } from 'react';
 import StaffSelectionInput from './StaffSelectionInput';
 
@@ -9,25 +10,65 @@ const AssembleTeamForm: React.FC = () => {
     setAssembleTeamFormData,
     subtasks,
     setSelectedTask,
+    isPreviousTasksCompleted,
+    resetTaskState,
+    resetSubsequentTasks,
   } = useProjectContext();
+
+  // Access toast functionality
+  const { showToast } = useToast();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.1')) {
+      showToast({
+        message: 'You must complete all previous tasks before editing this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     const { name, value } = e.target;
     setAssembleTeamFormData({ [name]: value });
   };
 
   const handleStaffChange = (selectedStaff: string[]) => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.1')) {
+      showToast({
+        message: 'You must complete all previous tasks before editing this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     setAssembleTeamFormData({ selectedStaff });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.1')) {
+      showToast({
+        message: 'You must complete all previous tasks before submitting this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     // Validate form
     if (!assembleTeamFormData.projectDescription || assembleTeamFormData.selectedStaff.length === 0) {
-      alert('Please fill out all required fields');
+      showToast({
+        message: 'Please fill out all required fields',
+        type: 'error',
+        duration: 3000,
+      });
       return;
     }
 
@@ -48,7 +89,50 @@ const AssembleTeamForm: React.FC = () => {
     return (
       <div className="mt-6 border-t pt-4 border-gray-200 dark:border-gray-700">
         <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-500">
-          <p className="text-sm">Project team assembled successfully! You can now proceed to the next task.</p>
+          <div className="flex justify-between items-center">
+            <p className="text-sm">Project team assembled successfully! You can now proceed to the next task.</p>
+            <button
+              type="button"
+              onClick={() => {
+                // Reset form submission state
+                setFormSubmitted(false);
+
+                // Reset task status
+                resetTaskState('1.1');
+
+                // Reset all subsequent tasks
+                resetSubsequentTasks('1.1');
+
+                showToast({
+                  message: 'Editing mode activated. All subsequent tasks have been reset.',
+                  type: 'info',
+                  duration: 3000,
+                });
+              }}
+              className="px-3 py-1.5 text-xs border border-amber-300 rounded-md hover:bg-amber-100 dark:border-amber-600 dark:hover:bg-amber-800/30 dark:text-amber-300"
+            >
+              Edit Team
+            </button>
+          </div>
+        </div>
+
+        {/* Display the submitted data */}
+        <div className="mt-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+          <h6 className="mb-3 font-medium text-gray-700 dark:text-gray-300">Project Details</h6>
+          <div className="space-y-3">
+            <div>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Project Description:</p>
+              <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{assembleTeamFormData.projectDescription}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Team Members:</p>
+              <ul className="mt-1 list-disc list-inside">
+                {assembleTeamFormData.selectedStaff.map((staff, index) => (
+                  <li key={index} className="text-sm text-gray-700 dark:text-gray-300">{staff}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -179,7 +179,7 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
                       type="button"
                       onClick={e => handleOpenAIEditModal(e)}
                       className="px-3 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800 dark:text-gray-300 flex items-center"
-                      disabled={isApproved || isAIEditing}
+                      disabled={isAIEditing}
                     >
                       {isAIEditing
                         ? (
@@ -197,7 +197,7 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
                     type="button"
                     onClick={handleStartEditing}
                     className="px-3 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-800 dark:text-gray-300"
-                    disabled={isApproved || isAIEditing}
+                    disabled={isAIEditing}
                   >
                     Edit Manually
                   </button>
@@ -209,7 +209,7 @@ const AIContentApproval: React.FC<AIContentApprovalProps> = ({
                         ? 'bg-amber-700 text-white'
                         : 'bg-amber-600 text-white hover:bg-amber-700'
                     }`}
-                    disabled={isApproved || isAIEditing}
+                    disabled={isAIEditing}
                   >
                     {isApproved ? 'Approved' : 'Approve & Continue'}
                   </button>

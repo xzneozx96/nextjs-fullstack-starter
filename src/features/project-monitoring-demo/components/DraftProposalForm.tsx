@@ -2,6 +2,7 @@ import { openRouter } from '@/core/ai/OpenRouter';
 import { useProjectContext } from '@/features/project-monitoring-demo/contexts/ProjectContext';
 import { MarkdownRenderer } from '@/shared/components/ui/markdown/MarkdownRenderer';
 import ModelSelector from '@/shared/components/ui/model-selector';
+import { useToast } from '@/shared/components/ui/toast/ToastContainer';
 import React, { useState } from 'react';
 import AIContentApproval from './AIContentApproval';
 
@@ -12,7 +13,14 @@ const DraftProposalForm: React.FC = () => {
     setDraftProposalFormData,
     selectedModel,
     setSelectedModel,
+    isPreviousTasksCompleted,
+    resetTaskState,
+    resetSubsequentTasks,
+    resetTaskApproval,
   } = useProjectContext();
+
+  // Access toast functionality
+  const { showToast } = useToast();
 
   const [isGeneratingProposal, setIsGeneratingProposal] = useState(false);
   const [isAIEditing, setIsAIEditing] = useState(false);
@@ -20,6 +28,16 @@ const DraftProposalForm: React.FC = () => {
   const [_, setFormSubmitted] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.6')) {
+      showToast({
+        message: 'You must complete all previous tasks before editing this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     const { name, value } = e.target;
     // Use the correct way to update the form data
     setDraftProposalFormData({
@@ -57,10 +75,24 @@ const DraftProposalForm: React.FC = () => {
   };
 
   const handleGenerateProposal = async () => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.6')) {
+      showToast({
+        message: 'You must complete all previous tasks before generating a proposal.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
     // Validate form
     const { clientName, goal, proposalLocation, proposalTime } = draftProposalFormData;
     if (!clientName || !goal || !proposalLocation || !proposalTime) {
-      alert('Please fill out all required fields');
+      showToast({
+        message: 'Please fill out all required fields',
+        type: 'error',
+        duration: 3000,
+      });
       return;
     }
 
@@ -129,11 +161,57 @@ const DraftProposalForm: React.FC = () => {
 
   // Handle editing of the proposal content
   const handleEditProposal = (editedContent: string) => {
+    // If the content was previously approved, reset subsequent tasks
+    if (draftProposalFormData.isApproved) {
+      // Reset approval state
+      resetTaskApproval('1.6');
+
+      // Reset task status
+      resetTaskState('1.6');
+
+      // Reset all subsequent tasks
+      resetSubsequentTasks('1.6');
+
+      showToast({
+        message: 'Content edited. All subsequent tasks have been reset.',
+        type: 'info',
+        duration: 3000,
+      });
+    }
+
     setDraftProposalFormData({ proposalResult: editedContent });
   };
 
   // Handle AI editing of the proposal content
   const handleAIEditProposal = async (instructions: string) => {
+    // Check if previous tasks are completed
+    if (!isPreviousTasksCompleted('1.6')) {
+      showToast({
+        message: 'You must complete all previous tasks before editing this one.',
+        type: 'warning',
+        duration: 3000,
+      });
+      return;
+    }
+
+    // If the content was previously approved, reset subsequent tasks
+    if (draftProposalFormData.isApproved) {
+      // Reset approval state
+      resetTaskApproval('1.6');
+
+      // Reset task status
+      resetTaskState('1.6');
+
+      // Reset all subsequent tasks
+      resetSubsequentTasks('1.6');
+
+      showToast({
+        message: 'Content being edited. All subsequent tasks have been reset.',
+        type: 'info',
+        duration: 3000,
+      });
+    }
+
     // Show loading state
     setIsAIEditing(true);
     setProposalError(null);
@@ -196,12 +274,36 @@ const DraftProposalForm: React.FC = () => {
     }
   };
 
-  // If approved, show success message and the proposal content
+  // If approved, show success message and the proposal content with edit button
   if (draftProposalFormData.isApproved) {
     return (
       <div className="mt-6 border-t pt-4 border-gray-200 dark:border-gray-700">
         <div className="p-4 mb-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-500">
-          <p className="text-sm">Proposal approved! You can now proceed to the next task.</p>
+          <div className="flex justify-between items-center">
+            <p className="text-sm">Proposal approved! You can now proceed to the next task.</p>
+            <button
+              type="button"
+              onClick={() => {
+                // Reset approval state
+                resetTaskApproval('1.6');
+
+                // Reset task status
+                resetTaskState('1.6');
+
+                // Reset all subsequent tasks
+                resetSubsequentTasks('1.6');
+
+                showToast({
+                  message: 'Editing mode activated. All subsequent tasks have been reset.',
+                  type: 'info',
+                  duration: 3000,
+                });
+              }}
+              className="px-3 py-1.5 text-xs border border-amber-300 rounded-md hover:bg-amber-100 dark:border-amber-600 dark:hover:bg-amber-800/30 dark:text-amber-300"
+            >
+              Edit Proposal
+            </button>
+          </div>
         </div>
 
         {/* Display the approved proposal content */}

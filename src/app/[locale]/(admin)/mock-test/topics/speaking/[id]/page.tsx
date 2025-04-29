@@ -3,13 +3,13 @@
 import type { QuestionBank, Topic } from '@/features/mock-test/types/question-bank';
 import SpeakingPracticeSession from '@/features/mock-test/components/SpeakingPracticeSession';
 import { mockQuestions } from '@/features/mock-test/constants/mock-questions';
-import { useFeedbackStore } from '@/features/mock-test/stores/useFeedbackStore';
 import Button from '@/shared/components/ui/button/Button';
 import {
   ChevronLeftIcon,
   MicrophoneIcon,
 } from '@/shared/icons';
 import { cn } from '@/shared/utils/utils';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { notFound, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -36,7 +36,6 @@ const topicVocabulary: Record<string, string[]> = {
 export default function SpeakingTopicPage() {
   const params = useParams();
   const id = params.id as string;
-  const { resetStore } = useFeedbackStore();
 
   const [showPracticeSession, setShowPracticeSession] = useState(false);
 
@@ -62,13 +61,13 @@ export default function SpeakingTopicPage() {
   // Get vocabulary for this topic
   const vocabulary = topicVocabulary[id] || [];
 
-  // Reset the feedback store when the component mounts
+  // Clear lastVapiCallId when the component mounts
   useEffect(() => {
-    // Clear any previous conversation history and feedback
-    resetStore();
-    // Also clear the lastVapiCallId from localStorage to prevent loading old recordings
+    // Clear the lastVapiCallId from localStorage to prevent loading old recordings
     localStorage.removeItem('lastVapiCallId');
-  }, [resetStore]);
+    // Note: We don't call resetStore() here anymore to avoid infinite loops
+    // The SpeakingPracticeSession component will handle resetting the store
+  }, []);
 
   const handleStartPractice = () => {
     setShowPracticeSession(true);
@@ -90,7 +89,12 @@ export default function SpeakingTopicPage() {
 
   return (
     <div className="container px-4 sm:px-6 md:px-8 max-w-4xl mx-auto py-6 sm:py-8 md:py-10 lg:py-16">
-      <div className="mb-6 sm:mb-8 md:mb-10">
+      <motion.div
+        className="mb-6 sm:mb-8 md:mb-10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <Link
           href="/mock-test/topics/speaking"
           className="text-blue-600 inline-flex items-center gap-1 text-sm sm:text-base"
@@ -98,9 +102,14 @@ export default function SpeakingTopicPage() {
           <ChevronLeftIcon className="size-4 sm:size-5" />
           Back to Topics
         </Link>
-      </div>
+      </motion.div>
 
-      <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+      <motion.div
+        className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+      >
         <span>
           <span
             className={cn(
@@ -115,10 +124,15 @@ export default function SpeakingTopicPage() {
           <h1 className="text-xl sm:text-2xl md:text-title-sm font-medium text-gray-800">{topic.title}</h1>
           <p className="text-sm sm:text-base text-gray-500">{topic.description}</p>
         </div>
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8 md:mb-10">
-        <div className="border rounded-xl p-3 sm:p-4 lg:p-6">
+        <motion.div
+          className="border rounded-xl p-3 sm:p-4 lg:p-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
           <h2 className="text-lg sm:text-xl font-medium mb-3 sm:mb-4">Questions</h2>
 
           {part1Questions.length > 0 && (
@@ -162,9 +176,14 @@ export default function SpeakingTopicPage() {
               </ul>
             </div>
           )}
-        </div>
+        </motion.div>
 
-        <div className="border rounded-xl p-3 sm:p-4 lg:p-6">
+        <motion.div
+          className="border rounded-xl p-3 sm:p-4 lg:p-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
+        >
           <h2 className="text-lg sm:text-xl font-medium mb-3 sm:mb-4">Key Vocabulary</h2>
           <div className="flex flex-wrap gap-2">
             {vocabulary.map(word => (
@@ -176,10 +195,15 @@ export default function SpeakingTopicPage() {
               </span>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      <div className="border rounded-xl p-4 sm:p-6 bg-blue-50">
+      <motion.div
+        className="border rounded-xl p-4 sm:p-6 bg-blue-50"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.4 }}
+      >
         <h2 className="text-lg sm:text-xl font-medium mb-3 sm:mb-4">Practice This Topic</h2>
         <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
           Ready to practice speaking on this topic? Our AI tutor will ask you questions and provide
@@ -193,7 +217,7 @@ export default function SpeakingTopicPage() {
             View Sample Answers
           </Button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

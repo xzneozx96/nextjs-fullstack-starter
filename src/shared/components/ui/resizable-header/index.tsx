@@ -1,6 +1,6 @@
 'use client';
 import { BarsIcon, XIcon } from '@/shared/icons';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@/shared/utils/utils';
 import {
   AnimatePresence,
   motion,

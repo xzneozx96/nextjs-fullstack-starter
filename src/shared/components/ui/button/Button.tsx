@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@/shared/utils/utils';
 import React from 'react';
 
 type ButtonProps = {

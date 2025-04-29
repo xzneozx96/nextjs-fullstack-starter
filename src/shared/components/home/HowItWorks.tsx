@@ -3,7 +3,7 @@
 import type React from 'react';
 
 import { AngleRightIcon, CheckSolidIcon } from '@/shared/icons';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@/shared/utils/utils';
 import { AnimatePresence, motion, useAnimation } from 'framer-motion';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';

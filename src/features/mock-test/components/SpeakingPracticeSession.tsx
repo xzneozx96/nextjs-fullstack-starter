@@ -1,13 +1,13 @@
 'use client';
 
 import type { QuestionBank, Topic } from '../types/question-bank';
+import { CALL_STATUS, useVapi } from '@/features/mock-test/hooks/useVapi';
 import Button from '@/shared/components/ui/button/Button';
 import { Card } from '@/shared/components/ui/card/Card';
-import { CALL_STATUS, useVapi } from '@/shared/hooks/useVapi';
 import Link from 'next/link';
 // import { useUser } from '@clerk/nextjs';
 import { useEffect, useRef } from 'react';
-import { MessageTypeEnum } from '../types/vapi-conversation';
+import { useFeedbackStore } from '../stores/useFeedbackStore';
 import { VapiButton } from './VapiButton';
 import { VapiConversation } from './VapiConversation';
 
@@ -19,8 +19,18 @@ type SpeakingPracticeSessionProps = {
 
 const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionProps) => {
   // Use our custom hook for vapi functionality
-  const { toggleCall, messages, callStatus, activeTranscript, audioLevel }
-    = useVapi();
+  const {
+    toggleCall,
+    messages,
+    callStatus,
+    activeTranscript,
+    audioLevel,
+    currentCallId,
+    getCallDetails,
+  } = useVapi();
+
+  // Use the Zustand store
+  const { setSelectedTopic, setSelectedQuestions, resetStore } = useFeedbackStore();
 
   // const { user } = useUser();
   const user = {
@@ -30,6 +40,19 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
     imageUrl: '/images/user/user-01.jpg',
   };
   const messageContainerRef = useRef<HTMLDivElement>(null);
+
+  // Reset the store and update with the current topic and questions
+  useEffect(() => {
+    // Reset the store to clear any previous conversation history and feedback
+    resetStore();
+
+    // Then set the current topic and questions
+    setSelectedTopic(topic);
+    setSelectedQuestions(questions);
+
+    // Also clear the lastVapiCallId from localStorage to prevent loading old recordings
+    localStorage.removeItem('lastVapiCallId');
+  }, [topic, questions, setSelectedTopic, setSelectedQuestions, resetStore]);
 
   // auto-scroll messages
   useEffect(() => {
@@ -170,7 +193,7 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
         )}
 
         {/* CALL CONTROLS */}
-        <div className="text-center flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
+        <div className="text-center flex justify-center items-center gap-3 sm:gap-4">
           <VapiButton
             audioLevel={audioLevel}
             callStatus={callStatus}
@@ -188,10 +211,22 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
                 variant="outline"
                 className="w-full sm:w-auto"
                 onClick={() => {
-                  // Store messages in localStorage for the feedback page
-                  const transcript = messages.filter(msg => msg.type === MessageTypeEnum.TRANSCRIPT)
-                    .map(({ role, transcript }) => ({ role, transcript }));
-                  localStorage.setItem('speakingMessages', JSON.stringify(transcript));
+                  // Store call ID in localStorage for the feedback page
+                  if (currentCallId) {
+                    localStorage.setItem('lastVapiCallId', currentCallId);
+
+                    // Fetch call details to ensure they're cached
+                    getCallDetails(currentCallId)
+                      .then((response) => {
+                        if (response.success && response.data) {
+                          // No need to set timestamp here as it will be set in setMessagesFromCallDetails
+                          // when the feedback page loads
+                        }
+                      })
+                      .catch((error) => {
+                        console.error('Error fetching call details:', error);
+                      });
+                  }
                 }}
               >
                 View Feedback

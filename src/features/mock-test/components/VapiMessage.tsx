@@ -1,7 +1,7 @@
 import type {
   TranscriptMessage,
 } from '../types/vapi-conversation';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@/shared/utils/utils';
 import {
   MessageRoleEnum,
 } from '../types/vapi-conversation';

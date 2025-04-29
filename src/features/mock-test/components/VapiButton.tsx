@@ -1,6 +1,6 @@
-import type { useVapi } from '@/shared/hooks/useVapi';
+import type { useVapi } from '@/features/mock-test/hooks/useVapi';
+import { CALL_STATUS } from '@/features/mock-test/hooks/useVapi';
 import Button from '@/shared/components/ui/button/Button';
-import { CALL_STATUS } from '@/shared/hooks/useVapi';
 
 type VapiButtonProps = Partial<ReturnType<typeof useVapi>> & {
   assistantVariables?: Record<string, any>;

@@ -1,7 +1,7 @@
 'use client';
 
 import { AcademicCapIcon, ChartPieIcon, ChatIcon, RocketLaunchIcon } from '@/shared/icons';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@/shared/utils/utils';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 

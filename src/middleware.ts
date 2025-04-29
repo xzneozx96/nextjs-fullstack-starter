@@ -4,7 +4,9 @@ import { detectBot } from '@arcjet/next';
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
+import { ZodError } from 'zod';
 import { routing } from './core/config/i18nNavigation';
+import { SafeError } from './shared/utils/error-handling';
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -12,6 +14,56 @@ const isProtectedRoute = createRouteMatcher([
   // '/dashboard(.*)',
   // '/:locale/dashboard(.*)',
 ]);
+
+export type NextHandler = (
+  req: NextRequest,
+  context: { params: Promise<Record<string, string>> }
+) => Promise<Response>;
+
+export function withError(handler: NextHandler): NextHandler {
+  return async (req, context) => {
+    try {
+      return await handler(req, context);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return NextResponse.json(
+          { error: { issues: error.issues }, isKnownError: true },
+          { status: 400 },
+        );
+      }
+
+      if (isErrorWithConfigAndHeaders(error)) {
+        error.config.headers = undefined;
+      }
+
+      if (error instanceof SafeError) {
+        return NextResponse.json(
+          { error: error.safeMessage, isKnownError: true },
+          { status: 400 },
+        );
+      }
+
+      // Quick fix: log full error in development. TODO: handle properly
+      console.error(error);
+
+      return NextResponse.json(
+        { error: 'An unexpected error occurred' },
+        { status: 500 },
+      );
+    }
+  };
+}
+
+function isErrorWithConfigAndHeaders(
+  error: unknown,
+): error is { config: { headers: unknown } } {
+  return (
+    typeof error === 'object'
+    && error !== null
+    && 'config' in error
+    && 'headers' in (error as { config: any }).config
+  );
+}
 
 const isAuthPage = createRouteMatcher([
   '/signin(.*)',
@@ -78,10 +130,9 @@ export default async function middleware(
   // Extract the URL pathname from the request
   const path = request.nextUrl.pathname;
 
-  // Allow direct access to sitemap.xml and robots.txt without i18n middleware processing
-  // This ensures these files are properly served for SEO purposes
-  // Related to GitHub issue: https://github.com/ixartz/Next-js-Boilerplate/issues/356
-  if (path === '/sitemap.xml' || path === '/robots.txt') {
+  // Allow direct access to API routes, sitemap.xml and robots.txt without i18n middleware processing
+  // This ensures these files are properly served without locale prefixing
+  if (path === '/sitemap.xml' || path === '/robots.txt' || path.startsWith('/api/')) {
     return NextResponse.next();
   }
 

@@ -1,5 +1,4 @@
 import OpenAI from 'openai';
-import { Env } from '../config/Env';
 
 // Create a mock OpenAI client for development
 class MockOpenAI {
@@ -249,12 +248,13 @@ function mockProposalResponse(): string[] {
 }
 
 // Determine whether to use the real OpenAI client or the mock one
-const useMock = process.env.NODE_ENV === 'development' && !Env.NEXT_PUBLIC_OPENAI_API_KEY;
+const useMock = process.env.NODE_ENV === 'development'
+  && (typeof process.env.OPENAI_API_KEY === 'undefined' || process.env.OPENAI_API_KEY === '');
 
 // Create a singleton instance of the OpenAI client or use the mock
+// This should only be used server-side now
 export const openai = useMock
   ? new MockOpenAI() as unknown as OpenAI
   : new OpenAI({
-    apiKey: Env.NEXT_PUBLIC_OPENAI_API_KEY,
-    dangerouslyAllowBrowser: true, // Only for client-side usage
+    apiKey: process.env.OPENAI_API_KEY,
   });

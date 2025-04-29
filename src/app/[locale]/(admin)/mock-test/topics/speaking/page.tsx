@@ -1,9 +1,12 @@
+'use client';
+
 import type { Topic } from '@/features/mock-test/types/question-bank';
 import { mockQuestions } from '@/features/mock-test/constants/mock-questions';
 import {
   MicrophoneIcon,
 } from '@/shared/icons';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@/shared/utils/utils';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 export default function TestsListPage() {
@@ -25,35 +28,42 @@ export default function TestsListPage() {
 
       {/* Grid layout with responsive columns */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-        {speakingTopics.map(topic => (
-          <Link
+        {speakingTopics.map((topic, index) => (
+          <motion.div
             key={topic.id}
-            href={`/mock-test/topics/speaking/${topic.id}`}
-            className="block group"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1, duration: 0.3 }}
           >
-            <div className="h-full border rounded-xl p-4 sm:p-5 md:p-6 transition-all
-              duration-300 hover:shadow-md flex flex-col"
+            <Link
+              key={topic.id}
+              href={`/mock-test/topics/speaking/${topic.id}`}
+              className="block group"
             >
-              <div className="mb-3 sm:mb-4">
-                <span className={cn(
-                  'flex size-10 sm:size-12 items-center justify-center rounded-full',
-                  'text-blue-500 bg-blue-500/[0.08]',
-                )}
-                >
-                  <MicrophoneIcon className="size-4 sm:size-5" />
-                </span>
+              <div className="h-full border rounded-xl p-4 sm:p-5 md:p-6 transition-all
+              duration-300 hover:shadow-md flex flex-col"
+              >
+                <div className="mb-3 sm:mb-4">
+                  <span className={cn(
+                    'flex size-10 sm:size-12 items-center justify-center rounded-full',
+                    'text-blue-500 bg-blue-500/[0.08]',
+                  )}
+                  >
+                    <MicrophoneIcon className="size-4 sm:size-5" />
+                  </span>
+                </div>
+                <h3 className="font-medium text-base sm:text-lg mb-1 sm:mb-2 transition-colors">
+                  {topic.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-500 flex-grow">
+                  {topic.description}
+                </p>
+                <div className="mt-4 sm:mt-6 md:mt-8 text-xs sm:text-sm text-blue-600 font-medium">
+                  Practice Now →
+                </div>
               </div>
-              <h3 className="font-medium text-base sm:text-lg mb-1 sm:mb-2 transition-colors">
-                {topic.title}
-              </h3>
-              <p className="text-xs sm:text-sm text-gray-500 flex-grow">
-                {topic.description}
-              </p>
-              <div className="mt-4 sm:mt-6 md:mt-8 text-xs sm:text-sm text-blue-600 font-medium">
-                Practice Now →
-              </div>
-            </div>
-          </Link>
+            </Link>
+          </motion.div>
         ))}
       </div>
 

@@ -1,0 +1,64 @@
+---
+description: Add environment variables to the project
+globs: 
+alwaysApply: false
+---
+# Add Environment Variables
+
+This is how we add environment variables to the project:
+
+  1. Add to `.env.example`:
+      ```bash
+      NEW_VARIABLE=value_example
+      ```
+
+  2. Add to `Env.ts`:
+      ```typescript
+      // For server-only variables
+      server: {
+        NEW_VARIABLE: z.string(),
+      }
+      // For client-side variables
+      client: {
+        NEXT_PUBLIC_NEW_VARIABLE: z.string(),
+      }
+      runtimeEnv: {
+        NEXT_PUBLIC_NEW_VARIABLE: process.env.NEXT_PUBLIC_NEW_VARIABLE,
+      }
+      ```
+
+  3. For client-side variables:
+      - Must be prefixed with `NEXT_PUBLIC_`
+      - Add to both `client` and `runtimeEnv` sections
+
+examples:
+  - input: |
+      # Adding a server-side API key
+      # .env.example
+      API_KEY=your_api_key_here
+
+      # Env.ts
+      server: {
+        API_KEY: z.string(),
+      }
+
+    output: "Server-side environment variable properly added"
+
+  - input: |
+      # Adding a client-side feature flag
+      # .env.example
+      NEXT_PUBLIC_FEATURE_ENABLED=false
+
+      # Env.ts
+      client: {
+        NEXT_PUBLIC_FEATURE_ENABLED: z.coerce.boolean().default(false),
+      },
+      runtimeEnv: {
+        NEXT_PUBLIC_FEATURE_ENABLED: process.env.NEXT_PUBLIC_FEATURE_ENABLED,
+      }
+
+    output: "Client-side environment variable properly added"
+
+references:
+  - src/core/config/Env.ts
+  - .env.example

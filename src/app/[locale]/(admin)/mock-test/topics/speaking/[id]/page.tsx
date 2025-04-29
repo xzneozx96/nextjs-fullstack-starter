@@ -3,15 +3,16 @@
 import type { QuestionBank, Topic } from '@/features/mock-test/types/question-bank';
 import SpeakingPracticeSession from '@/features/mock-test/components/SpeakingPracticeSession';
 import { mockQuestions } from '@/features/mock-test/constants/mock-questions';
+import { useFeedbackStore } from '@/features/mock-test/stores/useFeedbackStore';
 import Button from '@/shared/components/ui/button/Button';
 import {
   ChevronLeftIcon,
   MicrophoneIcon,
 } from '@/shared/icons';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@/shared/utils/utils';
 import Link from 'next/link';
 import { notFound, useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Common vocabulary for each topic
 const topicVocabulary: Record<string, string[]> = {
@@ -34,8 +35,9 @@ const topicVocabulary: Record<string, string[]> = {
 
 export default function SpeakingTopicPage() {
   const params = useParams();
-  console.log('params', params);
   const id = params.id as string;
+  const { resetStore } = useFeedbackStore();
+
   const [showPracticeSession, setShowPracticeSession] = useState(false);
 
   // Type assertion for the imported JSON data
@@ -59,6 +61,14 @@ export default function SpeakingTopicPage() {
 
   // Get vocabulary for this topic
   const vocabulary = topicVocabulary[id] || [];
+
+  // Reset the feedback store when the component mounts
+  useEffect(() => {
+    // Clear any previous conversation history and feedback
+    resetStore();
+    // Also clear the lastVapiCallId from localStorage to prevent loading old recordings
+    localStorage.removeItem('lastVapiCallId');
+  }, [resetStore]);
 
   const handleStartPractice = () => {
     setShowPracticeSession(true);

@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@/shared/utils/utils';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 

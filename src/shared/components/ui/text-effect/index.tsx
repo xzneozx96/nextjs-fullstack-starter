@@ -5,7 +5,7 @@ import type {
   Variant,
   Variants,
 } from 'motion/react';
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@/shared/utils/utils';
 import {
   AnimatePresence,
   motion,

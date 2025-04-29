@@ -1,4 +1,4 @@
-import { cn } from '@/shared/libs/utils';
+import { cn } from '@/shared/utils/utils';
 import * as React from 'react';
 
 const Card = ({

@@ -1,8 +1,9 @@
 import type { Message, TranscriptMessage } from '@/features/mock-test/types/vapi-conversation';
 import { vapi } from '@/core/ai/Vapi';
 import { Env } from '@/core/config/Env';
+import { fetchCallById } from '@/features/mock-test/actions/vapi/vapi-actions';
 import { MessageTypeEnum, TranscriptMessageTypeEnum } from '@/features/mock-test/types/vapi-conversation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export enum CALL_STATUS {
   INACTIVE = 'inactive',
@@ -22,6 +23,15 @@ export function useVapi() {
     = useState<TranscriptMessage | null>(null);
 
   const [audioLevel, setAudioLevel] = useState(0);
+
+  // Store the current call ID
+  const [currentCallId, setCurrentCallId] = useState<string | null>(null);
+
+  // Store call details including recording URL
+  const [callDetails, setCallDetails] = useState<any | null>(null);
+
+  // Track if we're fetching call details
+  const [isFetchingCallDetails, setIsFetchingCallDetails] = useState(false);
 
   useEffect(() => {
     const onSpeechStart = () => setIsSpeechActive(true);
@@ -93,10 +103,49 @@ export function useVapi() {
 
     response.then((res) => {
       console.log('call', res);
+      // Store the call ID for later use
+      if (res && res.id) {
+        setCurrentCallId(res.id);
+        // Store the call ID in localStorage for persistence
+        localStorage.setItem('lastVapiCallId', res.id);
+      }
+    }).catch((error) => {
+      console.error('Error starting call:', error);
+      setCallStatus(CALL_STATUS.INACTIVE);
     });
 
     return response;
   };
+
+  /**
+   * Fetch call details from the VAPI API
+   * @param callId Optional call ID to fetch. If not provided, uses the current call ID
+   * @returns Promise that resolves to the call details
+   */
+  const getCallDetails = useCallback(async (callId?: string) => {
+    const idToFetch = callId || currentCallId || localStorage.getItem('lastVapiCallId');
+
+    if (!idToFetch) {
+      throw new Error('No call ID available');
+    }
+
+    try {
+      setIsFetchingCallDetails(true);
+      const response = await fetchCallById({ id: idToFetch });
+
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Failed to fetch call details');
+      }
+
+      setCallDetails(response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching call details:', error);
+      throw error;
+    } finally {
+      setIsFetchingCallDetails(false);
+    }
+  }, [currentCallId]);
 
   const stop = () => {
     setCallStatus(CALL_STATUS.LOADING);
@@ -134,5 +183,9 @@ export function useVapi() {
     start,
     stop,
     toggleCall,
+    currentCallId,
+    callDetails,
+    isFetchingCallDetails,
+    getCallDetails,
   };
 }

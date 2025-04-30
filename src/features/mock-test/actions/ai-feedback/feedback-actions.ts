@@ -1,10 +1,10 @@
 'use server';
 
 import type { ServerActionResponse } from '@/shared/types/global';
-import type { GenerateFeedbackParams, OrganizeTranscriptParams, OrganizeTranscriptResponse } from './feedback-actions.validation';
+import type { OrganizeTranscriptParams, OrganizeTranscriptResponse } from './feedback-actions.validation';
 import { openai } from '@/core/ai/OpenAI';
 import { IELTS_TRANSCRIPT_ORGANIZE_PROMPT, openaiModels } from '../../constants/ai-prompts';
-import { generateFeedbackSchema, organizeTranscriptSchema } from './feedback-actions.validation';
+import { organizeTranscriptSchema } from './feedback-actions.validation';
 
 /**
  * Server action to organize a transcript into parts
@@ -98,37 +98,5 @@ export async function organizeTranscriptAction(
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     console.error('Error organizing transcript:', error);
     return { success: false, error: errorMessage };
-  }
-}
-
-/**
- * Server action to generate feedback for a speaking test
- * This function validates the input and returns the parameters to be used by the client
- * for making a request to the streaming API endpoint
- *
- * @param unsafeData The parameters for generating feedback
- * @returns Promise that resolves to a validated parameters object or an error
- */
-export async function generateFeedbackAction(
-  unsafeData: GenerateFeedbackParams,
-): Promise<{ validatedParams?: GenerateFeedbackParams; error?: string }> {
-  try {
-    // Validate input data using Zod
-    const validationResult = generateFeedbackSchema.safeParse(unsafeData);
-    if (!validationResult.success) {
-      // Format Zod errors into a readable string
-      const errorMessage = validationResult.error.errors
-        .map(e => `${e.path.join('.')}: ${e.message}`)
-        .join(', ');
-
-      return { error: errorMessage };
-    }
-
-    // Return the validated parameters to be used by the client
-    return { validatedParams: validationResult.data };
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    console.error('Error validating feedback parameters:', error);
-    return { error: errorMessage };
   }
 }

@@ -27,7 +27,6 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
     activeTranscript,
     audioLevel,
     currentCallId,
-    getCallDetails,
   } = useVapi();
 
   // Use the Zustand store
@@ -127,9 +126,7 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
                 {/* SPEAKING INDICATOR */}
                 <div
                   className={`mt-2 sm:mt-3 md:mt-4 flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-0.5 sm:py-1
-                    rounded-full bg-card border border-border ${
-    callStatus === CALL_STATUS.ACTIVE ? 'border-blue-500' : ''
-    }`}
+                    rounded-full bg-card border border-border ${callStatus === CALL_STATUS.ACTIVE ? 'border-blue-500' : ''}`}
                 >
                   <div
                     className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full ${
@@ -196,7 +193,7 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
         {messages.length > 0 && (
           <motion.div
             ref={messageContainerRef}
-            className="w-full bg-card/90 border rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 md:mb-8
+            className="hidden md:block w-full bg-card/90 border rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 md:mb-8
               h-[200px] sm:h-[250px] md:h-[300px] overflow-y-auto transition-all duration-300 scroll-smooth"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -247,18 +244,6 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
                   // Store call ID in localStorage for the feedback page
                   if (currentCallId) {
                     localStorage.setItem('lastVapiCallId', currentCallId);
-
-                    // Fetch call details to ensure they're cached
-                    getCallDetails(currentCallId)
-                      .then((response) => {
-                        if (response.success && response.data) {
-                          // No need to set timestamp here as it will be set in setMessagesFromCallDetails
-                          // when the feedback page loads
-                        }
-                      })
-                      .catch((error) => {
-                        console.error('Error fetching call details:', error);
-                      });
                   }
                 }}
               >

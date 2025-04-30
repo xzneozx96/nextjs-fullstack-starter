@@ -19,7 +19,6 @@ type FeedbackState = {
   timestamp: string | null;
 
   // Actions
-  setMessages: (messages: Message[]) => void;
   setMessagesAndTranscriptFromCallDetails: (callDetails: { artifact?: VapiCallArtifact }) => void;
   setFeedbackText: (text: string) => void;
   setIsLoading: (loading: boolean) => void;
@@ -42,8 +41,6 @@ export const useFeedbackStore = create<FeedbackState>(set => ({
   timestamp: null,
 
   // Actions
-  setMessages: messages => set({ messages }),
-
   setMessagesAndTranscriptFromCallDetails: (callDetails) => {
     if (callDetails?.artifact?.messages && callDetails.artifact.messages.length > 0) {
       // Convert VAPI API message format to our internal Message format

@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 import GridShape from '@/shared/components/common/GridShape';
+import Button from '@/shared/components/ui/button/Button';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
 export const metadata: Metadata = {
-  title: 'Next.js Error 404 | TailAdmin - Next.js Dashboard Template',
+  title: 'Error 404 | IELTS AI Tutor',
   description:
-    'This is Next.js Error 404 page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template',
+    'This is Error 404 page for IELTS AI Tutor',
 };
 
 export default function Error404() {
@@ -40,9 +41,10 @@ export default function Error404() {
 
         <Link
           href="/"
-          className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
         >
-          Back to Home Page
+          <Button>
+            Back to Home Page
+          </Button>
         </Link>
       </div>
     </div>

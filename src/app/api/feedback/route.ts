@@ -1,19 +1,27 @@
-import type { GenerateFeedbackParams } from '@/features/mock-test/actions/ai-feedback/feedback-actions.validation';
 import type { NextRequest } from 'next/server';
+import type { GenerateFeedbackParams } from './validation';
 import { openai } from '@/core/ai/OpenAI';
 import { IELTS_FEEDBACK_PROMPT, openaiModels } from '@/features/mock-test/constants/ai-prompts';
 import { withError } from '@/middleware';
 import { NextResponse } from 'next/server';
+import { generateFeedbackSchema } from './validation';
 
 export const POST = withError(async (request: NextRequest) => {
   try {
     // Parse the request body
     const data: GenerateFeedbackParams = await request.json();
 
-    // Validate required fields
-    if (!data.topic || !data.fullTranscript) {
+    // Validate the request body
+    const { success, error } = generateFeedbackSchema.safeParse(data);
+
+    if (!success) {
+      // Format Zod errors into a readable string
+      const errorMessage = error.errors
+        .map(e => `${e.path.join('.')}: ${e.message}`)
+        .join(', ');
+
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: errorMessage },
         { status: 400 },
       );
     }
@@ -35,46 +43,46 @@ export const POST = withError(async (request: NextRequest) => {
       .replace('{{fullTranscript}}', fullTranscript);
 
     // stream response from ChatGPT using non-thinking model
-    // const stream = await openai.chat.completions.create({
-    //   model: openaiModels.default,
-    //   messages: [
-    //     {
-    //       role: 'user',
-    //       content: prompt,
-    //     },
-    //   ],
-    //   stream: true,
-    // });
-
-    // stream response from ChatGPT using reasoning model
-    const stream = await openai.responses.create({
-      model: openaiModels.reasoning,
-      input: prompt,
-      reasoning: {
-        effort: 'medium',
-      },
+    const stream = await openai.chat.completions.create({
+      model: openaiModels.default,
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
       stream: true,
     });
+
+    // stream response from ChatGPT using reasoning model
+    // const stream = await openai.responses.create({
+    //   model: openaiModels.reasoning,
+    //   input: prompt,
+    //   reasoning: {
+    //     effort: 'medium',
+    //   },
+    //   stream: true,
+    // });
 
     // Create a ReadableStream directly from the OpenAI stream
     const encoder = new TextEncoder();
     const readableStream = new ReadableStream({
       async start(controller) {
         // Process each chunk from the OpenAI stream (non-thinking model)
-        // for await (const chunk of stream) {
-        //   const content = chunk.choices[0]?.delta?.content || '';
-        //   if (content) {
-        //     controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content })}\n\n`));
-        //   }
-        // }
-
-        // Process each chunk from the OpenAI stream (reasoning model)
         for await (const chunk of stream) {
-          const content = chunk.type === 'response.output_text.delta' ? chunk.delta : '';
+          const content = chunk.choices[0]?.delta?.content || '';
           if (content) {
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content })}\n\n`));
           }
         }
+
+        // Process each chunk from the OpenAI stream (reasoning model)
+        // for await (const chunk of stream) {
+        //   const content = chunk.type === 'response.output_text.delta' ? chunk.delta : '';
+        //   if (content) {
+        //     controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content })}\n\n`));
+        //   }
+        // }
 
         // Signal the end of the stream
         controller.enqueue(encoder.encode('data: [DONE]\n\n'));

@@ -1,6 +1,6 @@
 import { useProjectContext } from '@/features/project-monitoring-demo/contexts/ProjectContext';
-import { useToast } from '@/shared/components/ui/toast/ToastContainer';
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import StaffSelectionInput from './StaffSelectionInput';
 
 const AssembleTeamForm: React.FC = () => {
@@ -15,17 +15,14 @@ const AssembleTeamForm: React.FC = () => {
     resetSubsequentTasks,
   } = useProjectContext();
 
-  // Access toast functionality
-  const { showToast } = useToast();
+  // Toast functionality is now imported directly from sonner
 
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.1')) {
-      showToast({
-        message: 'You must complete all previous tasks before editing this one.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before editing this one.', {
         duration: 3000,
       });
       return;
@@ -38,9 +35,7 @@ const AssembleTeamForm: React.FC = () => {
   const handleStaffChange = (selectedStaff: string[]) => {
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.1')) {
-      showToast({
-        message: 'You must complete all previous tasks before editing this one.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before editing this one.', {
         duration: 3000,
       });
       return;
@@ -54,9 +49,7 @@ const AssembleTeamForm: React.FC = () => {
 
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.1')) {
-      showToast({
-        message: 'You must complete all previous tasks before submitting this one.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before submitting this one.', {
         duration: 3000,
       });
       return;
@@ -64,9 +57,7 @@ const AssembleTeamForm: React.FC = () => {
 
     // Validate form
     if (!assembleTeamFormData.projectDescription || assembleTeamFormData.selectedStaff.length === 0) {
-      showToast({
-        message: 'Please fill out all required fields',
-        type: 'error',
+      toast.error('Please fill out all required fields', {
         duration: 3000,
       });
       return;
@@ -103,9 +94,7 @@ const AssembleTeamForm: React.FC = () => {
                 // Reset all subsequent tasks
                 resetSubsequentTasks('1.1');
 
-                showToast({
-                  message: 'Editing mode activated. All subsequent tasks have been reset.',
-                  type: 'info',
+                toast.info('Editing mode activated. All subsequent tasks have been reset.', {
                   duration: 3000,
                 });
               }}
@@ -127,8 +116,8 @@ const AssembleTeamForm: React.FC = () => {
             <div>
               <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Team Members:</p>
               <ul className="mt-1 list-disc list-inside">
-                {assembleTeamFormData.selectedStaff.map((staff, index) => (
-                  <li key={index} className="text-sm text-gray-700 dark:text-gray-300">{staff}</li>
+                {assembleTeamFormData.selectedStaff.map(staff => (
+                  <li key={staff} className="text-sm text-gray-700 dark:text-gray-300">{staff}</li>
                 ))}
               </ul>
             </div>

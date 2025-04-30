@@ -115,7 +115,7 @@ Also given the transcript of the Mock Test:
 {{fullTranscript}}
 
 
-Give your feedback and improvement advice in MARKDOWN block (not CODE block) without any additional text:
+Give your feedback and improvement advice without any additional text:
 `;
 
 export const IELTS_TRANSCRIPT_ORGANIZE_PROMPT = `

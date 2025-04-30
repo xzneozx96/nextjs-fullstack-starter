@@ -67,7 +67,7 @@ import {
   StarIcon,
 } from '@heroicons/react/24/solid';
 
-import { Check, Headphones } from 'lucide-react';
+import { Check, Headphones, MicOff } from 'lucide-react';
 
 export {
   AcademicCapIcon,
@@ -118,6 +118,7 @@ export {
   Bars3Icon as ListIcon,
   MagnifyingGlassIcon,
   MapIcon as MapPinIcon,
+  MicOff,
   MicrophoneIcon,
   EllipsisHorizontalIcon as MoreDotIcon,
   PlayIcon as MusicIcon,

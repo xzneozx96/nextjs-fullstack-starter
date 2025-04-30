@@ -24,10 +24,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, className, title }) => {
     }
 
     // Reset state when src changes
-    setIsPlaying(false);
-    setCurrentTime(0);
-    setIsLoading(true);
-    setError(null);
+    const timer = setTimeout(() => {
+      setIsLoading(true);
+      setError(null);
+      setCurrentTime(0);
+      setDuration(0);
+    }, 0);
 
     const handleLoadedMetadata = () => {
       setDuration(audio.duration);
@@ -56,6 +58,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, className, title }) => {
 
     // Clean up event listeners
     return () => {
+      clearTimeout(timer);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('ended', handleEnded);
@@ -92,7 +95,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, className, title }) => {
       return;
     }
 
-    const newTime = Number.parseFloat(e.target.value);
+    const newTime = Number(e.target.value);
     audio.currentTime = newTime;
     setCurrentTime(newTime);
   };
@@ -124,10 +127,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, className, title }) => {
               )
             : isPlaying
               ? (
-                  <span><PauseIcon className="size-4 text-blue-500" /></span>
+                  <span><PauseIcon className="size-5 text-brand-500" /></span>
                 )
               : (
-                  <span><PlayIcon className="size-4 text-blue-500" /></span>
+                  <span><PlayIcon className="size-5 text-brand-500" /></span>
                 )}
         </Button>
 

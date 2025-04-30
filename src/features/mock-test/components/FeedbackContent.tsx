@@ -1,17 +1,18 @@
 'use client';
 
-import type { GenerateFeedbackParams } from '../actions/ai-feedback/feedback-actions.validation';
+import type { GenerateFeedbackParams } from '@/app/api/feedback/validation';
 import type { QuestionBank, Topic } from '../types/question-bank';
 import { mockQuestions } from '@/features/mock-test/constants/mock-questions';
 import { useVapi } from '@/features/mock-test/hooks/useVapi';
 import AudioPlayer from '@/shared/components/ui/audio-player/AudioPlayer';
+import FancyLoader from '@/shared/components/ui/fancy-loader/FancyLoader';
 import { MarkdownRenderer } from '@/shared/components/ui/markdown/MarkdownRenderer';
 import { ChevronLeftIcon, MicrophoneIcon } from '@/shared/icons';
-import { processServerSentEvents } from '@/shared/utils/utils';
+import { cn, processServerSentEvents } from '@/shared/utils/utils';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
-import { generateFeedbackAction } from '../actions/ai-feedback/feedback-actions';
+import { toast } from 'sonner';
 import { useFeedbackStore } from '../stores/useFeedbackStore';
 import { formatQuestionsByPart } from '../utils/format-questions-by-part';
 import { VapiConversation } from './VapiConversation';
@@ -194,12 +195,6 @@ function FeedbackContentMain() {
         const part2Questions = formatQuestionsByPart('part2', selectedQuestions);
         const part3Questions = formatQuestionsByPart('part3', selectedQuestions);
 
-        // Extract only events whose type are 'transcript' from VAPI conversation
-        // const transcriptMessages = messages.filter(msg => msg.type === MessageTypeEnum.TRANSCRIPT);
-
-        // Extract full transcript
-        // const fullTranscript = formatTranscript(transcriptMessages);
-
         // Prepare feedback parameters - use selectedTopic from the store if available
         const feedbackParams: GenerateFeedbackParams = {
           topic: selectedTopic?.title || topic?.title || 'Unknown Topic',
@@ -251,25 +246,13 @@ function FeedbackContentMain() {
           // `,
         };
 
-        // Validate parameters using the server action
-        const validationResponse = await generateFeedbackAction(feedbackParams);
-
-        // Check for validation errors
-        if (validationResponse.error) {
-          throw new Error(validationResponse.error);
-        }
-
-        if (!validationResponse.validatedParams) {
-          throw new Error('Failed to validate feedback parameters');
-        }
-
         // Make a request to the streaming API endpoint
         const response = await fetch(`/api/feedback`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(validationResponse.validatedParams),
+          body: JSON.stringify(feedbackParams),
         });
 
         // Process the streaming response
@@ -278,9 +261,10 @@ function FeedbackContentMain() {
           accumulatedContent += content;
           setFeedbackText(accumulatedContent);
         });
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error generating feedback:', error);
         setHasError(true); // Mark as error to prevent retries
+        toast.error(`Error while preparing feedback: ${error.message}`);
       } finally {
         if (isMounted) {
           setIsLoading(false);
@@ -291,7 +275,7 @@ function FeedbackContentMain() {
     fetchFeedback();
 
     // No cleanup needed as we're using a local variable
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     // Only run this effect when these dependencies change
     messages.length, // Only care about the length changing, not the messages themselves
@@ -309,26 +293,41 @@ function FeedbackContentMain() {
     >
       {/* Header */}
       <div>
-        <div className="mb-6 sm:mb-8 md:mb-10">
+        <div className="hidden md:block mb-6 sm:mb-8 md:mb-10">
           {topicId && (
             <Link
               href={`/mock-test/topics/speaking/${topicId}`}
               className="text-blue-600 inline-flex items-center gap-1 text-sm sm:text-base"
             >
               <ChevronLeftIcon className="size-4 sm:size-5" />
-              Back to Topics
+              Back to Questions
             </Link>
           )}
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-10">
-          <span>
-            <span className="flex size-10 sm:size-12 items-center justify-center rounded-full
+        <div className="flex items-center gap-2 mb-6 md:mb-10">
+          {/* <span> */}
+          <span className="hidden md:flex size-10 sm:size-12 items-center justify-center rounded-full
                  text-blue-500 bg-blue-500/[0.08]"
-            >
-              <MicrophoneIcon className="size-4 sm:size-5" />
-            </span>
+          >
+            <MicrophoneIcon className="size-4 sm:size-5" />
           </span>
+
+          <Link
+            href={`/mock-test/topics/speaking/${topicId}`}
+            className="text-blue-600 inline-flex items-center gap-1 text-sm sm:text-base"
+          >
+            <span
+              className={cn(
+                'flex md:hidden size-10 sm:size-12 items-center justify-center rounded-full',
+                'text-blue-500 bg-blue-500/[0.08]',
+              )}
+            >
+              <ChevronLeftIcon className="size-4 sm:size-5" />
+            </span>
+          </Link>
+          {/* </span> */}
+
           <div>
             <h1 className="text-lg sm:text-xl font-medium">Speaking Test Feedback</h1>
             <p className="text-sm sm:text-base text-gray-500">
@@ -344,22 +343,46 @@ function FeedbackContentMain() {
       </div>
 
       {/* Main content - takes all available space */}
-      <div className="flex flex-col lg:flex-row flex-1 md:overflow-hidden gap-0 sm:gap-6">
-        {/* AI Feedback - full width on mobile, 60% on desktop, shown first on mobile */}
-        <div className="w-full lg:w-3/5 flex flex-col p-4 md:p-6 border rounded-xl order-1 lg:order-2">
+      <div className="flex flex-col lg:flex-row flex-1 overflow-hidden gap-0 sm:gap-6">
+        <div className="w-full lg:w-3/5 flex flex-col p-4 md:p-6 border rounded-xl order-1 lg:order-2 h-full">
           <h2 className="text-base sm:text-lg font-medium mb-2 sm:mb-3">AI Feedback</h2>
+
+          {/* Audio Player */}
+          <div className="mb-4">
+            {isLoadingRecording
+              ? (
+                  <div className="flex items-center justify-center h-12 bg-gray-50 rounded-lg">
+                    <FancyLoader />
+                    <span className="ml-2 text-sm text-gray-500">Loading recording...</span>
+                  </div>
+                )
+              : recordingUrl
+                ? (
+                    <AudioPlayer
+                      src={recordingUrl}
+                      title=""
+                      className="mt-2"
+                    />
+                  )
+                : recordingError
+                  ? (
+                      <div className="text-sm text-red-500 bg-red-50 p-2 rounded-lg mb-8">
+                        {recordingError}
+                      </div>
+                    )
+                  : null}
+          </div>
+
+          {/* AI Feedback - full width on mobile, 60% on desktop, shown first on mobile */}
           <div
             ref={feedbackContainerRef}
-            className="h-[300px] md:h-auto md:flex-1 overflow-auto bg-gray-50/90 rounded-xl p-4 md:p-6"
+            className="h-auto flex-1 overflow-auto bg-gray-50 rounded-xl p-4 md:p-6"
           >
             {isLoading && !feedbackText
               ? (
                   <div className="flex flex-col items-center justify-center h-full">
-                    <div className="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10
-                         border-t-2 border-blue-500 mb-2 sm:mb-3"
-                    >
-                    </div>
-                    <p className="text-sm sm:text-base text-muted-foreground">Generating feedback...</p>
+                    <FancyLoader />
+                    <p className="text-sm sm:text-base text-muted-foreground mt-2">Preparing feedback...</p>
                   </div>
                 )
               : processedFeedback
@@ -375,47 +398,28 @@ function FeedbackContentMain() {
         </div>
 
         {/* Conversation History - full width on mobile, 40% on desktop, shown second on mobile */}
-        <div className="w-full lg:w-2/5 flex flex-col p-4 md:p-6 order-2 lg:order-1 mt-4 lg:mt-0 border rounded-xl flex-1">
+        <div className="hidden md:flex w-full lg:w-2/5 flex-col p-4 md:p-6 order-2 lg:order-1 mt-4 lg:mt-0 border rounded-xl flex-1">
           <h2 className="text-base sm:text-lg font-medium mb-2 sm:mb-3">Conversation History</h2>
 
-          <div className="h-[250px] md:h-full md:flex-1 overflow-auto bg-gray-50/90 rounded-xl p-4">
-            {/* Audio Player */}
-            <div className="mb-4">
+          <div className="h-[250px] md:h-full md:flex-1 overflow-auto bg-gray-50 rounded-xl p-4">
+            {/* Conversation Transcript */}
+            <div className="space-y-3 sm:space-y-4">
               {isLoadingRecording
                 ? (
                     <div className="flex items-center justify-center h-12 bg-gray-50 rounded-lg">
-                      <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-blue-500"></div>
-                      <span className="ml-2 text-sm text-gray-500">Loading recording...</span>
+                      <FancyLoader />
+                      <span className="ml-2 text-sm text-gray-500">Loading conversation...</span>
                     </div>
                   )
-                : recordingUrl
+                : messages.length > 0
                   ? (
-                      <AudioPlayer
-                        src={recordingUrl}
-                        title=""
-                        className="mb-8"
-                      />
+                      <VapiConversation messages={messages} />
                     )
-                  : recordingError
-                    ? (
-                        <div className="text-sm text-red-500 bg-red-50 p-2 rounded-lg mb-8">
-                          {recordingError}
-                        </div>
-                      )
-                    : null}
-            </div>
-
-            {/* Conversation Transcript */}
-            <div className="space-y-3 sm:space-y-4">
-              {messages.length > 0
-                ? (
-                    <VapiConversation messages={messages} />
-                  )
-                : (
-                    <p className="text-muted-foreground text-center py-4 sm:py-8">
-                      No conversation history available
-                    </p>
-                  )}
+                  : (
+                      <p className="text-muted-foreground text-center py-4 sm:py-8">
+                        No conversation history available
+                      </p>
+                    )}
             </div>
           </div>
         </div>

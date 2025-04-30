@@ -2,8 +2,8 @@ import { openRouter } from '@/core/ai/OpenRouter';
 import { useProjectContext } from '@/features/project-monitoring-demo/contexts/ProjectContext';
 import { MarkdownRenderer } from '@/shared/components/ui/markdown/MarkdownRenderer';
 import ModelSelector from '@/shared/components/ui/model-selector';
-import { useToast } from '@/shared/components/ui/toast/ToastContainer';
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import AIContentApproval from './AIContentApproval';
 
 const PreliminaryResearchForm: React.FC = () => {
@@ -21,8 +21,7 @@ const PreliminaryResearchForm: React.FC = () => {
     resetTaskApproval,
   } = useProjectContext();
 
-  // Access toast functionality
-  const { showToast } = useToast();
+  // Toast functionality is now imported directly from sonner
 
   const [isGeneratingResearch, setIsGeneratingResearch] = useState(false);
   const [isAIEditing, setIsAIEditing] = useState(false);
@@ -32,9 +31,7 @@ const PreliminaryResearchForm: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.2')) {
-      showToast({
-        message: 'You must complete all previous tasks before editing this one.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before editing this one.', {
         duration: 3000,
       });
       return;
@@ -76,9 +73,7 @@ const PreliminaryResearchForm: React.FC = () => {
   const handleGenerateResearch = async () => {
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.2')) {
-      showToast({
-        message: 'You must complete all previous tasks before generating research.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before generating research.', {
         duration: 3000,
       });
       return;
@@ -86,9 +81,7 @@ const PreliminaryResearchForm: React.FC = () => {
 
     // Validate form
     if (!preliminaryResearchFormData.clientName || !preliminaryResearchFormData.clientDomain || !preliminaryResearchFormData.clientLocation) {
-      showToast({
-        message: 'Please fill out all required fields',
-        type: 'error',
+      toast.error('Please fill out all required fields', {
         duration: 3000,
       });
       return;
@@ -174,9 +167,7 @@ const PreliminaryResearchForm: React.FC = () => {
       // Reset all subsequent tasks
       resetSubsequentTasks('1.2');
 
-      showToast({
-        message: 'Content edited. All subsequent tasks have been reset.',
-        type: 'info',
+      toast.info('Content edited. All subsequent tasks have been reset.', {
         duration: 3000,
       });
     }
@@ -188,9 +179,7 @@ const PreliminaryResearchForm: React.FC = () => {
   const handleAIEditResearch = async (instructions: string) => {
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.2')) {
-      showToast({
-        message: 'You must complete all previous tasks before editing this one.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before editing this one.', {
         duration: 3000,
       });
       return;
@@ -207,9 +196,7 @@ const PreliminaryResearchForm: React.FC = () => {
       // Reset all subsequent tasks
       resetSubsequentTasks('1.2');
 
-      showToast({
-        message: 'Content being edited. All subsequent tasks have been reset.',
-        type: 'info',
+      toast.info('Content being edited. All subsequent tasks have been reset.', {
         duration: 3000,
       });
     }
@@ -295,9 +282,7 @@ const PreliminaryResearchForm: React.FC = () => {
                 // Reset all subsequent tasks
                 resetSubsequentTasks('1.2');
 
-                showToast({
-                  message: 'Editing mode activated. All subsequent tasks have been reset.',
-                  type: 'info',
+                toast.info('Editing mode activated. All subsequent tasks have been reset.', {
                   duration: 3000,
                 });
               }}

@@ -1,6 +1,6 @@
 import { useProjectContext } from '@/features/project-monitoring-demo/contexts/ProjectContext';
-import { useToast } from '@/shared/components/ui/toast/ToastContainer';
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import StaffSelectionInput from './StaffSelectionInput';
 
 const PresentationDeckForm: React.FC = () => {
@@ -15,8 +15,7 @@ const PresentationDeckForm: React.FC = () => {
     resetSubsequentTasks,
   } = useProjectContext();
 
-  // Access toast functionality
-  const { showToast } = useToast();
+  // Toast functionality is now imported directly from sonner
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -24,9 +23,7 @@ const PresentationDeckForm: React.FC = () => {
   const handleStaffChange = (selectedStaff: string[]) => {
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.5')) {
-      showToast({
-        message: 'You must complete all previous tasks before editing this one.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before editing this one.', {
         duration: 3000,
       });
       return;
@@ -38,9 +35,7 @@ const PresentationDeckForm: React.FC = () => {
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.5')) {
-      showToast({
-        message: 'You must complete all previous tasks before editing this one.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before editing this one.', {
         duration: 3000,
       });
       return;
@@ -52,9 +47,7 @@ const PresentationDeckForm: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.5')) {
-      showToast({
-        message: 'You must complete all previous tasks before editing this one.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before editing this one.', {
         duration: 3000,
       });
       return;
@@ -72,9 +65,7 @@ const PresentationDeckForm: React.FC = () => {
 
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.5')) {
-      showToast({
-        message: 'You must complete all previous tasks before submitting this one.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before submitting this one.', {
         duration: 3000,
       });
       return;
@@ -82,9 +73,7 @@ const PresentationDeckForm: React.FC = () => {
 
     // Validate form
     if (presentationDeckFormData.selectedStaff.length === 0 || !presentationDeckFormData.deadline || !file) {
-      showToast({
-        message: 'Please fill out all required fields',
-        type: 'error',
+      toast.error('Please fill out all required fields', {
         duration: 3000,
       });
       return;
@@ -105,9 +94,7 @@ const PresentationDeckForm: React.FC = () => {
 
   const handleDownloadTemplate = () => {
     // In a real app, this would download a template file
-    showToast({
-      message: 'In a real application, this would download a presentation template file.',
-      type: 'info',
+    toast.info('In a real application, this would download a presentation template file.', {
       duration: 3000,
     });
   };
@@ -130,9 +117,7 @@ const PresentationDeckForm: React.FC = () => {
                 // Reset all subsequent tasks
                 resetSubsequentTasks('1.5');
 
-                showToast({
-                  message: 'Editing mode activated. All subsequent tasks have been reset.',
-                  type: 'info',
+                toast.info('Editing mode activated. All subsequent tasks have been reset.', {
                   duration: 3000,
                 });
               }}

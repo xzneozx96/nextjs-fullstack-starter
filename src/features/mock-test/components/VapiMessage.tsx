@@ -13,15 +13,15 @@ type ConversationMessageProps = {
 export function VapiMessage({ message }: ConversationMessageProps) {
   return (
     <div
-      className={`flex w-full sm:w-11/12 md:w-4/5 text-xs sm:text-sm mb-3 sm:mb-4 justify-end ${
+      className={`flex w-4/5 text-xs sm:text-sm mb-3 sm:mb-4 justify-end ${
         message.role === MessageRoleEnum.USER ? 'ml-auto' : 'mr-auto'
       }`}
     >
       <div
         className={`p-2 sm:p-3 relative ${
           message.role !== MessageRoleEnum.USER
-            ? 'rounded-r-xl bg-blue-50 mr-auto'
-            : 'rounded-l-xl bg-orange-50 ml-auto'
+            ? 'rounded-r-xl bg-brand-100 mr-auto'
+            : 'rounded-l-xl bg-orange-100 ml-auto'
         } rounded-t-xl`}
       >
         <p className="leading-relaxed">{message.transcript}</p>

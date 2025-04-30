@@ -2,8 +2,8 @@ import { openRouter } from '@/core/ai/OpenRouter';
 import { useProjectContext } from '@/features/project-monitoring-demo/contexts/ProjectContext';
 import { MarkdownRenderer } from '@/shared/components/ui/markdown/MarkdownRenderer';
 import ModelSelector from '@/shared/components/ui/model-selector';
-import { useToast } from '@/shared/components/ui/toast/ToastContainer';
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import AIContentApproval from './AIContentApproval';
 
 const DraftProposalForm: React.FC = () => {
@@ -19,8 +19,7 @@ const DraftProposalForm: React.FC = () => {
     resetTaskApproval,
   } = useProjectContext();
 
-  // Access toast functionality
-  const { showToast } = useToast();
+  // Toast functionality is now imported directly from sonner
 
   const [isGeneratingProposal, setIsGeneratingProposal] = useState(false);
   const [isAIEditing, setIsAIEditing] = useState(false);
@@ -30,9 +29,7 @@ const DraftProposalForm: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.6')) {
-      showToast({
-        message: 'You must complete all previous tasks before editing this one.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before editing this one.', {
         duration: 3000,
       });
       return;
@@ -77,9 +74,7 @@ const DraftProposalForm: React.FC = () => {
   const handleGenerateProposal = async () => {
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.6')) {
-      showToast({
-        message: 'You must complete all previous tasks before generating a proposal.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before generating a proposal.', {
         duration: 3000,
       });
       return;
@@ -88,9 +83,7 @@ const DraftProposalForm: React.FC = () => {
     // Validate form
     const { clientName, goal, proposalLocation, proposalTime } = draftProposalFormData;
     if (!clientName || !goal || !proposalLocation || !proposalTime) {
-      showToast({
-        message: 'Please fill out all required fields',
-        type: 'error',
+      toast.error('Please fill out all required fields', {
         duration: 3000,
       });
       return;
@@ -172,9 +165,7 @@ const DraftProposalForm: React.FC = () => {
       // Reset all subsequent tasks
       resetSubsequentTasks('1.6');
 
-      showToast({
-        message: 'Content edited. All subsequent tasks have been reset.',
-        type: 'info',
+      toast.info('Content edited. All subsequent tasks have been reset.', {
         duration: 3000,
       });
     }
@@ -186,9 +177,7 @@ const DraftProposalForm: React.FC = () => {
   const handleAIEditProposal = async (instructions: string) => {
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.6')) {
-      showToast({
-        message: 'You must complete all previous tasks before editing this one.',
-        type: 'warning',
+      toast.warning('You must complete all previous tasks before editing this one.', {
         duration: 3000,
       });
       return;
@@ -205,9 +194,7 @@ const DraftProposalForm: React.FC = () => {
       // Reset all subsequent tasks
       resetSubsequentTasks('1.6');
 
-      showToast({
-        message: 'Content being edited. All subsequent tasks have been reset.',
-        type: 'info',
+      toast.info('Content being edited. All subsequent tasks have been reset.', {
         duration: 3000,
       });
     }
@@ -293,9 +280,7 @@ const DraftProposalForm: React.FC = () => {
                 // Reset all subsequent tasks
                 resetSubsequentTasks('1.6');
 
-                showToast({
-                  message: 'Editing mode activated. All subsequent tasks have been reset.',
-                  type: 'info',
+                toast.info('Editing mode activated. All subsequent tasks have been reset.', {
                   duration: 3000,
                 });
               }}

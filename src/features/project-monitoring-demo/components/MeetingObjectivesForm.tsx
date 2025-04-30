@@ -1,6 +1,6 @@
 import { useProjectContext } from '@/features/project-monitoring-demo/contexts/ProjectContext';
-import { useToast } from '@/shared/components/ui/toast/ToastContainer';
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 
 const MeetingObjectivesForm: React.FC = () => {
   const {
@@ -14,9 +14,6 @@ const MeetingObjectivesForm: React.FC = () => {
     resetSubsequentTasks,
   } = useProjectContext();
 
-  // Access toast functionality
-  const { showToast } = useToast();
-
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,21 +21,13 @@ const MeetingObjectivesForm: React.FC = () => {
 
     // Check if previous tasks are completed
     if (!isPreviousTasksCompleted('1.3')) {
-      showToast({
-        message: 'You must complete all previous tasks before submitting this one.',
-        type: 'warning',
-        duration: 3000,
-      });
+      toast.warning('You must complete all previous tasks before submitting this one');
       return;
     }
 
     // Validate form
     if (!meetingObjectivesFormData.meetingGoals.trim()) {
-      showToast({
-        message: 'Please define meeting objectives',
-        type: 'error',
-        duration: 3000,
-      });
+      toast.error('Please define meeting objectives');
       return;
     }
 
@@ -73,11 +62,7 @@ const MeetingObjectivesForm: React.FC = () => {
                 // Reset all subsequent tasks
                 resetSubsequentTasks('1.3');
 
-                showToast({
-                  message: 'Editing mode activated. All subsequent tasks have been reset.',
-                  type: 'info',
-                  duration: 3000,
-                });
+                toast.info('Editing mode activated. All subsequent tasks have been reset.');
               }}
               className="px-3 py-1.5 text-xs border border-amber-300 rounded-md hover:bg-amber-100 dark:border-amber-600 dark:hover:bg-amber-800/30 dark:text-amber-300"
             >
@@ -113,11 +98,7 @@ const MeetingObjectivesForm: React.FC = () => {
             onChange={(e) => {
               // Check if previous tasks are completed
               if (!isPreviousTasksCompleted('1.3')) {
-                showToast({
-                  message: 'You must complete all previous tasks before editing this one.',
-                  type: 'warning',
-                  duration: 3000,
-                });
+                toast.warning('You must complete all previous tasks before editing this one.');
                 return;
               }
               setMeetingObjectivesFormData({ meetingGoals: e.target.value });

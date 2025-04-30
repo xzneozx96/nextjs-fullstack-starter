@@ -90,7 +90,7 @@ export default function SpeakingTopicPage() {
   return (
     <div className="container px-4 sm:px-6 md:px-8 max-w-4xl mx-auto py-6 sm:py-8 md:py-10 lg:py-16">
       <motion.div
-        className="mb-6 sm:mb-8 md:mb-10"
+        className="hidden md:block mb-6 sm:mb-8 md:mb-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
@@ -113,12 +113,26 @@ export default function SpeakingTopicPage() {
         <span>
           <span
             className={cn(
-              'flex size-10 sm:size-12 items-center justify-center rounded-full',
+              'hidden md:flex size-10 sm:size-12 items-center justify-center rounded-full',
               'text-blue-500 bg-blue-500/[0.08]',
             )}
           >
             <MicrophoneIcon className="size-4 sm:size-5" />
           </span>
+
+          <Link
+            href="/mock-test/topics/speaking"
+            className="text-blue-600 inline-flex items-center gap-1 text-sm sm:text-base"
+          >
+            <span
+              className={cn(
+                'flex md:hidden size-10 sm:size-12 items-center justify-center rounded-full',
+                'text-blue-500 bg-blue-500/[0.08]',
+              )}
+            >
+              <ChevronLeftIcon className="size-4 sm:size-5" />
+            </span>
+          </Link>
         </span>
         <div>
           <h1 className="text-xl sm:text-2xl md:text-title-sm font-medium text-gray-800">{topic.title}</h1>
@@ -199,7 +213,7 @@ export default function SpeakingTopicPage() {
       </div>
 
       <motion.div
-        className="border rounded-xl p-4 sm:p-6 bg-blue-50"
+        className="rounded-xl p-4 sm:p-6 bg-blue-50"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.4 }}

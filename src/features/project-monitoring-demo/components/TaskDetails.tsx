@@ -42,7 +42,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
     <div className="space-y-6">
       {/* Task Header */}
       <div>
-        <h3 className="text-xl font-semibold text-amber-900 dark:text-amber-200">
+        <h3 className="text-xl font-medium text-amber-900 dark:text-amber-200">
           {selectedTask.id}
           {' '}
           {selectedTask.name}

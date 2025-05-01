@@ -207,7 +207,7 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
 
               {callStatus === CALL_STATUS.INACTIVE && (
                 <div className="message-item animate-fadeIn">
-                  <div className="font-semibold text-[10px] sm:text-xs text-blue-500 mb-0.5 sm:mb-1">System:</div>
+                  <div className="font-medium text-[10px] sm:text-xs text-blue-500 mb-0.5 sm:mb-1">System:</div>
                   <p className="text-xs sm:text-sm md:text-base text-foreground">
                     Your speaking practice session has ended. You can review your performance or start a new session.
                   </p>

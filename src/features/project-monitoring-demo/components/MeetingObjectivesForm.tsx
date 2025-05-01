@@ -71,7 +71,7 @@ const MeetingObjectivesForm: React.FC = () => {
           </div>
         </div>
         <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-          <h6 className="text-sm font-semibold text-gray-800 dark:text-white mb-2">Defined Meeting Objectives:</h6>
+          <h6 className="text-sm font-medium text-gray-800 dark:text-white mb-2">Defined Meeting Objectives:</h6>
           <p className="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">{meetingObjectivesFormData.meetingGoals}</p>
         </div>
       </div>
@@ -111,7 +111,7 @@ const MeetingObjectivesForm: React.FC = () => {
         </div>
 
         <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200 dark:bg-amber-900/20 dark:border-amber-800">
-          <h6 className="text-sm font-semibold text-amber-800 dark:text-amber-400 mb-2">Tips for Effective Meeting Objectives:</h6>
+          <h6 className="text-sm font-medium text-amber-800 dark:text-amber-400 mb-2">Tips for Effective Meeting Objectives:</h6>
           <ul className="list-disc pl-5 text-sm text-amber-700 dark:text-amber-300 space-y-1">
             <li>Be specific and measurable</li>
             <li>Focus on outcomes rather than activities</li>

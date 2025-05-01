@@ -18,7 +18,7 @@ export default function ProjectMonitoring() {
     <ProjectProvider>
       <div className="container mx-auto px-4 py-10">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+          <h2 className="text-2xl font-medium text-gray-800 dark:text-white">
             Project Monitoring Dashboard
           </h2>
           <div className="flex-shrink-0">

@@ -14,7 +14,7 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useFeedbackStore } from '../stores/useFeedbackStore';
 import { formatQuestionsByPart } from '../utils/format-questions-by-part';
-import { ChatBox } from './ChatBox';
+import { ChatWithAISpeakingTutor } from './ChatWithAISpeakingTutor';
 import { VapiConversation } from './VapiConversation';
 
 function FeedbackContentMain() {
@@ -367,10 +367,24 @@ function FeedbackContentMain() {
           </div>
 
           {/* AI Feedback - full width on mobile, 60% on desktop, shown first on mobile */}
-          <ChatBox
-            initialMessage={processedFeedback}
-            className="h-auto flex-1"
-          />
+          {isLoading && !feedbackText
+            ? (
+                <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8">
+                  <div className="relative mb-4">
+                    <FancyLoader />
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-2">Preparing your feedback</h3>
+                  <p className="text-sm text-gray-600 text-center max-w-xs">
+                    Our AI tutor is analyzing your speaking test and preparing detailed feedback on your performance.
+                  </p>
+                </div>
+              )
+            : (
+                <ChatWithAISpeakingTutor
+                  initialMessage={processedFeedback}
+                  className="h-auto flex-1"
+                />
+              )}
         </div>
 
         {/* Conversation History - full width on mobile, 40% on desktop, shown second on mobile */}

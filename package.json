@@ -9,7 +9,7 @@
     "dev:spotlight": "spotlight-sidecar",
     "dev:next": "next dev --turbo",
     "dev": "run-p dev:*",
-    "build": "npm run db:generate && npm run db:migrate && next build",
+    "build": "next build",
     "start": "next start",
     "build-stats": "cross-env ANALYZE=true npm run build",
     "clean": "rimraf .next out coverage",

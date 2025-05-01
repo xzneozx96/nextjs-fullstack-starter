@@ -80,7 +80,7 @@ export const MarkdownRenderer = memo(({ content, className }: MarkdownRendererPr
               {props.children}
             </a>
           ),
-          strong: ({ node, ...props }) => <strong className="font-semibold" {...props} />,
+          strong: ({ node, ...props }) => <strong className="font-medium" {...props} />,
           em: ({ node, ...props }) => <em className="italic text-gray-700 dark:text-gray-300" {...props} />,
           hr: ({ node, ...props }) => <hr className="my-6 border-t border-gray-200 dark:border-gray-800" {...props} />,
           table: ({ node, ...props }) => (

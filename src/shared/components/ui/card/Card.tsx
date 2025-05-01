@@ -44,7 +44,7 @@ const CardTitle = ({
   <h3
     ref={ref}
     className={cn(
-      'text-2xl font-semibold leading-none tracking-tight',
+      'text-2xl font-medium leading-none tracking-tight',
       className,
     )}
     {...props}

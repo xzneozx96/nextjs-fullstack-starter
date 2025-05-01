@@ -114,7 +114,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, className, title }) => {
           disabled={isLoading || !!error}
           variant="icon"
           className={cn(
-            '!bg-blue-500/[0.08] rounded-full',
+            '!bg-blue-500/[0.08] rounded-full min-w-10 min-h-10',
             (isLoading || !!error) && 'opacity-50 cursor-not-allowed',
           )}
           aria-label={isPlaying ? 'Pause' : 'Play'}
@@ -127,10 +127,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, className, title }) => {
               )
             : isPlaying
               ? (
-                  <span><PauseIcon className="size-5 text-brand-500" /></span>
+                  <span><PauseIcon className="size-5 text-blue-600" /></span>
                 )
               : (
-                  <span><PlayIcon className="size-5 text-brand-500" /></span>
+                  <span><PlayIcon className="size-5 text-blue-600" /></span>
                 )}
         </Button>
 
@@ -147,6 +147,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, className, title }) => {
               'accent-blue-600',
               (isLoading || !!error) && 'opacity-50 cursor-not-allowed',
             )}
+            style={{
+              // Ensure the range input is visible
+              display: 'block',
+              width: '100%',
+            }}
           />
         </div>
 

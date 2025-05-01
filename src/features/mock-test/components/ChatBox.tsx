@@ -8,11 +8,6 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 
 type ChatBoxProps = {
   initialMessage?: string;
-  topic?: string;
-  part1Questions?: string;
-  part2Questions?: string;
-  part3Questions?: string;
-  fullTranscript?: string;
   className?: string;
 };
 
@@ -37,10 +32,10 @@ const ChatMessage = memo(({ message }: { message: any }) => {
       }`}
     >
       <div
-        className={`max-w-[85%] p-3 rounded-lg ${
+        className={`max-w-[95%] p-3 rounded-lg ${
           message.role === 'user'
             ? 'bg-orange-100 rounded-tr-none'
-            : 'bg-gray-50 text-gray-900 rounded-tl-none'
+            : 'bg-gray-50 rounded-tl-none'
         }`}
       >
         {message.role === 'assistant'
@@ -170,7 +165,7 @@ export function ChatBox({
             type="text"
             value={input}
             onChange={handleInputChange}
-            placeholder="Ask a follow-up question about your feedback..."
+            placeholder="Ask Mark a question"
             className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             disabled={isLoading || messages.length === 0}
           />

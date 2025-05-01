@@ -1,6 +1,7 @@
 'use client';
 
 import { MarkdownRenderer } from '@/shared/components/ui/markdown/MarkdownRenderer';
+import ShinyText from '@/shared/components/ui/shiny-text/ShinyText';
 import { SendIcon } from '@/shared/icons';
 import { useChat } from '@ai-sdk/react';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
@@ -173,10 +174,7 @@ export function ChatWithAISpeakingTutor({
                 {isLoading && messages.length > 0 && (
                   <div className="flex justify-start">
                     <div className="bg-gray-50 p-3 rounded-lg rounded-tl-none flex items-center space-x-2">
-                      <div className="relative flex items-center justify-center">
-                        <div className="animate-spin rounded-full size-5 border-2 border-t-transparent border-blue-500"></div>
-                      </div>
-                      <span className="text-sm text-gray-700 font-medium">AI is thinking...</span>
+                      <ShinyText text="AI is thinking..." />
                     </div>
                   </div>
                 )}

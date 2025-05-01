@@ -333,6 +333,20 @@
   .animate-fadeIn {
     animation: fadeIn 0.3s ease-in-out forwards;
   }
+
+  /* Shiny animation */
+  @keyframes shine {
+    0% {
+      background-position: 200%;
+    }
+    100% {
+      background-position: -200%;
+    }
+  }
+
+  .animate-shine {
+    animation: shine 5s linear infinite;
+  }
 }
 
 @utility menu-item {

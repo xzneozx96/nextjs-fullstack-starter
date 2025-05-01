@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/shared/utils/utils';
+import { memo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -9,7 +10,8 @@ type MarkdownRendererProps = {
   className?: string;
 };
 
-export const MarkdownRenderer = ({ content, className }: MarkdownRendererProps) => {
+// Memoize the component to prevent unnecessary re-renders
+export const MarkdownRenderer = memo(({ content, className }: MarkdownRendererProps) => {
   // Ensure content is a string
   const safeContent = typeof content === 'string' ? content : '';
   return (
@@ -105,4 +107,7 @@ export const MarkdownRenderer = ({ content, className }: MarkdownRendererProps) 
       </ReactMarkdown>
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  // Only re-render if the content has changed
+  return prevProps.content === nextProps.content;
+});

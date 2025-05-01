@@ -132,6 +132,7 @@ export {
   BoltIcon as PlugInIcon,
   PlusIcon,
   RocketLaunchIcon,
+  PaperAirplaneIcon as SendIcon,
   ShoppingBagIcon as ShoppingCartIcon,
   Square2StackSolidIcon as SquareIcon,
   Squares2X2Icon as SquaresIcon,

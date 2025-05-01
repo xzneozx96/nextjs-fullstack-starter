@@ -1,19 +1,45 @@
-import type { NextFetchEvent, NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import arcjet from '@/core/ai/Arcjet';
 import { detectBot } from '@arcjet/next';
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
+import { getUserFromSession } from './core/auth/session';
 import { routing } from './core/config/i18nNavigation';
 import { SafeError } from './shared/utils/error-handling';
 
 const intlMiddleware = createMiddleware(routing);
 
-const isProtectedRoute = createRouteMatcher([
-  // '/dashboard(.*)',
-  // '/:locale/dashboard(.*)',
-]);
+// const isProtectedRoute = createRouteMatcher([
+//   '/dashboard(.*)',
+//   '/:locale/dashboard(.*)',
+//   '/mock-test(.*)',
+//   '/:locale/mock-test(.*)',
+// ]);
+
+// const isAuthPage = createRouteMatcher([
+//   '/signin(.*)',
+//   '/:locale/signin(.*)',
+//   '/signup(.*)',
+//   '/:locale/signup(.*)',
+// ]);
+
+const protectedRoutes = [
+  '/dashboard(.*)',
+  '/:locale/dashboard(.*)',
+  '/mock-test(.*)',
+  '/:locale/mock-test(.*)',
+];
+
+// Create a function to match routes with patterns
+function matchesProtectedRoute(path: string): boolean {
+  return protectedRoutes.some((route) => {
+    // Remove the locale pattern for matching
+    const cleanRoute = route.replace(/:\w+/g, '');
+    const pattern = new RegExp(cleanRoute.replace(/\(.\)/g, ''));
+    return pattern.test(path);
+  });
+}
 
 export type NextHandler = (
   req: NextRequest,
@@ -65,13 +91,6 @@ function isErrorWithConfigAndHeaders(
   );
 }
 
-const isAuthPage = createRouteMatcher([
-  '/signin(.*)',
-  '/:locale/signin(.*)',
-  '/signup(.*)',
-  '/:locale/signup(.*)',
-]);
-
 // Improve security with Arcjet
 const aj = arcjet.withRule(
   detectBot({
@@ -86,9 +105,23 @@ const aj = arcjet.withRule(
   }),
 );
 
+async function customAuthMiddleware(req: NextRequest) {
+  const user = await getUserFromSession(req.cookies);
+
+  if (!user) {
+    const locale
+          = req.nextUrl.pathname.match(/(\/.*)\/dashboard/)?.at(1) ?? '';
+
+    const signInUrl = new URL(`${locale}/signin`, req.url);
+    return NextResponse.redirect(signInUrl.toString());
+  }
+
+  return intlMiddleware(req);
+}
+
 export default async function middleware(
   request: NextRequest,
-  event: NextFetchEvent,
+  // event: NextFetchEvent,
 ) {
   // Verify the request with Arcjet
   // Use `process.env` instead of Env to reduce bundle size in middleware
@@ -107,28 +140,33 @@ export default async function middleware(
   }
 
   // Run Clerk middleware only when it's necessary
-  if (
-    isAuthPage(request) || isProtectedRoute(request)
-  ) {
-    return clerkMiddleware(async (auth, req) => {
-      if (isProtectedRoute(req)) {
-        const locale
-          = req.nextUrl.pathname.match(/(\/.*)\/dashboard/)?.at(1) ?? '';
+  // if (
+  //   isAuthPage(request) || isProtectedRoute(request)
+  // ) {
+  //   return clerkMiddleware(async (auth, req) => {
+  //     if (isProtectedRoute(req)) {
+  //       const locale
+  //         = req.nextUrl.pathname.match(/(\/.*)\/dashboard/)?.at(1) ?? '';
 
-        const signInUrl = new URL(`${locale}/signin`, req.url);
+  //       const signInUrl = new URL(`${locale}/signin`, req.url);
 
-        await auth.protect({
-          // `unauthenticatedUrl` is needed to avoid error: "Unable to find `next-intl` locale because the middleware didn't run on this request"
-          unauthenticatedUrl: signInUrl.toString(),
-        });
-      }
+  //       await auth.protect({
+  //         // `unauthenticatedUrl` is needed to avoid error: "Unable to find `next-intl` locale because the middleware didn't run on this request"
+  //         unauthenticatedUrl: signInUrl.toString(),
+  //       });
+  //     }
 
-      return intlMiddleware(req);
-    })(request, event);
-  }
+  //     return intlMiddleware(req);
+  //   })(request, event);
+  // }
 
   // Extract the URL pathname from the request
   const path = request.nextUrl.pathname;
+
+  // Run custom auth middleware for protected routes
+  if (matchesProtectedRoute(path)) {
+    return customAuthMiddleware(request);
+  }
 
   // Allow direct access to API routes, sitemap.xml and robots.txt without i18n middleware processing
   // This ensures these files are properly served without locale prefixing

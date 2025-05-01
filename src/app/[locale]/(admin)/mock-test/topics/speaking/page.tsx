@@ -38,7 +38,7 @@ export default function TestsListPage() {
             <Link
               key={topic.id}
               href={`/mock-test/topics/speaking/${topic.id}`}
-              className="block group"
+              className="h-full block group"
             >
               <div className="h-full border rounded-xl p-4 sm:p-5 md:p-6 transition-all
               duration-300 hover:shadow-md flex flex-col"

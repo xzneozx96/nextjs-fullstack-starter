@@ -1,15 +1,43 @@
 'use client';
+import type { z } from 'zod';
+import { logIn } from '@/features/auth/actions/auth-actions';
+import { signInSchema } from '@/features/auth/actions/auth-actions.validation';
 import Checkbox from '@/shared/components/form/input/Checkbox';
 import Input from '@/shared/components/form/input/InputField';
 import Label from '@/shared/components/form/Label';
 import Button from '@/shared/components/ui/button/Button';
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from '@/shared/icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import Alert from '../ui/alert/Alert';
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [error, setError] = useState<string>();
+
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const {
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = form;
+
+  async function onSubmit(data: z.infer<typeof signInSchema>) {
+    const { error } = await logIn(data);
+    if (error) {
+      setError(error);
+    }
+  }
+
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
@@ -32,7 +60,7 @@ export default function SignInForm() {
             </p>
           </div>
           <div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
+            {/* <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
               <button
                 type="button"
                 className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-4 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
@@ -63,6 +91,7 @@ export default function SignInForm() {
                 </svg>
                 Sign in with Google
               </button>
+
               <button
                 type="button"
                 className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-4 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
@@ -80,6 +109,7 @@ export default function SignInForm() {
                 Sign in with X
               </button>
             </div>
+
             <div className="relative py-3 sm:py-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
@@ -89,8 +119,9 @@ export default function SignInForm() {
                   Or
                 </span>
               </div>
-            </div>
-            <form>
+            </div> */}
+
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="space-y-6">
                 <div>
                   <Label>
@@ -99,7 +130,19 @@ export default function SignInForm() {
                     <span className="text-error-500">*</span>
                     {' '}
                   </Label>
-                  <Input placeholder="info@gmail.com" type="email" />
+                  <Controller
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        placeholder="info@gmail.com"
+                        type="email"
+                        error={!!errors.email?.message}
+                        hint={errors.email?.message}
+                      />
+                    )}
+                  />
                 </div>
                 <div>
                   <Label>
@@ -109,9 +152,18 @@ export default function SignInForm() {
                     {' '}
                   </Label>
                   <div className="relative">
-                    <Input
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Enter your password"
+                    <Controller
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <Input
+                          {...field}
+                          placeholder="Enter your password"
+                          type={showPassword ? 'text' : 'password'}
+                          error={!!errors.password?.message}
+                          hint={errors.password?.message}
+                        />
+                      )}
                     />
                     <span
                       tabIndex={0}
@@ -149,8 +201,11 @@ export default function SignInForm() {
                     Forgot password?
                   </Link>
                 </div>
+
+                {error && <Alert variant="error" title="Error" message={error} />}
+
                 <div>
-                  <Button className="w-full" size="sm">
+                  <Button className="w-full" size="sm" type="submit" disabled={isSubmitting}>
                     Sign in
                   </Button>
                 </div>

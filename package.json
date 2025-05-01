@@ -45,6 +45,7 @@
     "@sentry/nextjs": "^8.55.0",
     "@spotlightjs/spotlight": "^2.12.0",
     "@t3-oss/env-nextjs": "^0.12.0",
+    "@upstash/redis": "^1.34.8",
     "@vapi-ai/web": "^2.2.6",
     "apexcharts": "^4.5.0",
     "class-variance-authority": "^0.7.1",

@@ -1,14 +1,50 @@
 'use client';
+import type { z } from 'zod';
+import { signUp } from '@/features/auth/actions/auth-actions';
+import { signUpSchema } from '@/features/auth/actions/auth-actions.validation';
 import Checkbox from '@/shared/components/form/input/Checkbox';
 import Input from '@/shared/components/form/input/InputField';
 import Label from '@/shared/components/form/Label';
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from '@/shared/icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import Alert from '../ui/alert/Alert';
+import Button from '../ui/button/Button';
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+
+  const [error, setError] = useState<string>();
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      username: '',
+      email: '',
+      password: '',
+    },
+  });
+
+  const {
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = form;
+
+  async function onSubmit(data: z.infer<typeof signUpSchema>) {
+    const result = await signUp(data);
+
+    if (result.error) {
+      setError(result.error);
+    } else if (result.success) {
+      setError('');
+      // Navigate to mock test page
+      redirect('/mock-test');
+    }
+  }
+
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar">
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
@@ -30,8 +66,9 @@ export default function SignUpForm() {
               Enter your email and password to sign up!
             </p>
           </div>
+
           <div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
+            {/* <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
               <button
                 type="button"
                 className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-4 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
@@ -62,6 +99,7 @@ export default function SignUpForm() {
                 </svg>
                 Sign up with Google
               </button>
+
               <button
                 type="button"
                 className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-4 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
@@ -79,6 +117,7 @@ export default function SignUpForm() {
                 Sign up with X
               </button>
             </div>
+
             <div className="relative py-3 sm:py-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
@@ -88,50 +127,54 @@ export default function SignUpForm() {
                   Or
                 </span>
               </div>
-            </div>
-            <form>
+            </div> */}
+
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="space-y-5">
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  {/* <!-- First Name --> */}
-                  <div className="sm:col-span-1">
+                <div className="grid grid-cols-1 gap-5">
+                  {/* <!-- Full Name --> */}
+                  <div>
                     <Label>
-                      First Name
+                      Full Name
                       <span className="text-error-500">*</span>
                     </Label>
-                    <Input
-                      type="text"
-                      id="fname"
-                      name="fname"
-                      placeholder="Enter your first name"
-                    />
-                  </div>
-                  {/* <!-- Last Name --> */}
-                  <div className="sm:col-span-1">
-                    <Label>
-                      Last Name
-                      <span className="text-error-500">*</span>
-                    </Label>
-                    <Input
-                      type="text"
-                      id="lname"
-                      name="lname"
-                      placeholder="Enter your last name"
+                    <Controller
+                      control={form.control}
+                      name="username"
+                      render={({ field }) => (
+                        <Input
+                          {...field}
+                          error={!!errors.username?.message}
+                          hint={errors.username?.message}
+                          placeholder="Enter your full name"
+                          type="text"
+                        />
+                      )}
                     />
                   </div>
                 </div>
+
                 {/* <!-- Email --> */}
                 <div>
                   <Label>
                     Email
                     <span className="text-error-500">*</span>
                   </Label>
-                  <Input
-                    type="email"
-                    id="email"
+                  <Controller
+                    control={form.control}
                     name="email"
-                    placeholder="Enter your email"
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        error={!!errors.email?.message}
+                        hint={errors.email?.message}
+                        placeholder="Enter your full name"
+                        type="text"
+                      />
+                    )}
                   />
                 </div>
+
                 {/* <!-- Password --> */}
                 <div>
                   <Label>
@@ -139,9 +182,18 @@ export default function SignUpForm() {
                     <span className="text-error-500">*</span>
                   </Label>
                   <div className="relative">
-                    <Input
-                      placeholder="Enter your password"
-                      type={showPassword ? 'text' : 'password'}
+                    <Controller
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <Input
+                          {...field}
+                          error={!!errors.password?.message}
+                          hint={errors.password?.message}
+                          placeholder="Enter your password"
+                          type={showPassword ? 'text' : 'password'}
+                        />
+                      )}
                     />
                     <span
                       role="button"
@@ -185,11 +237,14 @@ export default function SignUpForm() {
                     </span>
                   </p>
                 </div>
+
+                {error && <Alert variant="error" title="Error" message={error} />}
+
                 {/* <!-- Button --> */}
                 <div>
-                  <button className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+                  <Button className="w-full" size="sm" type="submit" disabled={isSubmitting}>
                     Sign Up
-                  </button>
+                  </Button>
                 </div>
               </div>
             </form>

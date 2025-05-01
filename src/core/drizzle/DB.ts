@@ -21,7 +21,7 @@ if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD && Env.DATABASE_URL) {
 
   drizzle = drizzlePg(client, { schema });
   await migratePg(drizzle, {
-    migrationsFolder: path.join(process.cwd(), 'migrations'),
+    migrationsFolder: path.join(process.cwd(), 'src/core/drizzle/migrations'),
   });
 } else {
   // Stores the db connection in the global scope to prevent multiple instances due to hot reloading with Next.js
@@ -36,7 +36,7 @@ if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD && Env.DATABASE_URL) {
 
   drizzle = global.drizzle;
   await migratePglite(global.drizzle, {
-    migrationsFolder: path.join(process.cwd(), 'migrations'),
+    migrationsFolder: path.join(process.cwd(), 'src/core/drizzle/migrations'),
   });
 }
 

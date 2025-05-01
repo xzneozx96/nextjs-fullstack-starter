@@ -9,6 +9,8 @@ export const Env = createEnv({
     LOGTAIL_SOURCE_TOKEN: z.string().optional(),
     VAPI_PRIVATE_KEY: z.string().min(1).optional(),
     OPENAI_API_KEY: z.string().min(1),
+    REDIS_URL: z.string().min(1),
+    REDIS_TOKEN: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().optional(),
@@ -31,6 +33,8 @@ export const Env = createEnv({
     LOGTAIL_SOURCE_TOKEN: process.env.LOGTAIL_SOURCE_TOKEN,
     VAPI_PRIVATE_KEY: process.env.VAPI_PRIVATE_KEY,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    REDIS_URL: process.env.REDIS_URL,
+    REDIS_TOKEN: process.env.REDIS_TOKEN,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,

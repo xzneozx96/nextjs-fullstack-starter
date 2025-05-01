@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, timestamp } from 'drizzle-orm/pg-core';
+import { pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 // This file defines the structure of your database tables using the Drizzle ORM.
 
@@ -10,9 +10,17 @@ import { integer, pgTable, serial, timestamp } from 'drizzle-orm/pg-core';
 // The migration is automatically applied during the next database interaction,
 // so there's no need to run it manually or restart the Next.js server.
 
-export const counterSchema = pgTable('counter', {
-  id: serial('id').primaryKey(),
-  count: integer('count').default(0),
+export const userRoles = ['admin', 'student', 'teacher'] as const;
+export type UserRole = (typeof userRoles)[number];
+export const userRoleEnum = pgEnum('user_roles', userRoles);
+
+export const userTable = pgTable('user', {
+  id: uuid().primaryKey().defaultRandom(),
+  username: text('username').notNull().unique(),
+  email: text('email').notNull().unique(),
+  password: text('password').notNull(),
+  salt: text('salt').notNull(),
+  role: userRoleEnum().notNull().default('student'),
   updatedAt: timestamp('updated_at', { mode: 'date' })
     .defaultNow()
     .$onUpdate(() => new Date())

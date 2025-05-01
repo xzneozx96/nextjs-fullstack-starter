@@ -6,15 +6,15 @@ import { mockQuestions } from '@/features/mock-test/constants/mock-questions';
 import { useVapi } from '@/features/mock-test/hooks/useVapi';
 import AudioPlayer from '@/shared/components/ui/audio-player/AudioPlayer';
 import FancyLoader from '@/shared/components/ui/fancy-loader/FancyLoader';
-import { MarkdownRenderer } from '@/shared/components/ui/markdown/MarkdownRenderer';
 import { ChevronLeftIcon, MicrophoneIcon } from '@/shared/icons';
 import { cn, processServerSentEvents } from '@/shared/utils/utils';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useFeedbackStore } from '../stores/useFeedbackStore';
 import { formatQuestionsByPart } from '../utils/format-questions-by-part';
+import { ChatBox } from './ChatBox';
 import { VapiConversation } from './VapiConversation';
 
 function FeedbackContentMain() {
@@ -52,8 +52,7 @@ function FeedbackContentMain() {
   const [isLoadingRecording, setIsLoadingRecording] = useState(false);
   const [recordingError, setRecordingError] = useState<string | null>(null);
 
-  // Reference to the feedback container for auto-scrolling
-  const feedbackContainerRef = useRef<HTMLDivElement>(null);
+  // We no longer need a reference to the feedback container as ChatBox handles scrolling
 
   // Function to fetch call recording and conversation history
   const fetchCallRecording = useCallback(async () => {
@@ -141,13 +140,7 @@ function FeedbackContentMain() {
     }
   }, [fetchCallRecording, messages.length]);
 
-  // Auto-scroll effect when processedFeedback changes
-  useEffect(() => {
-    if (feedbackContainerRef.current && processedFeedback) {
-      const container = feedbackContainerRef.current;
-      container.scrollTop = container.scrollHeight;
-    }
-  }, [processedFeedback]);
+  // Auto-scroll is now handled by the ChatBox component
 
   // Reset error state when messages length changes
   useEffect(() => {
@@ -374,34 +367,17 @@ function FeedbackContentMain() {
           </div>
 
           {/* AI Feedback - full width on mobile, 60% on desktop, shown first on mobile */}
-          <div
-            ref={feedbackContainerRef}
-            className="h-auto flex-1 overflow-auto bg-gray-50 rounded-xl p-4 md:p-6"
-          >
-            {isLoading && !feedbackText
-              ? (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <FancyLoader />
-                    <p className="text-sm sm:text-base text-muted-foreground mt-2">Preparing feedback...</p>
-                  </div>
-                )
-              : processedFeedback
-                ? (
-                    <MarkdownRenderer content={processedFeedback} />
-                  )
-                : (
-                    <p className="text-muted-foreground text-center py-4 sm:py-8">
-                      No feedback available
-                    </p>
-                  )}
-          </div>
+          <ChatBox
+            initialMessage={processedFeedback}
+            className="h-auto flex-1"
+          />
         </div>
 
         {/* Conversation History - full width on mobile, 40% on desktop, shown second on mobile */}
         <div className="hidden md:flex w-full lg:w-2/5 flex-col p-4 md:p-6 order-2 lg:order-1 mt-4 lg:mt-0 border rounded-xl flex-1">
           <h2 className="text-base sm:text-lg font-medium mb-2 sm:mb-3">Conversation History</h2>
 
-          <div className="h-[250px] md:h-full md:flex-1 overflow-auto bg-gray-50 rounded-xl p-4">
+          <div className="h-[250px] md:h-full md:flex-1 overflow-auto">
             {/* Conversation Transcript */}
             <div className="space-y-3 sm:space-y-4">
               {isLoadingRecording

@@ -51,7 +51,7 @@ const ChatMessage = memo(({ message }: { message: any }) => {
 
 ChatMessage.displayName = 'ChatMessage';
 
-export function ChatBox({
+export function ChatWithAISpeakingTutor({
   initialMessage,
   className,
 }: ChatBoxProps) {

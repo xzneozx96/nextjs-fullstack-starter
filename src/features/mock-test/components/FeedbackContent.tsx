@@ -14,7 +14,7 @@ import { Suspense, useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useFeedbackStore } from '../stores/useFeedbackStore';
 import { formatQuestionsByPart } from '../utils/format-questions-by-part';
-import { ChatBox } from './ChatBox';
+import { ChatWithAISpeakingTutor } from './ChatWithAISpeakingTutor';
 import { VapiConversation } from './VapiConversation';
 
 function FeedbackContentMain() {
@@ -380,7 +380,7 @@ function FeedbackContentMain() {
                 </div>
               )
             : (
-                <ChatBox
+                <ChatWithAISpeakingTutor
                   initialMessage={processedFeedback}
                   className="h-auto flex-1"
                 />

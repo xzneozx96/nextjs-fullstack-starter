@@ -51,9 +51,6 @@ function FeedbackContentMain() {
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
   const [isLoadingRecording, setIsLoadingRecording] = useState(false);
   const [recordingError, setRecordingError] = useState<string | null>(null);
-
-  // We no longer need a reference to the feedback container as ChatBox handles scrolling
-
   // Function to fetch call recording and conversation history
   const fetchCallRecording = useCallback(async () => {
     // Skip if we're already loading or if we already have a recording URL
@@ -132,6 +129,7 @@ function FeedbackContentMain() {
     return () => clearTimeout(timer);
   }, [topicId, selectedTopic, selectedQuestions, setSelectedTopic, setSelectedQuestions]);
 
+  // Fetch call recording when component mounts (only once)
   useEffect(() => {
     // Only fetch call recording if we don't already have messages
     // This prevents unnecessary API calls when we already have the data
@@ -139,8 +137,6 @@ function FeedbackContentMain() {
       fetchCallRecording();
     }
   }, [fetchCallRecording, messages.length]);
-
-  // Auto-scroll is now handled by the ChatBox component
 
   // Reset error state when messages length changes
   useEffect(() => {
@@ -344,7 +340,7 @@ function FeedbackContentMain() {
           <div className="mb-4">
             {isLoadingRecording
               ? (
-                  <div className="flex items-center justify-center h-12 bg-gray-50 rounded-lg">
+                  <div className="flex items-center justify-center h-12">
                     <FancyLoader />
                     <span className="ml-2 text-sm text-gray-500">Loading recording...</span>
                   </div>
@@ -359,11 +355,15 @@ function FeedbackContentMain() {
                   )
                 : recordingError
                   ? (
-                      <div className="text-sm text-red-500 bg-red-50 p-2 rounded-lg mb-8">
+                      <div className="text-sm text-red-500 bg-red-50 p-2 rounded-lg">
                         {recordingError}
                       </div>
                     )
-                  : null}
+                  : (
+                      <div className="text-sm text-gray-500 p-2">
+                        No recording available.
+                      </div>
+                    )}
           </div>
 
           {/* AI Feedback - full width on mobile, 60% on desktop, shown first on mobile */}

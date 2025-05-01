@@ -23,7 +23,7 @@ export const MarkdownRenderer = memo(({ content, className }: MarkdownRendererPr
           h1: ({ node, children, ...props }) => children
             ? (
                 <h1
-                  className="text-xl sm:text-2xl font-bold my-3 sm:my-4 pb-1 sm:pb-2 border-b
+                  className="text-lg font-medium md:text-2xl my-3 sm:my-4 pb-1 sm:pb-2 border-b
                   border-gray-200 dark:border-gray-800"
                   {...props}
                 >
@@ -33,21 +33,21 @@ export const MarkdownRenderer = memo(({ content, className }: MarkdownRendererPr
             : null,
           h2: ({ node, children, ...props }) => children
             ? (
-                <h2 className="text-lg sm:text-xl font-bold my-3 sm:my-4 pb-1" {...props}>
+                <h2 className="text-lg font-medium md:text-xl my-3 sm:my-4 pb-1" {...props}>
                   {children}
                 </h2>
               )
             : null,
           h3: ({ node, children, ...props }) => children
             ? (
-                <h3 className="text-base sm:text-lg font-bold my-2 sm:my-3" {...props}>
+                <h3 className="text-base font-medium md:text-lg my-2 sm:my-3" {...props}>
                   {children}
                 </h3>
               )
             : null,
           h4: ({ node, children, ...props }) => children
             ? (
-                <h4 className="text-sm sm:text-base font-bold my-1 sm:my-2" {...props}>
+                <h4 className="text-sm font-medium md:text-base my-1 sm:my-2" {...props}>
                   {children}
                 </h4>
               )

@@ -8,7 +8,6 @@ import Label from '@/shared/components/form/Label';
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from '@/shared/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Alert from '../ui/alert/Alert';
@@ -34,14 +33,14 @@ export default function SignUpForm() {
   } = form;
 
   async function onSubmit(data: z.infer<typeof signUpSchema>) {
-    const result = await signUp(data);
-
-    if (result.error) {
-      setError(result.error);
-    } else if (result.success) {
-      setError('');
-      // Navigate to mock test page
-      redirect('/mock-test');
+    try {
+      const { error } = await signUp(data);
+      if (error) {
+        setError(error);
+      }
+    } catch (err) {
+      console.error('Signup error:', err);
+      setError('An unexpected error occurred. Please try again later.');
     }
   }
 
@@ -50,7 +49,7 @@ export default function SignUpForm() {
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
         <Link
           href="/"
-          className="inline-flex items-center text-sm text-gray-500 dark:text-gray-300 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+          className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
         >
           <ChevronLeftIcon className="size-5" />
           Back to Home
@@ -62,7 +61,7 @@ export default function SignUpForm() {
             <h1 className="mb-2 font-medium text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
               Sign Up
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-300 dark:text-gray-400">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Enter your email and password to sign up!
             </p>
           </div>
@@ -223,7 +222,7 @@ export default function SignUpForm() {
                     checked={isChecked}
                     onChange={setIsChecked}
                   />
-                  <p className="inline-block font-normal text-gray-500 dark:text-gray-300 dark:text-gray-400">
+                  <p className="inline-block font-normal text-gray-500 dark:text-gray-400">
                     By creating an account means you agree to the
                     {' '}
                     <span className="text-gray-800 dark:text-white/90">
@@ -242,7 +241,7 @@ export default function SignUpForm() {
 
                 {/* <!-- Button --> */}
                 <div>
-                  <Button className="w-full" size="sm" type="submit" disabled={isSubmitting}>
+                  <Button className="w-full" size="sm" type="submit" disabled={isSubmitting || !isChecked}>
                     Sign Up
                   </Button>
                 </div>

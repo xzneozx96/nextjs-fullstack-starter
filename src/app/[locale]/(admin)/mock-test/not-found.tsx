@@ -6,9 +6,9 @@ import Link from 'next/link';
 import React from 'react';
 
 export const metadata: Metadata = {
-  title: 'Error 404 | IELTS AI Tutor',
+  title: 'Error 404 | IELTS MentorPro',
   description:
-    'This is Error 404 page for IELTS AI Tutor',
+    'This is Error 404 page for IELTS MentorPro',
 };
 
 export default function Error404() {

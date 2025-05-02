@@ -24,7 +24,7 @@ export default function UserAddressCard() {
 
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
               <div>
-                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-300 dark:text-gray-400">
+                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                   Country
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
@@ -33,7 +33,7 @@ export default function UserAddressCard() {
               </div>
 
               <div>
-                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-300 dark:text-gray-400">
+                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                   City/State
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
@@ -42,7 +42,7 @@ export default function UserAddressCard() {
               </div>
 
               <div>
-                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-300 dark:text-gray-400">
+                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                   Postal Code
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
@@ -51,7 +51,7 @@ export default function UserAddressCard() {
               </div>
 
               <div>
-                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-300 dark:text-gray-400">
+                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                   TAX ID
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
@@ -90,7 +90,7 @@ export default function UserAddressCard() {
             <h4 className="mb-2 text-2xl font-medium text-gray-800 dark:text-white/90">
               Edit Address
             </h4>
-            <p className="mb-6 text-sm text-gray-500 dark:text-gray-300 dark:text-gray-400 lg:mb-7">
+            <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
               Update your details to keep your profile up-to-date.
             </p>
           </div>

@@ -88,7 +88,7 @@ export async function logIn(unsafeData: z.infer<typeof signInSchema>): Promise<S
     if (!user || !user.password || !user.salt) {
       return {
         success: false,
-        error: 'Email or password is incorrect.',
+        error: 'Account not exist.',
       };
     }
 
@@ -101,7 +101,7 @@ export async function logIn(unsafeData: z.infer<typeof signInSchema>): Promise<S
     if (!isCorrectPassword) {
       return {
         success: false,
-        error: 'Username or password is incorrect. Please try again.',
+        error: 'Email or password is incorrect. Please try again.',
       };
     }
 

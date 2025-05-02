@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import SignInForm from '@/shared/components/auth/SignInForm';
 
 export const metadata: Metadata = {
-  title: 'Next.js SignIn Page | TailAdmin - Next.js Dashboard Template',
-  description: 'This is Next.js Signin Page TailAdmin Dashboard Template',
+  title: 'SignIn | IELTS MentorPro',
+  description: 'SignIn to IELTS MentorPro',
 };
 
 export default function SignIn() {

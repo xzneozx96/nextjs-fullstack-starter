@@ -63,7 +63,7 @@ export default function UserDropdown() {
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
             Ross and Zober
           </span>
-          <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-300 dark:text-gray-400">
+          <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
             rossandzober@gmail.com
           </span>
         </div>

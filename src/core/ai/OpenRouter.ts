@@ -33,7 +33,7 @@ class OpenRouterClient {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.apiKey}`,
           'HTTP-Referer': window.location.origin, // Required for OpenRouter
-          'X-Title': 'IELTS AI Tutor', // Optional, but good practice
+          'X-Title': 'IELTS MentorPro', // Optional, but good practice
         },
         body: JSON.stringify({
           model,

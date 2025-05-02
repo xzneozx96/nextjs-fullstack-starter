@@ -89,6 +89,7 @@ export default function Hero() {
                 <Link href="/mock-test">
                   <Button
                     key={1}
+                    className="w-[220px]"
                   >
                     <span className="text-nowrap">Take a Mock Test</span>
                   </Button>
@@ -97,6 +98,7 @@ export default function Hero() {
                   <Button
                     key={2}
                     variant="outline"
+                    className="w-[220px]"
                   >
                     <span className="text-nowrap">Get started as a Teacher</span>
                   </Button>

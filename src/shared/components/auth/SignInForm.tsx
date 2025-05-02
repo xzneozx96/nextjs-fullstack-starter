@@ -2,7 +2,6 @@
 import type { z } from 'zod';
 import { logIn } from '@/features/auth/actions/auth-actions';
 import { signInSchema } from '@/features/auth/actions/auth-actions.validation';
-import Checkbox from '@/shared/components/form/input/Checkbox';
 import Input from '@/shared/components/form/input/InputField';
 import Label from '@/shared/components/form/Label';
 import Button from '@/shared/components/ui/button/Button';
@@ -14,8 +13,8 @@ import { Controller, useForm } from 'react-hook-form';
 import Alert from '../ui/alert/Alert';
 
 export default function SignInForm() {
+  // const [isChecked, setIsChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
   const [error, setError] = useState<string>();
 
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -32,9 +31,14 @@ export default function SignInForm() {
   } = form;
 
   async function onSubmit(data: z.infer<typeof signInSchema>) {
-    const { error } = await logIn(data);
-    if (error) {
-      setError(error);
+    try {
+      const { error } = await logIn(data);
+      if (error) {
+        setError(error);
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('An unexpected error occurred. Please try again later.');
     }
   }
 
@@ -43,7 +47,7 @@ export default function SignInForm() {
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
         <Link
           href="/"
-          className="inline-flex items-center text-sm text-gray-500 dark:text-gray-300 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+          className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
         >
           <ChevronLeftIcon className="size-5" />
           Back to Home
@@ -55,7 +59,7 @@ export default function SignInForm() {
             <h1 className="mb-2 font-medium text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
               Sign In
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-300 dark:text-gray-400">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Enter your email and password to sign in!
             </p>
           </div>
@@ -187,7 +191,8 @@ export default function SignInForm() {
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
+
+                {/* <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Checkbox checked={isChecked} onChange={setIsChecked} />
                     <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
@@ -200,13 +205,13 @@ export default function SignInForm() {
                   >
                     Forgot password?
                   </Link>
-                </div>
+                </div> */}
 
                 {error && <Alert variant="error" title="Error" message={error} />}
 
                 <div>
                   <Button className="w-full" size="sm" type="submit" disabled={isSubmitting}>
-                    Sign in
+                    Log In
                   </Button>
                 </div>
               </div>

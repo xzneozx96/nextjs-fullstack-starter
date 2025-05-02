@@ -1,6 +1,6 @@
 {
-  "id": "00000000-0000-0000-0000-000000000000",
-  "prevId": "",
+  "id": "fd211fdc-e487-47d7-8bdd-b078231b9689",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -67,34 +67,34 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "user_username_unique": {
+          "name": "user_username_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "username"
-          ],
-          "nullsNotDistinct": false,
-          "name": "user_username_unique"
+          ]
         },
         "user_email_unique": {
+          "name": "user_email_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ],
-          "nullsNotDistinct": false,
-          "name": "user_email_unique"
+          ]
         }
       },
-      "checkConstraints": {},
       "policies": {},
+      "checkConstraints": {},
       "isRLSEnabled": false
     }
   },
   "enums": {
     "public.user_roles": {
       "name": "user_roles",
+      "schema": "public",
       "values": [
         "admin",
         "student",
         "teacher"
-      ],
-      "schema": "public"
+      ]
     }
   },
   "schemas": {},
@@ -103,11 +103,8 @@
   "policies": {},
   "views": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "internal": {
     "tables": {}
   }
 }

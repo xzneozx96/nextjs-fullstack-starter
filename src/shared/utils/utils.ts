@@ -8,11 +8,18 @@ export function cn(...inputs: ClassValue[]) {
 
 // Helper function to clean markdown content
 export const cleanMarkdownContent = (content: string): string => {
+  // If content is undefined or empty, return empty string
+  if (!content) {
+    console.log('cleanMarkdownContent: content is empty or undefined');
+    return '';
+  }
+
   // Check if content is wrapped in a code block and extract it
   const codeBlockRegex = /```(?:markdown)?\n([\s\S]*)\n```/;
   const match = content.match(codeBlockRegex);
 
   if (match && match[1]) {
+    console.log('cleanMarkdownContent: found code block match');
     // Return the content inside the code block
     return match[1].trim();
   }
@@ -22,11 +29,13 @@ export const cleanMarkdownContent = (content: string): string => {
   const htmlMatch = content.match(htmlCodeBlockRegex);
 
   if (htmlMatch && htmlMatch[1]) {
+    console.log('cleanMarkdownContent: found HTML code block match');
     // Return the content inside the HTML code block
     return htmlMatch[1].trim();
   }
 
   // If no code block wrapping is detected, return the original content
+  console.log('cleanMarkdownContent: no matches found, returning original content');
   return content;
 };
 

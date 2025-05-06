@@ -379,12 +379,22 @@ function FeedbackContentMain() {
                   </p>
                 </div>
               )
-            : (
-                <ChatWithAISpeakingTutor
-                  initialMessage={processedFeedback}
-                  className="h-auto flex-1"
-                />
-              )}
+            : selectedTopic
+              ? (
+                  <ChatWithAISpeakingTutor
+                    aiFeedback={processedFeedback}
+                    topic={selectedTopic}
+                    questions={selectedQuestions}
+                    className="h-auto flex-1"
+                  />
+                )
+              : (
+                  <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8">
+                    <p className="text-sm text-gray-600 text-center">
+                      Topic information is not available. Please try again or select a different topic.
+                    </p>
+                  </div>
+                )}
         </div>
 
         {/* Conversation History - full width on mobile, 40% on desktop, shown second on mobile */}

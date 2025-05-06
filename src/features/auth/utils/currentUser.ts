@@ -6,12 +6,12 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 
-type FullUser = Exclude<
+export type FullUser = Exclude<
   Awaited<ReturnType<typeof getUserFromDb>>,
   undefined | null
 >;
 
-type User = Exclude<
+export type User = Exclude<
   Awaited<ReturnType<typeof getUserFromSession>>,
   undefined | null
 >;

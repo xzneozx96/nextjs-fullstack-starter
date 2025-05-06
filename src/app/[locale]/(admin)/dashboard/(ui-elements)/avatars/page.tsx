@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import ComponentCard from '@/shared/components/common/ComponentCard';
 import PageBreadcrumb from '@/shared/components/common/PageBreadCrumb';
-import Avatar from '@/shared/components/ui/avatar/Avatar';
+import { Avatar, AvatarImage } from '@/shared/components/ui/avatar/Avatar';
 import React from 'react';
 
 export const metadata: Metadata = {
@@ -18,107 +18,24 @@ export default function AvatarPage() {
         <ComponentCard title="Default Avatar">
           {/* Default Avatar (No Status) */}
           <div className="flex flex-col items-center justify-center gap-5 sm:flex-row">
-            <Avatar src="/images/user/user-01.jpg" size="xsmall" />
-            <Avatar src="/images/user/user-01.jpg" size="small" />
-            <Avatar src="/images/user/user-01.jpg" size="medium" />
-            <Avatar src="/images/user/user-01.jpg" size="large" />
-            <Avatar src="/images/user/user-01.jpg" size="xlarge" />
-            <Avatar src="/images/user/user-01.jpg" size="xxlarge" />
-          </div>
-        </ComponentCard>
-        <ComponentCard title="Avatar with online indicator">
-          <div className="flex flex-col items-center justify-center gap-5 sm:flex-row">
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="xsmall"
-              status="online"
-            />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="small"
-              status="online"
-            />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="medium"
-              status="online"
-            />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="large"
-              status="online"
-            />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="xlarge"
-              status="online"
-            />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="xxlarge"
-              status="online"
-            />
-          </div>
-        </ComponentCard>
-        <ComponentCard title="Avatar with Offline indicator">
-          <div className="flex flex-col items-center justify-center gap-5 sm:flex-row">
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="xsmall"
-              status="offline"
-            />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="small"
-              status="offline"
-            />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="medium"
-              status="offline"
-            />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="large"
-              status="offline"
-            />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="xlarge"
-              status="offline"
-            />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="xxlarge"
-              status="offline"
-            />
-          </div>
-        </ComponentCard>
-        {' '}
-        <ComponentCard title="Avatar with busy indicator">
-          <div className="flex flex-col items-center justify-center gap-5 sm:flex-row">
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="xsmall"
-              status="busy"
-            />
-            <Avatar src="/images/user/user-01.jpg" size="small" status="busy" />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="medium"
-              status="busy"
-            />
-            <Avatar src="/images/user/user-01.jpg" size="large" status="busy" />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="xlarge"
-              status="busy"
-            />
-            <Avatar
-              src="/images/user/user-01.jpg"
-              size="xxlarge"
-              status="busy"
-            />
+            <Avatar className="size-6">
+              <AvatarImage src="/images/user/user-01.jpg" />
+            </Avatar>
+            <Avatar className="size-8">
+              <AvatarImage src="/images/user/user-01.jpg" />
+            </Avatar>
+            <Avatar className="size-10">
+              <AvatarImage src="/images/user/user-01.jpg" />
+            </Avatar>
+            <Avatar className="size-12">
+              <AvatarImage src="/images/user/user-01.jpg" />
+            </Avatar>
+            <Avatar className="size-14">
+              <AvatarImage src="/images/user/user-01.jpg" />
+            </Avatar>
+            <Avatar className="size-16">
+              <AvatarImage src="/images/user/user-01.jpg" />
+            </Avatar>
           </div>
         </ComponentCard>
       </div>

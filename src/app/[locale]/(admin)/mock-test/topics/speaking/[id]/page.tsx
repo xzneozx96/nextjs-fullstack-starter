@@ -1,7 +1,6 @@
 'use client';
 
 import type { QuestionBank, Topic } from '@/features/mock-test/types/question-bank';
-import SpeakingPracticeSession from '@/features/mock-test/components/SpeakingPracticeSession';
 import { mockQuestions } from '@/features/mock-test/constants/mock-questions';
 import Button from '@/shared/components/ui/button/Button';
 import {
@@ -11,8 +10,8 @@ import {
 import { cn } from '@/shared/utils/utils';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { notFound, useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { notFound, redirect, useParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 // Common vocabulary for each topic
 const topicVocabulary: Record<string, string[]> = {
@@ -37,7 +36,7 @@ export default function SpeakingTopicPage() {
   const params = useParams();
   const id = params.id as string;
 
-  const [showPracticeSession, setShowPracticeSession] = useState(false);
+  // const [showPracticeSession, setShowPracticeSession] = useState(false);
 
   // Type assertion for the imported JSON data
   const typedMockData = mockQuestions as unknown as { topics: Topic[]; questions: QuestionBank[] };
@@ -70,22 +69,21 @@ export default function SpeakingTopicPage() {
   }, []);
 
   const handleStartPractice = () => {
-    setShowPracticeSession(true);
+    redirect(`/mock-test/topics/speaking/${id}/practice`);
   };
 
-  const handleClosePractice = () => {
-    setShowPracticeSession(false);
-  };
+  // const handleClosePractice = () => {
+  //   setShowPracticeSession(false);
+  // };
 
-  if (showPracticeSession) {
-    return (
-      <SpeakingPracticeSession
-        topic={topic}
-        questions={topicQuestions}
-        onClose={handleClosePractice}
-      />
-    );
-  }
+  // if (showPracticeSession) {
+  //   return (
+  //     <SpeakingPracticeSession
+  //       topic={topic}
+  //       questions={topicQuestions}
+  //     />
+  //   );
+  // }
 
   return (
     <div className="container px-4 sm:px-6 md:px-8 max-w-4xl mx-auto py-6 sm:py-8 md:py-10 lg:py-16">
@@ -105,35 +103,33 @@ export default function SpeakingTopicPage() {
       </motion.div>
 
       <motion.div
-        className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8"
+        className="flex items-center gap-2 mb-6 sm:mb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <span>
+        <span
+          className={cn(
+            'hidden md:flex size-10 sm:size-12 items-center justify-center rounded-full',
+            'text-blue-500 bg-blue-500/[0.08]',
+          )}
+        >
+          <MicrophoneIcon className="size-4 sm:size-5" />
+        </span>
+
+        <Link
+          href="/mock-test/topics/speaking"
+          className="text-blue-600 inline-flex items-center gap-1 text-sm sm:text-base"
+        >
           <span
             className={cn(
-              'hidden md:flex size-10 sm:size-12 items-center justify-center rounded-full',
+              'flex md:hidden size-10 sm:size-12 items-center justify-center rounded-full',
               'text-blue-500 bg-blue-500/[0.08]',
             )}
           >
-            <MicrophoneIcon className="size-4 sm:size-5" />
+            <ChevronLeftIcon className="size-4 sm:size-5" />
           </span>
-
-          <Link
-            href="/mock-test/topics/speaking"
-            className="text-blue-600 inline-flex items-center gap-1 text-sm sm:text-base"
-          >
-            <span
-              className={cn(
-                'flex md:hidden size-10 sm:size-12 items-center justify-center rounded-full',
-                'text-blue-500 bg-blue-500/[0.08]',
-              )}
-            >
-              <ChevronLeftIcon className="size-4 sm:size-5" />
-            </span>
-          </Link>
-        </span>
+        </Link>
         <div>
           <h1 className="text-xl sm:text-2xl md:text-title-sm font-medium text-gray-800">{topic.title}</h1>
           <p className="text-sm sm:text-base text-gray-500">{topic.description}</p>
@@ -224,9 +220,12 @@ export default function SpeakingTopicPage() {
           feedback on your responses.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-          <Button variant="primary" className="w-full sm:w-auto px-4 sm:px-6" onClick={handleStartPractice}>
-            Start Practice Session
-          </Button>
+          <Link href={`/mock-test/topics/speaking/${id}/practice`}>
+            <Button variant="primary" className="w-full sm:w-auto px-4 sm:px-6" onClick={handleStartPractice}>
+              Start Practice Session
+            </Button>
+          </Link>
+
           <Button variant="outline" className="w-full sm:w-auto px-4 sm:px-6">
             View Sample Answers
           </Button>

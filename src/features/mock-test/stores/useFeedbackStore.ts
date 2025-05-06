@@ -69,10 +69,14 @@ export const useFeedbackStore = create<FeedbackState>(set => ({
     }
   },
 
-  setFeedbackText: text => set({
-    feedbackText: text,
-    processedFeedback: cleanMarkdownContent(text),
-  }),
+  setFeedbackText: (text) => {
+    const processed = cleanMarkdownContent(text);
+
+    set({
+      feedbackText: text,
+      processedFeedback: processed,
+    });
+  },
 
   setIsLoading: loading => set({ isLoading: loading }),
 

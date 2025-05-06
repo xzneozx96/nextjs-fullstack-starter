@@ -1,13 +1,16 @@
 'use client';
 
+import type { QuestionBank, Topic } from '../types/question-bank';
 import { MarkdownRenderer } from '@/shared/components/ui/markdown/MarkdownRenderer';
-import ShinyText from '@/shared/components/ui/shiny-text/ShinyText';
+import { ShinyText } from '@/shared/components/ui/shiny-text/ShinyText';
 import { SendIcon } from '@/shared/icons';
 import { useChat } from '@ai-sdk/react';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 
 type ChatBoxProps = {
-  initialMessage?: string;
+  topic: Topic;
+  questions: QuestionBank[];
+  aiFeedback?: string;
   className?: string;
 };
 
@@ -52,8 +55,23 @@ const ChatMessage = memo(({ message }: { message: any }) => {
 
 ChatMessage.displayName = 'ChatMessage';
 
+// Memoized loading indicator component to prevent unnecessary re-renders
+const LoadingIndicator = memo(() => {
+  return (
+    <div className="flex justify-start">
+      <div className="bg-gray-50 p-3 rounded-lg rounded-tl-none flex items-center space-x-2">
+        <ShinyText>AI is thinking</ShinyText>
+      </div>
+    </div>
+  );
+});
+
+LoadingIndicator.displayName = 'LoadingIndicator';
+
 export function ChatWithAISpeakingTutor({
-  initialMessage,
+  aiFeedback,
+  topic,
+  questions,
   className,
 }: ChatBoxProps) {
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -61,30 +79,29 @@ export function ChatWithAISpeakingTutor({
   const scrollTimeoutRef = useRef<number | null>(null);
 
   // Initialize the chat with the initial feedback message if available
-  const initialSystemMessage = initialMessage
+  const feedbackMessage = aiFeedback
     ? [
         {
           id: 'initial-assistant',
           role: 'assistant' as const,
-          content: initialMessage,
+          content: aiFeedback,
         },
       ]
     : [];
 
   const { messages, input, handleInputChange, handleSubmit, status, error } = useChat({
     api: '/api/chat',
-    initialMessages: initialSystemMessage,
+    body: {
+      systemMessage: `You are an IELTS speaking tutor named Mark. You are helping a student with their IELTS speaking test on topic ${topic.title} that includes following questions: ${questions
+        .map(question => question.questionText)
+        .join(', ')}. Be supportive, encouraging, and provide constructive feedback with clear examples when necessary. The initial message contains important feedback about the student\'s speaking test that you should reference in your responses.`,
+    },
+    initialMessages: feedbackMessage,
     experimental_throttle: 200, // Throttle updates to reduce re-renders
   });
 
   // Check if the chat is loading
   const isLoading = status === 'streaming' || status === 'submitted';
-
-  // Check if this is the initial loading state
-  const isInitialLoading = messages.length === 0 && initialMessage && !error;
-
-  // Check if we should show the loading indicator
-  const showLoadingIndicator = isInitialLoading || (messages.length === 0 && isLoading);
 
   // Optimized auto-scroll using requestAnimationFrame
   const smoothScrollToBottom = useCallback(() => {
@@ -134,63 +151,32 @@ export function ChatWithAISpeakingTutor({
         ref={chatContainerRef}
         className="flex-1 overflow-auto space-y-4"
       >
-        {/* Initial loading state - when there are no messages yet but we have an initial message */}
-        {showLoadingIndicator
-          ? (
-              <div className="flex flex-col items-center justify-center h-full bg-gray-50 rounded-lg p-8">
-                <div className="relative mb-4">
-                  <div className="animate-pulse bg-blue-100 rounded-full size-16 flex items-center justify-center">
-                    <div className="animate-spin rounded-full size-10 border-4 border-t-transparent border-blue-500"></div>
-                  </div>
-                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-3 py-1 rounded-full font-medium">
-                    AI Tutor
-                  </div>
-                </div>
-                <h3 className="text-lg font-medium text-gray-800 mb-2">Preparing your feedback</h3>
-                <p className="text-sm text-gray-600 text-center max-w-xs">
-                  Our AI tutor is analyzing your speaking test and preparing detailed feedback on your performance.
-                </p>
-                <div className="mt-4 flex space-x-1">
-                  <div className="animate-bounce size-2 bg-blue-400 rounded-full" style={{ animationDelay: '0ms' }}></div>
-                  <div className="animate-bounce size-2 bg-blue-500 rounded-full" style={{ animationDelay: '150ms' }}></div>
-                  <div className="animate-bounce size-2 bg-blue-600 rounded-full" style={{ animationDelay: '300ms' }}></div>
-                </div>
-              </div>
-            )
-          : (
-              <>
-                {/* Regular message list */}
-                {messagesList}
+        <>
+          {/* Regular message list */}
+          {messagesList}
 
-                {/* Error message */}
-                {error && (
-                  <div className="p-4 bg-red-100 text-red-800 rounded-lg">
-                    <p className="font-medium mb-1">Error:</p>
-                    <p>{error.message || 'Something went wrong. Please try again.'}</p>
-                  </div>
-                )}
+          {/* Error message */}
+          {error && (
+            <div className="p-4 bg-red-100 text-red-800 rounded-lg">
+              <p className="font-medium mb-1">Error:</p>
+              <p>{error.message || 'Something went wrong. Please try again.'}</p>
+            </div>
+          )}
 
-                {/* Loading indicator for ongoing conversation */}
-                {isLoading && messages.length > 0 && (
-                  <div className="flex justify-start">
-                    <div className="bg-gray-50 p-3 rounded-lg rounded-tl-none flex items-center space-x-2">
-                      <ShinyText text="AI is thinking..." />
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
+          {/* Loading indicator for ongoing conversation */}
+          {isLoading && <LoadingIndicator />}
+        </>
       </div>
 
       {/* Input form */}
       <form onSubmit={handleSubmit} className="mt-4 flex items-center gap-2">
-        <div className="relative flex-1">
+        <div className="relative flex-1 max-w-xl mx-auto">
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={handleInputChange}
-            placeholder="Ask a follow-up question about your feedback..."
+            placeholder="Ask Mark a question..."
             className="w-full p-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             disabled={isLoading || messages.length === 0}
           />
@@ -199,7 +185,7 @@ export function ChatWithAISpeakingTutor({
             disabled={isLoading || !input.trim() || messages.length === 0}
             className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 text-blue-600 hover:text-blue-800 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <SendIcon className="size-5" />
+            <SendIcon className="size-5 -rotate-45" />
           </button>
         </div>
       </form>

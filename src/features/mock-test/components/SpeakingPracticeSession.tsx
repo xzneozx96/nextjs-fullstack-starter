@@ -1,12 +1,14 @@
 'use client';
 
+import type { FullUser } from '@/features/auth/utils/currentUser';
 import type { QuestionBank, Topic } from '../types/question-bank';
 import { CALL_STATUS, useVapi } from '@/features/mock-test/hooks/useVapi';
+import { Avatar, AvatarFallback } from '@/shared/components/ui/avatar/Avatar';
 import Button from '@/shared/components/ui/button/Button';
 import { Card } from '@/shared/components/ui/card/Card';
+import { ChevronLeftIcon } from '@/shared/icons';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-// import { useUser } from '@clerk/nextjs';
 import { useEffect, useRef } from 'react';
 import { useFeedbackStore } from '../stores/useFeedbackStore';
 import { VapiButton } from './VapiButton';
@@ -15,10 +17,10 @@ import { VapiConversation } from './VapiConversation';
 type SpeakingPracticeSessionProps = {
   topic: Topic;
   questions: QuestionBank[];
-  onClose: () => void;
+  currentUser: FullUser;
 };
 
-const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionProps) => {
+const SpeakingPracticeSession = ({ topic, questions, currentUser }: SpeakingPracticeSessionProps) => {
   // Use our custom hook for vapi functionality
   const {
     toggleCall,
@@ -32,13 +34,6 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
   // Use the Zustand store
   const { setSelectedTopic, setSelectedQuestions, resetStore } = useFeedbackStore();
 
-  // const { user } = useUser();
-  const user = {
-    firstName: 'Ross',
-    lastName: 'Geller',
-    id: '1234567890',
-    imageUrl: '/images/user/user-01.jpg',
-  };
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
   // Reset the store and update with the current topic and questions
@@ -71,6 +66,22 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
   return (
     <div className="flex flex-col min-h-screen text-foreground overflow-hidden pb-4 sm:pb-6">
       <div className="container mx-auto px-4 h-full max-w-5xl py-6 sm:py-10 md:py-16 lg:py-20">
+        {/* Back Link */}
+        <motion.div
+          className="mb-4 sm:mb-6 md:mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Link
+            href={`/mock-test/topics/speaking/${topic.id}`}
+            className="text-blue-600 inline-flex items-center gap-1 text-sm sm:text-base"
+          >
+            <ChevronLeftIcon className="size-4 sm:size-5" />
+            Back to Questions
+          </Link>
+        </motion.div>
+
         {/* Title */}
         <motion.div
           className="text-center mb-4 sm:mb-6 md:mb-8"
@@ -157,23 +168,15 @@ const SpeakingPracticeSession = ({ topic, questions }: SpeakingPracticeSessionPr
             <Card className="bg-card/90 border shadow-none overflow-hidden relative">
               <div className="aspect-video flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 relative">
                 {/* User Image */}
-                <div className="relative size-20 sm:size-24 md:size-32 mb-2 sm:mb-3 md:mb-4">
-                  <div
-                    style={{
-                      backgroundImage: `url(${user?.imageUrl || '/default-avatar.png'})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '100%',
-                    }}
-                    aria-label="User"
-                  />
+                <div className="relative size-20 sm:size-24 md:size-32 mb-2 sm:mb-3 md:mb-d">
+                  <Avatar className="size-full text-title-md">
+                    <AvatarFallback className="bg-orange-100">{currentUser.username[0]?.toUpperCase()}</AvatarFallback>
+                  </Avatar>
                 </div>
 
                 <h4 className="text-base sm:text-lg md:text-xl font-medium text-foreground">You</h4>
                 <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">
-                  {user ? (`${user.firstName} ${user.lastName || ''}`).trim() : 'Guest'}
+                  {currentUser.username}
                 </p>
 
                 {/* User Ready Text */}

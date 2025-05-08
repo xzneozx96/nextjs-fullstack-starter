@@ -1,3 +1,32 @@
+# 1.0.0 (2025-05-08)
+
+
+### Bug Fixes
+
+* **build:** bring back missing packages to package.json ([8cbb2a6](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/8cbb2a6fb7c126249d881f41adbf6ca63cc0c863))
+* **build:** remove unused files causing build error ([93d7d66](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/93d7d6642a3cad44a507c85ff5ba1a94179a8c45))
+* **build:** resolve warning that blocks build ([2333d6a](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/2333d6a0b15f3118b3fc950d8e64993d15575717))
+* **build:** resolve warning that blocks build ([2445c27](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/2445c278119873be0e51bfa4ec3f3e23b666f8b1))
+* **build:** wrap component with useSearchParam into suspense element ([15d5b00](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/15d5b00af26e566ddd1aa17fb7ad60f5258a1d73))
+* **db-migration:** update build command to run migration ([445c7a5](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/445c7a5a46f086c5f5ea34d60cbcd4df62ed1f9d))
+* **db-migration:** update build command to run migration ([f2c98d6](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/f2c98d666be218ec3d9b745920beb936c0a7e58f))
+* **drizzle:** bring back migration ([8ca6215](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/8ca621536f1af9a1c34e4aa4972406d1dd0c6e4f))
+* **drizzle:** bring back migration ([3999f86](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/3999f864b607f936fcff5764799f4c7990f75ff8))
+* **drizzle:** remove migration folder ([fb3711e](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/fb3711eb698a283db39d8152b40bda5c2e0478c4))
+* **drizzle:** update build command ([4b027b8](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/4b027b85ced0487f72a0fe2997c4404bf1b47718))
+* **env exposed:** remove env ([f1aaa5e](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/f1aaa5e3d0dc547ecb8b7b97539e5e6432971724))
+* **header:** resolve issue on Header component ([8e60e7a](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/8e60e7a73f307a090fb324784a9f132b8509843a))
+* **infinite-loop:** fix bug maxium call exceeded ([882f421](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/882f4215b06ac47c75801a8dc5178a08330a8aa7))
+
+
+### Features
+
+* **ai feedback:** integrate with open ai to give feedback to speaking test ([8d75143](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/8d7514368e84fb3e77b6a6a8ee2c4f81534aeefb))
+* **auth:** implement custom auth solution ([4c4c93c](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/4c4c93c316b95b11cbb78355b569386f93ff7093))
+* **chat-with-ai-tutor:** implement vercel ai sdk to build interactive chat interface ([4bd9e68](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/4bd9e686c2c86baabf81dbcc17086c4dab45c7fa))
+* **demo:** implement open router for selecting llms, update sub-tasks for pre-brief task ([04dba8a](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/04dba8a9c66e63304b89824ad3519d1ffe783614))
+* **project-monitor:** demo version for project monitor tool ([6b33de1](https://github.com/xzneozx96/nextjs-fullstack-starter/commit/6b33de13a203cd25dd5ba5ef5b366483574f64fb))
+
 # 1.0.0 (2025-04-05)
 
 

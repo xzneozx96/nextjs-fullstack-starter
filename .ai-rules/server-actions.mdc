@@ -1,6 +1,6 @@
 ---
 description: Guidelines for implementing Next.js server actions
-globs: 
+globs:
 alwaysApply: false
 ---
 # Server Actions
@@ -9,59 +9,207 @@ alwaysApply: false
 Server actions should follow this format:
 
 Files:
-- `src/lib/server-actions/NAME.validation.ts`
-- `src/lib/server-actions/NAME.ts`
+- `src/features/[feature-name]/actions/[action-group]/[action-group]-actions.validation.ts`
+- `src/features/[feature-name]/actions/[action-group]/[action-group]-actions.ts`
 
-For `src/lib/server-actions/NAME.validation.ts`:
+For `[action-group]-actions.validation.ts`:
 
 ```typescript
-import { z } from "zod";
+import { z } from 'zod';
 
-export const createApiKeyBody = z.object({ name: z.string().nullish() });
-export type CreateApiKeyBody = z.infer<typeof createApiKeyBody>;
+// Validation schema for actionName
+export const actionNameSchema = z.object({
+  param1: z.string().min(1, 'Parameter is required'),
+  param2: z.number().min(1).max(1000).optional(),
+});
+export type ActionNameParams = z.infer<typeof actionNameSchema>;
 
-export const deactivateApiKeyBody = z.object({ id: z.string() });
-export type DeactivateApiKeyBody = z.infer<typeof deactivateApiKeyBody>;
+// Define response types
+export type ActionNameResponse = {
+  // Response type properties
+  result: string;
+  // Add other properties as needed
+};
 ```
 
-For `src/server-actions/NAME.ts`:
+For `[action-group]-actions.ts`:
 
 ```typescript
 'use server';
 
-import { revalidatePath } from "next/cache";
-import { auth } from '@clerk/nextjs/server';
-import prisma from '@/lib/prisma';
-import { withActionInstrumentation } from "@/utils/actions/middleware";
-import {
-  deactivateApiKeyBody,
-  type DeactivateApiKeyBody,
-} from "@/utils/actions/api-key.validation";
+import type { ServerActionResponse } from '@/shared/types/global';
+import type { ActionNameParams, ActionNameResponse } from './[action-group]-actions.validation';
+import { actionNameSchema } from './[action-group]-actions.validation';
 
-export const deactivateApiKeyAction = withActionInstrumentation(
-  "deactivateApiKey",
-  async (unsafeData: DeactivateApiKeyBody) => {
-    const session = await auth();
-    const userId = session?.user.id;
-    if (!userId) return { error: "Not logged in" };
+/**
+ * Server action to perform a specific task
+ * @param unsafeData The parameters for the action
+ * @returns Promise that resolves to the result with a standardized response format
+ */
+export async function actionNameAction(
+  unsafeData: ActionNameParams,
+): Promise<ServerActionResponse<ActionNameResponse>> {
+  try {
+    // Validate input data using Zod
+    const validationResult = actionNameSchema.safeParse(unsafeData);
+    if (!validationResult.success) {
+      // Format Zod errors into a readable string
+      const errorMessage = validationResult.error.errors
+        .map(e => `${e.path.join('.')}: ${e.message}`)
+        .join(', ');
+      return { success: false, error: errorMessage };
+    }
 
-    const { data, success, error } =
-      deactivateApiKeyBody.safeParse(unsafeData);
-    if (!success) return { error: error.message };
+    const data = validationResult.data;
 
-    await prisma.apiKey.update({
-      where: { id: data.id, userId },
-      data: { isActive: false },
+    // Perform the action logic here
+    // ...
+
+    // Return successful response with data
+    return {
+      success: true,
+      data: {
+        result: 'Action completed successfully',
+        // Add other response data as needed
+      }
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    console.error('Error in actionName:', error);
+    return { success: false, error: errorMessage };
+  }
+}
+```
+
+## Real-World Example
+
+Here's a real example from the project:
+
+For `src/features/mock-test/actions/ai-feedback/feedback-actions.validation.ts`:
+
+```typescript
+import { z } from 'zod';
+
+// Validation schema for organizeTranscript
+export const organizeTranscriptSchema = z.object({
+  transcript: z.array(z.any()).min(1, 'Transcript is required'),
+});
+export type OrganizeTranscriptParams = z.infer<typeof organizeTranscriptSchema>;
+
+// Define response types
+export type OrganizeTranscriptResponse = {
+  part1: any[];
+  part2: any[];
+  part3: any[];
+};
+```
+
+For `src/features/mock-test/actions/ai-feedback/feedback-actions.ts`:
+
+```typescript
+'use server';
+
+import type { ServerActionResponse } from '@/shared/types/global';
+import type { OrganizeTranscriptParams, OrganizeTranscriptResponse } from './feedback-actions.validation';
+import { openai } from '@/core/ai/OpenAI';
+import { IELTS_TRANSCRIPT_ORGANIZE_PROMPT, openaiModels } from '../../constants/ai-prompts';
+import { organizeTranscriptSchema } from './feedback-actions.validation';
+
+/**
+ * Server action to organize a transcript into parts
+ * @param unsafeData The parameters for organizing the transcript
+ * @returns Promise that resolves to the organized transcript with a standardized response format
+ */
+export async function organizeTranscriptAction(
+  unsafeData: OrganizeTranscriptParams,
+): Promise<ServerActionResponse<OrganizeTranscriptResponse>> {
+  try {
+    // Validate input data using Zod
+    const validationResult = organizeTranscriptSchema.safeParse(unsafeData);
+    if (!validationResult.success) {
+      // Format Zod errors into a readable string
+      const errorMessage = validationResult.error.errors
+        .map(e => `${e.path.join('.')}: ${e.message}`)
+        .join(', ');
+      return { success: false, error: errorMessage };
+    }
+
+    const data = validationResult.data;
+
+    // Replace the placeholders in the prompt
+    const prompt = IELTS_TRANSCRIPT_ORGANIZE_PROMPT
+      .replace('{{transcript}}', JSON.stringify(data.transcript));
+
+    // Call OpenAI API
+    const result = await openai.chat.completions.create({
+      model: openaiModels.default,
+      response_format: {
+        type: 'json_object',
+      },
+      messages: [
+        {
+          role: 'system',
+          content: `You must give your answer in valid JSON format exactly like this schema:
+          {
+            "part1": [], // array of messages for part 1
+            "part2": [], // array of messages for part 2
+            "part3": []  // array of messages for part 3
+          }`,
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
     });
 
-    revalidatePath("/settings");
+    // Process the response
+    const responseContent = result.choices[0]?.message.content || '{}';
+    try {
+      const parsedResponse = JSON.parse(responseContent);
+
+      // Return with fallbacks for each part
+      const organizedTranscript = {
+        part1: Array.isArray(parsedResponse.part1) ? parsedResponse.part1 : [],
+        part2: Array.isArray(parsedResponse.part2) ? parsedResponse.part2 : [],
+        part3: Array.isArray(parsedResponse.part3) ? parsedResponse.part3 : [],
+      };
+
+      return { success: true, data: organizedTranscript };
+    } catch (parseError) {
+      console.error('Error parsing JSON response:', parseError);
+
+      // Return a default structure if parsing fails
+      return {
+        success: false,
+        error: 'Failed to parse AI response',
+        data: {
+          part1: [],
+          part2: [],
+          part3: [],
+        },
+      };
+    }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    console.error('Error organizing transcript:', error);
+    return { success: false, error: errorMessage };
   }
-);
+}
 ```
 
 ## Implementation Guidelines
 - Implement type-safe server actions with proper validation
 - Define input schemas using Zod for robust type checking and validation
 - Handle errors gracefully and return appropriate responses
-- Ensure all server actions return the `Promise<ServerActionResponse>` type
-- The zod schema will also be used on the client for form validation.
+- Ensure all server actions return the `Promise<ServerActionResponse<T>>` type with the correct generic type
+- Use JSDoc comments to document the purpose and parameters of each server action
+- Place server actions in feature-specific directories under `src/features/[feature-name]/actions/`
+- Group related actions in the same file with a descriptive name
+- Format validation errors to be user-friendly
+- Log errors with appropriate context for debugging
+- Use try/catch blocks to handle exceptions properly
+- The Zod schema can also be used on the client for form validation
+- Include proper error handling for third-party API calls
+- Use Next.js cache options when making fetch requests (e.g., `next: { revalidate: 60 }`)
+- Return standardized response objects with `success`, `data`, and `error` properties

@@ -5,81 +5,97 @@ alwaysApply: false
 ---
 # API Routes
 
+## File Structure
+
+API routes should follow this structure:
+
+- `src/app/api/[endpoint-name]/route.ts` - Main route handler
+- `src/app/api/[endpoint-name]/validation.ts` - Validation schemas
+
 ## Standard Format
 
 Use this format for API routes:
 
-```ts
-import { z } from "zod";
-import { NextResponse } from "next/server";
-import { auth } from '@clerk/nextjs/server';
-import prisma from '@/lib/prisma';
-import { withError } from "@/middleware";
+```typescript
+import type { NextRequest } from 'next/server';
+import type { RequestBodyType } from './validation';
+import { withError } from '@/middleware';
+import { NextResponse } from 'next/server';
+import { requestBodySchema } from './validation';
 
-const apiNameBody = z.object({ id: z.string(), message: z.string() });
-export type ApiNameBody = z.infer<typeof apiNameBody>;
-export type UpdateApiNameResponse = Awaited<ReturnType<typeof updateApiName>>;
+export const POST = withError(async (request: NextRequest) => {
+  try {
+    // Parse the request body
+    const data: RequestBodyType = await request.json();
 
-async function updateApiName(body: ApiNameBody, options: { email: string }) {
-  const { email } = options;
-  const result = await prisma.table.update({
-    where: {
-      id: body.id,
-      email,
-    },
-    data: body,
-  });
+    // Validate the request body
+    const { success, error } = requestBodySchema.safeParse(data);
 
-  return { result };
-}
+    if (!success) {
+      // Format Zod errors into a readable string
+      const errorMessage = error.errors
+        .map(e => `${e.path.join('.')}: ${e.message}`)
+        .join(', ');
 
-// For routes without params
-export const POST = withError(async (request: Request) => {
-  const session = await auth();
-  if (!session?.user.email)
-    return NextResponse.json({ error: "Not authenticated" });
+      return NextResponse.json(
+        { error: errorMessage },
+        { status: 400 },
+      );
+    }
 
-  const json = await request.json();
-  const body = apiNameBody.parse(json);
+    // Process the request
+    // ...
 
-  const result = await updateApiName(body, { email: session.user.email });
+    // Return a response
+    return NextResponse.json({ result: 'Success' });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    console.error('Error processing request:', error);
 
-  return NextResponse.json(result);
-});
-
-// For routes with params (note the params promise which is how Next.js 15+ works)
-export const GET = withError(
-  async (
-    request: Request,
-    { params }: { params: Promise<{ slug: string }> }
-  ) => {
-    const session = await auth();
-    if (!session?.user.email)
-      return NextResponse.json({ error: "Not authenticated" });
-
-    const { slug } = await params;
-    // Use the slug parameter...
-
-    return NextResponse.json({ result });
+    // Return an error response
+    return NextResponse.json(
+      { error: errorMessage },
+      { status: 500 },
+    );
   }
-);
+});
 ```
+
+For validation schema (`validation.ts`):
+
+```typescript
+import { z } from 'zod';
+
+// Validation schema for request body
+export const requestBodySchema = z.object({
+  param1: z.string().min(1, 'Parameter is required'),
+  param2: z.number().min(1).max(1000).optional(),
+});
+export type RequestBodyType = z.infer<typeof requestBodySchema>;
+```
+
+## Real-World Example
+Please take a look at folder `src/app/api/feedback`
 
 ## Implementation Guidelines
 
-- Use Zod for request body validation
-- Create separate functions for business logic
-- Wrap route handlers with `withError` middleware
-- Always validate authentication with `auth()`
-- Export typed responses for client usage
-- For routes with dynamic parameters, use the new Next.js 15+ params format with async params
+- Use Zod for request body validation in a separate validation.ts file
+- Wrap route handlers with `withError` middleware for consistent error handling
+- Use proper TypeScript typing for request and response data
+- Format validation errors to be user-friendly
+- Handle errors gracefully with try/catch blocks
+- Use NextResponse.json for regular responses
+- For streaming responses, use ReadableStream with proper headers
+- Log errors with appropriate context for debugging
+- Place validation schemas in a separate file for reuse
+- Use JSDoc comments to document the purpose of each API route
 
 ## Accessing API Routes from Client Components
 
-When accessing API routes from client components in a project with internationalization (i18n):
+When accessing API routes from client components:
 
 ```typescript
-// API routes are excluded from i18n middleware in the middleware.ts configuration
+// For regular JSON responses
 const response = await fetch('/api/your-endpoint', {
   method: 'POST',
   headers: {
@@ -87,10 +103,33 @@ const response = await fetch('/api/your-endpoint', {
   },
   body: JSON.stringify(data),
 });
+const result = await response.json();
+
+// For streaming responses
+const response = await fetch('/api/feedback', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(feedbackParams),
+});
+
+if (response.ok) {
+  // Process the stream using a utility function
+  processServerSentEvents(response, (data) => {
+    if (data.content) {
+      // Handle each chunk of the stream
+      setFeedbackText(prev => prev + data.content);
+    }
+  });
+} else {
+  // Handle error
+  const errorData = await response.json();
+  toast.error(`Error: ${errorData.error || 'Failed to generate feedback'}`);
+}
 ```
 
 Important notes:
 - API routes are defined at `/api/*` and are excluded from locale routing in the middleware
-- The middleware configuration has a special exception for paths starting with `/api/` to bypass the i18n middleware
 - This allows direct access to API routes without locale prefixing
 - Always use the direct path (e.g., `/api/feedback`) rather than trying to construct locale-aware paths

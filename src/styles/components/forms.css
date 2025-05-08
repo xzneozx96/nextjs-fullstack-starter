@@ -1,0 +1,8 @@
+/*
+ * Form Styles
+ * This file contains styles for form elements and inputs
+ */
+
+.form-check-input:checked ~ span {
+  @apply border-[6px] border-brand-500 bg-brand-500 dark:border-brand-500;
+}

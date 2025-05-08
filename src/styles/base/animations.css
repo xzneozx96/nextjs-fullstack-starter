@@ -1,0 +1,53 @@
+/*
+ * Animations
+ * This file contains all the animation keyframes and animation classes
+ */
+
+@layer base {
+  /* Sound wave animation */
+  @keyframes sound-wave {
+    0% {
+      height: 10%;
+    }
+    50% {
+      height: 100%;
+    }
+    100% {
+      height: 10%;
+    }
+  }
+
+  .animate-sound-wave {
+    animation: sound-wave 1.2s ease-in-out infinite;
+  }
+
+  /* Fade in animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out forwards;
+  }
+
+  /* Shiny animation */
+  @keyframes shine {
+    0% {
+      background-position: 200%;
+    }
+    100% {
+      background-position: -200%;
+    }
+  }
+
+  .animate-shine {
+    animation: shine 5s linear infinite;
+  }
+}

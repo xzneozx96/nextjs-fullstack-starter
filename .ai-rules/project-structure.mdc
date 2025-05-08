@@ -1,0 +1,218 @@
+---
+description: Overview of the project structure and architecture
+globs: 
+alwaysApply: false
+---
+# Project Structure
+
+This document outlines the structure and organization of the IELTS AI Tutor project, a Next.js application built with TypeScript, Tailwind CSS, and various other technologies.
+
+## Directory Structure
+
+```
+ielts-ai-tutor/
+├── .ai-rules/                    # AI assistant rules for code generation
+├── .github/                      # GitHub workflows and configuration
+├── .storybook/                   # Storybook configuration
+├── public/                       # Static assets
+├── src/                          # Source code
+│   ├── app/                      # Next.js App Router
+│   ├── core/                     # Core functionality
+│   ├── features/                 # Feature modules
+│   ├── locales/                  # Internationalization files
+│   ├── shared/                   # Shared components and utilities
+│   └── styles/                   # Global styles
+└── tests/                        # Test files
+```
+
+## Key Directories Explained
+
+### `src/app/`
+
+The application uses Next.js App Router with internationalization support:
+
+```
+src/app/
+├── api/                          # API routes
+│   ├── chat/                     # Chat API
+│   ├── feedback/                 # Feedback API
+│   └── ...
+├── [locale]/                     # Locale-specific routes
+│   ├── (admin)/                  # Admin routes (grouped)
+│   │   ├── dashboard/            # Dashboard pages
+│   │   └── mock-test/            # Mock test pages
+│   ├── (auth)/                   # Auth routes (grouped)
+│   │   ├── signin/               # Sign in page
+│   │   └── signup/               # Sign up page
+│   └── (marketing)/              # Marketing routes (grouped)
+│       └── page.tsx              # Home page
+├── robots.ts                     # Robots configuration
+└── sitemap.ts                    # Sitemap configuration
+```
+
+### `src/core/`
+
+Core functionality and services:
+
+```
+src/core/
+├── ai/                           # AI service integrations
+│   ├── Arcjet.ts                 # Arcjet security
+│   ├── OpenAI.ts                 # OpenAI integration
+│   ├── OpenRouter.ts             # OpenRouter integration
+│   └── Vapi.ts                   # Vapi integration
+├── auth/                         # Authentication
+│   ├── constant.ts               # Auth constants
+│   ├── passwordHasher.ts         # Password hashing
+│   ├── session.ts                # Session management
+│   └── types.ts                  # Auth types
+├── config/                       # Configuration
+│   ├── Env.ts                    # Environment variables
+│   ├── i18n.ts                   # i18n configuration
+│   └── i18nNavigation.ts         # i18n navigation
+├── drizzle/                      # Database
+│   ├── DB.ts                     # Database connection
+│   ├── migrations/               # Database migrations
+│   └── models/                   # Database models
+├── monitoring/                   # Monitoring and logging
+│   └── Logger.ts                 # Logger configuration
+└── redis/                        # Redis
+    └── Redis.ts                  # Redis client
+```
+
+### `src/features/`
+
+Feature modules organized by domain:
+
+```
+src/features/
+├── auth/                         # Authentication feature
+│   ├── actions/                  # Server actions
+│   │   ├── auth-actions.ts       # Auth actions
+│   │   └── auth-actions.validation.ts # Validation schemas
+│   ├── components/               # Auth components
+│   └── utils/                    # Auth utilities
+├── mock-test/                    # Mock test feature
+│   ├── actions/                  # Server actions
+│   │   ├── ai-feedback/          # AI feedback actions
+│   │   └── vapi/                 # Vapi actions
+│   ├── components/               # Mock test components
+│   ├── constants/                # Constants and configuration
+│   ├── hooks/                    # Custom hooks
+│   ├── stores/                   # State management
+│   ├── types/                    # Type definitions
+│   └── utils/                    # Utilities
+└── ...                           # Other features
+```
+
+### `src/shared/`
+
+Shared components, utilities, and contexts:
+
+```
+src/shared/
+├── components/                   # Shared components
+│   ├── auth/                     # Auth components
+│   ├── common/                   # Common components
+│   ├── form/                     # Form components
+│   ├── home/                     # Home page components
+│   ├── ui/                       # UI components
+│   │   ├── alert/                # Alert component
+│   │   ├── avatar/               # Avatar component
+│   │   ├── button/               # Button component
+│   │   └── ...                   # Other UI components
+│   └── ...                       # Other component categories
+├── contexts/                     # React contexts
+│   ├── SidebarContext.tsx        # Sidebar context
+│   └── ThemeContext.tsx          # Theme context
+├── hooks/                        # Custom hooks
+├── icons/                        # Icon components
+├── layout/                       # Layout components
+│   ├── AppHeader.tsx             # App header
+│   └── AppSidebar.tsx            # App sidebar
+├── types/                        # Shared type definitions
+│   └── global.d.ts               # Global type definitions
+├── utils/                        # Shared utilities
+│   ├── AppConfig.ts              # App configuration
+│   ├── error-handling.ts         # Error handling utilities
+│   ├── Helpers.ts                # Helper functions
+│   └── utils.ts                  # General utilities
+└── validations/                  # Shared validation schemas
+```
+
+## Key Architectural Patterns
+
+### 1. Internationalization (i18n)
+
+The project uses `next-intl` for internationalization:
+
+- Locale files are stored in `src/locales/`
+- Routes are organized under `src/app/[locale]/`
+- Translations are managed with Crowdin
+
+### 2. API Routes
+
+API routes follow a consistent pattern:
+
+- Located in `src/app/api/`
+- Each endpoint has a `route.ts` file for handlers
+- Validation schemas in a separate `validation.ts` file
+- Error handling with the `withError` middleware
+
+### 3. Server Actions
+
+Server actions are organized by feature:
+
+- Located in `src/features/[feature-name]/actions/`
+- Each action group has an actions file and a validation file
+- Follow a consistent pattern with Zod validation
+- Return standardized response objects
+
+### 4. Component Organization
+
+Components are organized in multiple levels:
+
+- Feature-specific components in `src/features/[feature-name]/components/`
+- Shared components in `src/shared/components/`
+- UI components in `src/shared/components/ui/`
+- Layout components in `src/shared/layout/`
+
+### 5. State Management
+
+The project uses multiple state management approaches:
+
+- Zustand for global state (e.g., `useFeedbackStore`)
+- React Context for theme and sidebar state
+- React Query/SWR for data fetching
+
+### 6. Environment Variables
+
+Environment variables are managed with `@t3-oss/env-nextjs`:
+
+- Defined and validated in `src/core/config/Env.ts`
+- Example values in `.env.example`
+- Production values in `.env.production`
+
+## Technology Stack
+
+- **Framework**: Next.js 15+ with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: Custom auth with session management
+- **AI Services**: OpenAI, Vapi, OpenRouter
+- **Caching**: Redis
+- **Monitoring**: Sentry, Logtail
+- **Testing**: Vitest, Playwright
+- **UI Components**: Shadcn UI, Radix UI
+- **Internationalization**: next-intl, Crowdin
+
+## Development Workflow
+
+1. Use feature-based organization for new functionality
+2. Follow established patterns for API routes and server actions
+3. Place shared components in the appropriate directories
+4. Use TypeScript for type safety
+5. Validate inputs with Zod schemas
+6. Handle errors consistently
+7. Follow the internationalization setup for user-facing text

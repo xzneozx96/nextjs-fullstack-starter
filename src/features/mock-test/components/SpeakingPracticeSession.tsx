@@ -65,7 +65,7 @@ const SpeakingPracticeSession = ({ topic, questions, currentUser }: SpeakingPrac
 
   return (
     <div className="flex flex-col min-h-screen text-foreground overflow-hidden pb-4 sm:pb-6">
-      <div className="container mx-auto px-4 h-full max-w-5xl py-6 sm:py-10 md:py-16 lg:py-20">
+      <div className="container mx-auto px-4 h-full max-w-5xl py-6 sm:py-10 md:py-12 lg:py-16 flex flex-col md:flex-1">
         {/* Back Link */}
         <motion.div
           className="mb-4 sm:mb-6 md:mb-8"
@@ -197,7 +197,7 @@ const SpeakingPracticeSession = ({ topic, questions, currentUser }: SpeakingPrac
           <motion.div
             ref={messageContainerRef}
             className="hidden md:block w-full bg-card/90 border rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 md:mb-8
-              h-[200px] sm:h-[250px] md:h-[300px] overflow-y-auto transition-all duration-300 scroll-smooth"
+              md:flex-1 md:min-h-[300px] md:max-h-[calc(100vh-500px)] overflow-y-auto transition-all duration-300 scroll-smooth custom-scrollbar"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.3 }}

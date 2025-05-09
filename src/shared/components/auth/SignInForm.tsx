@@ -1,7 +1,7 @@
 'use client';
 import type { z } from 'zod';
-import { logIn } from '@/features/auth/actions/auth-actions';
 import { signInSchema } from '@/features/auth/actions/auth-actions.validation';
+import { loginService } from '@/features/auth/services/auth.service';
 import Input from '@/shared/components/form/input/InputField';
 import Label from '@/shared/components/form/Label';
 import Button from '@/shared/components/ui/button/Button';
@@ -31,15 +31,20 @@ export default function SignInForm() {
   } = form;
 
   async function onSubmit(data: z.infer<typeof signInSchema>) {
-    try {
-      const { error } = await logIn(data);
-      if (error) {
-        setError(error);
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-      setError('An unexpected error occurred. Please try again later.');
-    }
+    loginService.login(data).then((res) => {
+      console.log(res);
+    }).catch((err) => {
+      console.error(err);
+      setError(error);
+    });
+    // try {
+    //   const { error } = await logIn(data);
+    //   if (error) {
+    //   }
+    // } catch (err) {
+    //   console.error('Login error:', err);
+    //   setError('An unexpected error occurred. Please try again later.');
+    // }
   }
 
   return (

@@ -1,21 +1,23 @@
 'use client';
 import type { z } from 'zod';
-import { signInSchema } from '@/features/auth/actions/auth-actions.validation';
-import { loginService } from '@/features/auth/services/auth.service';
+import { useHttp } from '@/core/http/useHttp';
+import { signInSchema } from '@/features/auth/services/auth.validation';
 import Input from '@/shared/components/form/input/InputField';
 import Label from '@/shared/components/form/Label';
 import Button from '@/shared/components/ui/button/Button';
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from '@/shared/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Alert from '../ui/alert/Alert';
 
 export default function SignInForm() {
+  const router = useRouter();
   // const [isChecked, setIsChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string>();
+  const { post, loading, error: httpError, resetError } = useHttp();
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -31,21 +33,25 @@ export default function SignInForm() {
   } = form;
 
   async function onSubmit(data: z.infer<typeof signInSchema>) {
-    loginService.login(data).then((res) => {
-      console.log(res);
-    }).catch((err) => {
-      console.error(err);
-      setError(error);
-    });
-    // try {
-    //   const { error } = await logIn(data);
-    //   if (error) {
-    //   }
-    // } catch (err) {
-    //   console.error('Login error:', err);
-    //   setError('An unexpected error occurred. Please try again later.');
-    // }
+    resetError();
+
+    try {
+      await post({
+        url: '/auth/login',
+        data,
+        schemaValidation: signInSchema,
+        showErrorToast: false,
+      });
+
+      router.push('/dashboard');
+    } catch (err) {
+      console.log('Login error:', err);
+      // No need to set local error as httpError will be populated
+    }
   }
+
+  // Use httpError if available, otherwise use local error state
+  const displayError = httpError?.message || null;
 
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
@@ -212,11 +218,11 @@ export default function SignInForm() {
                   </Link>
                 </div> */}
 
-                {error && <Alert variant="error" title="Error" message={error} />}
+                {displayError && <Alert variant="error" title="Error" message={displayError} />}
 
                 <div>
-                  <Button className="w-full" size="sm" type="submit" disabled={isSubmitting}>
-                    Log In
+                  <Button className="w-full" size="sm" type="submit" disabled={isSubmitting || loading}>
+                    {loading ? 'Logging in...' : 'Log In'}
                   </Button>
                 </div>
               </div>

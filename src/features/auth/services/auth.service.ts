@@ -1,26 +1,22 @@
-// SERVER / CLIENT
+import type { ZodSchema } from 'zod';
+import type { SignInPayload } from './auth.validation';
+import { http } from '@/core/http/http';
 
-import { Env } from '@/core/config/Env';
-import { httpService } from '@/shared/services/http.services';
+export const loginApi = async (
+  payload: SignInPayload,
+  schemaValidation?: ZodSchema<SignInPayload>,
+): Promise<any> => {
+  const data = await http.post({
+    url: '/auth/login',
+    options: { data: payload },
+    schemaValidation,
+  });
+  return data;
+};
 
-class LoginService {
-  private static instance: LoginService;
-
-  private constructor() { }
-
-  public static getInstance(): LoginService {
-    if (!LoginService.instance) {
-      LoginService.instance = new LoginService();
-    }
-    return LoginService.instance;
-  }
-
-  public async login(
-    options: { email: string; password: string },
-  ): Promise<any> {
-    const data = await httpService.post(`${Env.NEXT_PUBLIC_API_SERVER}/auth/login`, options);
-    return data;
-  }
-}
-
-export const loginService = LoginService.getInstance();
+export const logoutApi = async (): Promise<any> => {
+  const data = await http.post({
+    url: '/auth/logout',
+  });
+  return data;
+};

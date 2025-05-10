@@ -1,5 +1,7 @@
 import type { ClassValue } from 'clsx';
+import type { ZodError } from 'zod';
 import { clsx } from 'clsx';
+
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -100,3 +102,8 @@ export function formatDateTime(date: Date) {
 
   return `${day}/${month}/${year}, ${hours}:${minutes}`;
 }
+
+// helper function to make Zod errors readable
+export const parseZodError = (error: ZodError) => {
+  return error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
+};

@@ -3,6 +3,7 @@
 import type { ServerActionResponse } from '@/shared/types/global';
 import type { FetchCallByIdParams, FetchCallHistoryParams, VapiCallListResponse, VapiCallResponse } from './vapi-actions.validation';
 import { Env } from '@/core/config/Env';
+import { parseZodError } from '@/shared/utils/utils';
 import {
   fetchCallByIdSchema,
   fetchCallHistorySchema,
@@ -20,9 +21,8 @@ export async function fetchCallById(
   const validationResult = fetchCallByIdSchema.safeParse(unsafeData);
   if (!validationResult.success) {
     // Format Zod errors into a readable string
-    const errorMessage = validationResult.error.errors
-      .map(e => `${e.path.join('.')}: ${e.message}`)
-      .join(', ');
+    const errorMessage = parseZodError(validationResult.error);
+
     return { success: false, error: errorMessage };
   }
 
@@ -132,9 +132,8 @@ export async function fetchCallHistory(
     const validationResult = fetchCallHistorySchema.safeParse(unsafeData);
     if (!validationResult.success) {
       // Format Zod errors into a readable string
-      const errorMessage = validationResult.error.errors
-        .map(e => `${e.path.join('.')}: ${e.message}`)
-        .join(', ');
+      const errorMessage = parseZodError(validationResult.error);
+
       return { success: false, error: errorMessage };
     }
 

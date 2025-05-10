@@ -3,6 +3,7 @@ import type { GenerateFeedbackParams } from './validation';
 import { openai } from '@/core/ai/OpenAI';
 import { IELTS_FEEDBACK_PROMPT, openaiModels } from '@/features/mock-test/constants/ai-prompts';
 import { withError } from '@/middleware';
+import { parseZodError } from '@/shared/utils/utils';
 import { NextResponse } from 'next/server';
 import { generateFeedbackSchema } from './validation';
 
@@ -16,9 +17,7 @@ export const POST = withError(async (request: NextRequest) => {
 
     if (!success) {
       // Format Zod errors into a readable string
-      const errorMessage = error.errors
-        .map(e => `${e.path.join('.')}: ${e.message}`)
-        .join(', ');
+      const errorMessage = parseZodError(error);
 
       return NextResponse.json(
         { error: errorMessage },

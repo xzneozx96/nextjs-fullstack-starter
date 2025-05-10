@@ -1,7 +1,7 @@
 'use client';
 import type { z } from 'zod';
 import { signUp } from '@/features/auth/actions/auth-actions';
-import { signUpSchema } from '@/features/auth/actions/auth-actions.validation';
+import { signUpSchema } from '@/features/auth/services/auth.validation';
 import Checkbox from '@/shared/components/form/input/Checkbox';
 import Input from '@/shared/components/form/input/InputField';
 import Label from '@/shared/components/form/Label';

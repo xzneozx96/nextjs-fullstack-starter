@@ -5,6 +5,7 @@ import { sessionSchema } from './types';
 
 export function getUserFromSession(cookies: Pick<Cookies, 'get'>) {
   const sessionId = cookies.get(COOKIE_SESSION_KEY)?.value;
+  console.log('getUserFromSession', sessionId);
   if (sessionId == null) {
     return null;
   }

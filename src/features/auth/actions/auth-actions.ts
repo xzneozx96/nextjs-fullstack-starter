@@ -1,7 +1,7 @@
 'use server';
 
 import type { ServerActionResponse } from '@/shared/types/global';
-import type { z } from 'zod';
+import type { SignInPayload, SignUpPayload } from './auth-actions.validation';
 import { comparePasswords, generateSalt, hashPassword } from '@/core/auth/passwordHasher';
 import { createUserSession, removeUserFromSession } from '@/core/auth/session';
 import { db } from '@/core/drizzle/DB';
@@ -9,13 +9,13 @@ import { userTable } from '@/core/drizzle/models/Schema';
 import { eq } from 'drizzle-orm';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { signInSchema, signUpSchema } from './auth-actions.validation';
+import { signInSchema, signUpSchema } from '../services/auth.validation';
 
 type SignUpResponse = ServerActionResponse<string> & {
   message?: string;
 };
 
-export async function signUp(unsafeData: z.infer<typeof signUpSchema>): Promise<SignUpResponse> {
+export async function signUp(unsafeData: SignUpPayload): Promise<SignUpResponse> {
   try {
     const { success, data } = signUpSchema.safeParse(unsafeData);
 
@@ -69,7 +69,7 @@ export async function signUp(unsafeData: z.infer<typeof signUpSchema>): Promise<
   redirect('/mock-test');
 }
 
-export async function logIn(unsafeData: z.infer<typeof signInSchema>): Promise<ServerActionResponse<string>> {
+export async function logIn(unsafeData: SignInPayload): Promise<ServerActionResponse<string>> {
   try {
     const { success, data } = signInSchema.safeParse(unsafeData);
 

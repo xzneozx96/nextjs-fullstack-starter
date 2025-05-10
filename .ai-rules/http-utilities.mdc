@@ -1,0 +1,168 @@
+# HTTP Utilities Documentation
+
+This document provides detailed information about the HTTP utilities in the application, with a focus on the `execute()` function in the `useHttp` hook.
+
+## API Response Format
+
+All API responses follow a standardized format:
+
+```typescript
+type ApiResponse<T = any> = {
+  statusCode: number;
+  message: string;
+  data: T | null;
+  errorDetails?: {
+    error: string;
+    statusCode: number;
+    timestamp: string;
+    path: string;
+  };
+};
+```
+
+- `statusCode`: HTTP status code (200, 400, 401, etc.)
+- `message`: Human-readable message describing the response
+- `data`: The actual response data (or null for errors)
+- `errorDetails`: Additional error information (for error responses)
+
+## The `execute()` Function
+
+The `execute()` function is the core of our HTTP request handling system. It provides a consistent way to make HTTP requests, handle responses, and manage errors.
+
+### Purpose
+
+The `execute()` function serves as a central point for:
+
+1. Making HTTP requests with standardized error handling
+2. Managing loading states during requests
+3. Handling component unmounting during in-flight requests
+4. Providing toast notifications for errors
+5. Supporting request cancellation
+6. Invoking success and error callbacks
+
+### Function Signature
+
+```typescript
+const execute = async <T>(
+  fn: (signal: AbortSignal) => Promise<ApiResponse<T>>,
+  onSuccess?: (data: T) => void,
+  onError?: (err: any) => void,
+  showErrorToast = true,
+): Promise<ApiResponse<T>> => {
+  // Implementation...
+};
+```
+
+### Parameters
+
+- `fn`: A function that performs the actual HTTP request. It accepts an `AbortSignal` for cancellation support and returns a Promise with the standardized `ApiResponse`.
+- `onSuccess`: Optional callback function that receives the data on successful response.
+- `onError`: Optional callback function that receives the error on failed response.
+- `showErrorToast`: Boolean flag to control whether toast notifications should be shown for errors (defaults to true).
+
+### Return Value
+
+The function returns a Promise that resolves to an `ApiResponse<T>` object containing the standardized response format.
+
+### Detailed Workflow
+
+1. **Request Preparation**
+   - Aborts any existing in-flight request
+   - Creates a new AbortController for the current request
+   - Sets loading state to true and clears any previous errors
+
+2. **Request Execution**
+   - Executes the provided function with the abort signal
+   - Handles component unmounting during the request
+
+3. **Response Processing**
+   - For successful responses:
+     - Updates the data state
+     - Invokes the success callback with the response data
+     - Returns the full API response
+
+   - For error responses:
+     - Checks if the response follows the API error format
+     - Updates the error state
+     - Invokes the error callback
+     - Shows toast notifications if enabled
+     - Throws the error for further handling
+
+4. **Error Handling**
+   - Handles request cancellation errors
+   - Processes API errors with standardized format
+   - Handles unexpected errors
+   - Shows toast notifications for errors if enabled
+
+5. **Cleanup**
+   - Sets loading state to false when the request completes
+
+### Example Usage
+
+```typescript
+// Inside a component using the useHttp hook
+const { post, loading, error } = useHttp();
+
+async function handleSubmit() {
+  try {
+    const response = await post({
+      url: '/api/users',
+      data: userData,
+      onSuccess: (data) => {
+        console.log('User created:', data);
+      },
+      onError: (err) => {
+        console.error('Failed to create user:', err);
+      },
+      showErrorToast: true, // Show toast notifications for errors
+    });
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      // Handle successful response
+    }
+  } catch (error) {
+    // Handle errors that weren't already handled by onError callback
+  }
+}
+```
+
+### Key Features
+
+1. **Type Safety**
+   - Fully typed with TypeScript generics for type-safe API responses
+   - Consistent error handling with typed error responses
+
+2. **Request Cancellation**
+   - Supports cancellation of in-flight requests when new requests are made
+   - Handles component unmounting during requests to prevent state updates on unmounted components
+
+3. **Toast Notifications**
+   - Automatically shows toast notifications for errors
+   - Can be disabled per request if needed
+
+4. **Loading State Management**
+   - Manages loading state automatically
+   - Provides loading state for UI feedback
+
+5. **Error Handling**
+   - Standardized error format across the application
+   - Consistent error handling for all HTTP requests
+
+6. **Callback Support**
+   - Supports success and error callbacks for custom handling
+   - Callbacks are only invoked if the component is still mounted
+
+## Best Practices
+
+1. Always check the `statusCode` of the response to determine if it was successful.
+2. Use the `onSuccess` and `onError` callbacks for handling specific success and error cases.
+3. Use the `showErrorToast` parameter to control toast notifications for specific requests.
+4. Handle component unmounting properly to prevent memory leaks.
+5. Use the loading state for UI feedback during requests.
+6. Use the error state for displaying error messages in the UI.
+
+## Implementation Details
+
+The `execute()` function is implemented using React's `useCallback` hook to ensure stable function references across renders. It also uses refs to track the mounted state of the component and to manage the abort controller for request cancellation.
+
+The function is designed to work with the standardized API response format and provides a consistent way to handle both success and error cases.

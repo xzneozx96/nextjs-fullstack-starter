@@ -3,6 +3,7 @@
 import type { ServerActionResponse } from '@/shared/types/global';
 import type { OrganizeTranscriptParams, OrganizeTranscriptResponse } from './feedback-actions.validation';
 import { openai } from '@/core/ai/OpenAI';
+import { parseZodError } from '@/shared/utils/utils';
 import { IELTS_TRANSCRIPT_ORGANIZE_PROMPT, openaiModels } from '../../constants/ai-prompts';
 import { organizeTranscriptSchema } from './feedback-actions.validation';
 
@@ -19,9 +20,8 @@ export async function organizeTranscriptAction(
     const validationResult = organizeTranscriptSchema.safeParse(unsafeData);
     if (!validationResult.success) {
       // Format Zod errors into a readable string
-      const errorMessage = validationResult.error.errors
-        .map(e => `${e.path.join('.')}: ${e.message}`)
-        .join(', ');
+      const errorMessage = parseZodError(validationResult.error);
+
       return { success: false, error: errorMessage };
     }
 

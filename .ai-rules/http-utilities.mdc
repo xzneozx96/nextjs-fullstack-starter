@@ -1,6 +1,6 @@
 # HTTP Utilities Documentation
 
-This document provides detailed information about the HTTP utilities in the application, with a focus on the `execute()` function in the `useHttp` hook.
+This document provides detailed information about the HTTP utilities in the application, with a focus on the `execute()` function in the `useHttp` hook and its global error handling capabilities.
 
 ## API Response Format
 
@@ -25,9 +25,21 @@ type ApiResponse<T = any> = {
 - `data`: The actual response data (or null for errors)
 - `errorDetails`: Additional error information (for error responses)
 
+## Global Error Handling
+
+One of the key features of our HTTP utilities is **global error handling**. This means that individual components don't need to implement their own error handling logic using try/catch blocks. Instead, all error handling is centralized in the `useHttp` hook.
+
+### Benefits of Global Error Handling
+
+1. **Simplified Component Code**: Components can focus on their core functionality without worrying about error handling.
+2. **Consistent Error Handling**: All errors are handled in the same way throughout the application.
+3. **Automatic Toast Notifications**: Errors are automatically displayed to the user via toast notifications.
+4. **Standardized Error Responses**: All error responses follow the same format, making them easier to work with.
+5. **Automatic Loading State Management**: The loading state is automatically updated, even when errors occur.
+
 ## The `execute()` Function
 
-The `execute()` function is the core of our HTTP request handling system. It provides a consistent way to make HTTP requests, handle responses, and manage errors.
+The `execute()` function is the core of our HTTP request handling system. It provides a consistent way to make HTTP requests, handle responses, and manage errors globally.
 
 ### Purpose
 
@@ -50,7 +62,7 @@ const execute = async <T>(
   showErrorToast = true,
 ): Promise<ApiResponse<T>> => {
   // Implementation...
-};
+}
 ```
 
 ### Parameters
@@ -62,40 +74,18 @@ const execute = async <T>(
 
 ### Return Value
 
-The function returns a Promise that resolves to an `ApiResponse<T>` object containing the standardized response format.
+The function returns a Promise that resolves to an `ApiResponse<T>` object containing the standardized response format, **even for error cases**. This is a key aspect of the global error handling approach.
 
-### Detailed Workflow
+### Error Handling Flow
 
-1. **Request Preparation**
-   - Aborts any existing in-flight request
-   - Creates a new AbortController for the current request
-   - Sets loading state to true and clears any previous errors
+1. **Error Detection**: Catch any errors from the API request
+2. **Error State**: Set the error state for the hook
+3. **Toast Notification**: Display a toast notification (if enabled)
+4. **Error Callback**: Call the onError callback (if provided)
+5. **Standardized Response**: Return a standardized error response
+6. **Loading State**: Set loading state to false
 
-2. **Request Execution**
-   - Executes the provided function with the abort signal
-   - Handles component unmounting during the request
-
-3. **Response Processing**
-   - For successful responses:
-     - Updates the data state
-     - Invokes the success callback with the response data
-     - Returns the full API response
-
-   - For error responses:
-     - Checks if the response follows the API error format
-     - Updates the error state
-     - Invokes the error callback
-     - Shows toast notifications if enabled
-     - Throws the error for further handling
-
-4. **Error Handling**
-   - Handles request cancellation errors
-   - Processes API errors with standardized format
-   - Handles unexpected errors
-   - Shows toast notifications for errors if enabled
-
-5. **Cleanup**
-   - Sets loading state to false when the request completes
+This approach allows components to handle API requests without worrying about error handling, as all errors are handled globally by this function.
 
 ### Example Usage
 
@@ -104,65 +94,36 @@ The function returns a Promise that resolves to an `ApiResponse<T>` object conta
 const { post, loading, error } = useHttp();
 
 async function handleSubmit() {
-  try {
-    const response = await post({
-      url: '/api/users',
-      data: userData,
-      onSuccess: (data) => {
-        console.log('User created:', data);
-      },
-      onError: (err) => {
-        console.error('Failed to create user:', err);
-      },
-      showErrorToast: true, // Show toast notifications for errors
-    });
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      // Handle successful response
-    }
-  } catch (error) {
-    // Handle errors that weren't already handled by onError callback
+  // No try/catch needed - errors are handled globally
+  const response = await post({
+    url: '/api/users',
+    data: userData,
+    onSuccess: (data) => {
+      console.log('User created:', data);
+    },
+  });
+  
+  // Check if the response was successful
+  if (isApiSuccess(response)) {
+    // Handle successful response
+    router.push('/users');
   }
+  // No need to handle errors - they're handled globally
 }
 ```
 
-### Key Features
-
-1. **Type Safety**
-   - Fully typed with TypeScript generics for type-safe API responses
-   - Consistent error handling with typed error responses
-
-2. **Request Cancellation**
-   - Supports cancellation of in-flight requests when new requests are made
-   - Handles component unmounting during requests to prevent state updates on unmounted components
-
-3. **Toast Notifications**
-   - Automatically shows toast notifications for errors
-   - Can be disabled per request if needed
-
-4. **Loading State Management**
-   - Manages loading state automatically
-   - Provides loading state for UI feedback
-
-5. **Error Handling**
-   - Standardized error format across the application
-   - Consistent error handling for all HTTP requests
-
-6. **Callback Support**
-   - Supports success and error callbacks for custom handling
-   - Callbacks are only invoked if the component is still mounted
-
 ## Best Practices
 
-1. Always check the `statusCode` of the response to determine if it was successful.
-2. Use the `onSuccess` and `onError` callbacks for handling specific success and error cases.
-3. Use the `showErrorToast` parameter to control toast notifications for specific requests.
-4. Handle component unmounting properly to prevent memory leaks.
-5. Use the loading state for UI feedback during requests.
-6. Use the error state for displaying error messages in the UI.
+1. **Don't use try/catch blocks** for API requests unless you need custom error handling.
+2. Always check if the response was successful using the `isApiSuccess` helper function.
+3. Use the `onSuccess` callback for handling specific success cases.
+4. Use the `onError` callback only if you need custom error handling.
+5. Use the `showErrorToast` parameter to control toast notifications for specific requests.
+6. Use the loading state for UI feedback during requests.
+7. Use the error state for displaying custom error messages in the UI if needed.
 
 ## Implementation Details
 
 The `execute()` function is implemented using React's `useCallback` hook to ensure stable function references across renders. It also uses refs to track the mounted state of the component and to manage the abort controller for request cancellation.
 
-The function is designed to work with the standardized API response format and provides a consistent way to handle both success and error cases.
+The function is designed to work with the standardized API response format and provides a consistent way to handle both success and error cases without requiring try/catch blocks in individual components.

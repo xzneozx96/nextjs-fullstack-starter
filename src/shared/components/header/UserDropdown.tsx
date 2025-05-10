@@ -26,19 +26,13 @@ export default function UserDropdown() {
     e.preventDefault();
     closeDropdown();
 
-    try {
-      const response = await post({
-        url: '/auth/logout',
-      });
+    const response = await post({
+      url: '/auth/logout',
+    });
 
-      // If the logout was successful, redirect to signin page
-      if (isApiSuccess(response)) {
-        router.push('/signin');
-      }
-    } catch (err) {
-      // The error has already been handled by the onError callback and toast
-      // We're just catching it here to prevent the unhandled promise rejection
-      console.log('Error while log out', err);
+    // If the logout was successful, redirect to signin page
+    if (isApiSuccess(response)) {
+      router.push('/signin');
     }
   }
   return (

@@ -84,6 +84,7 @@ async function request<T, TZod>(
 
   if (schemaValidation && options.data !== undefined) {
     const result = schemaValidation.safeParse(options.data);
+
     if (!result.success) {
       // Create a standardized validation error response
       const errorResponse: ApiResponse<null> = {

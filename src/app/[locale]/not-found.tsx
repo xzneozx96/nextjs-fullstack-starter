@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import GridShape from '@/shared/components/common/GridShape';
-import Button from '@/shared/components/ui/button/Button';
+import { Button } from '@/shared/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';

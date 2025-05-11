@@ -7,7 +7,7 @@ import { cn } from '@/shared/utils/utils';
 import { AnimatePresence, motion, useAnimation } from 'framer-motion';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import Button from '../ui/button/Button';
+import { Button } from '../ui/button';
 
 type Feature = {
   id: number;
@@ -136,7 +136,7 @@ const HowItWorks = () => {
           </p>
           <h2 className="text-title-md font-medium md:text-title-lg mb-4">Simple, effective, and powerful</h2>
           <p className="text-xl text-gray-500 dark:text-gray-300">
-            IELTS MentorPro streamlines the IELTS preparation process for both teachers and students.
+            SNP streamlines the IELTS preparation process for both teachers and students.
           </p>
         </motion.div>
 

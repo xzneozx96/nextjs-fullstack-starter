@@ -1,6 +1,6 @@
 import type { useVapi } from '@/features/mock-test/hooks/useVapi';
 import { CALL_STATUS } from '@/features/mock-test/hooks/useVapi';
-import Button from '@/shared/components/ui/button/Button';
+import { Button } from '@/shared/components/ui/button';
 import { MicOff, MicrophoneIcon } from '@/shared/icons';
 
 type VapiButtonProps = Partial<ReturnType<typeof useVapi>> & {

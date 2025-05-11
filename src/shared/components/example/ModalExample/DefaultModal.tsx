@@ -3,7 +3,7 @@ import { useModal } from '@/shared/hooks/useModal';
 import React from 'react';
 
 import ComponentCard from '../../common/ComponentCard';
-import Button from '../../ui/button/Button';
+import { Button } from '../../ui/button';
 import { Modal } from '../../ui/modal';
 
 export default function DefaultModal() {

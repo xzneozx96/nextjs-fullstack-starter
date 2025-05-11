@@ -27,7 +27,7 @@ const features: FeatureItem[] = [
     description:
       'Students receive instant AI-generated feedback with detailed scoring and improvement suggestions after each test.',
     icon: <ChatIcon className="size-6" />,
-    colorScheme: 'text-blue-light-500 bg-blue-500/[0.08]',
+    colorScheme: 'text-brand-light-500 bg-brand-500/[0.08]',
     image: '/images/carousel/carousel-02.png',
   },
   {
@@ -94,7 +94,7 @@ const Feature = () => {
               }}
               className="text-gray-500 dark:text-gray-300 md:max-w-2xl"
             >
-              IELTS MentorPro combines AI technology with expert teaching methods to provide the most effective IELTS preparation experience.
+              SNP combines AI technology with expert teaching methods to provide the most effective IELTS preparation experience.
             </motion.p>
           </div>
         </motion.div>

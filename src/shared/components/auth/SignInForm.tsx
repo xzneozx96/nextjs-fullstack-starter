@@ -1,10 +1,10 @@
 'use client';
 import type { z } from 'zod';
 import { useHttp } from '@/core/http/useHttp';
-import { signInSchema } from '@/features/auth/services/auth.validation';
+import { signInSchema } from '@/features/auth/actions/auth-actions.validation';
 import Input from '@/shared/components/form/input/InputField';
 import Label from '@/shared/components/form/Label';
-import Button from '@/shared/components/ui/button/Button';
+import { Button } from '@/shared/components/ui/button';
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from '@/shared/icons';
 import { isApiSuccess } from '@/shared/types/api-response';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -73,75 +73,74 @@ export default function SignInForm() {
             </p>
           </div>
 
-          <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="space-y-6">
-                <div>
-                  <Label>
-                    Email
-                    {' '}
-                    <span className="text-error-500">*</span>
-                    {' '}
-                  </Label>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="space-y-6">
+              <div>
+                <Label>
+                  Email
+                  {' '}
+                  <span className="text-error-500">*</span>
+                  {' '}
+                </Label>
+                <Controller
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="info@gmail.com"
+                      type="email"
+                      error={!!errors.email?.message}
+                      hint={errors.email?.message}
+                    />
+                  )}
+                />
+              </div>
+              <div>
+                <Label>
+                  Password
+                  {' '}
+                  <span className="text-error-500">*</span>
+                  {' '}
+                </Label>
+                <div className="relative">
                   <Controller
                     control={form.control}
-                    name="email"
+                    name="password"
                     render={({ field }) => (
                       <Input
                         {...field}
-                        placeholder="info@gmail.com"
-                        type="email"
-                        error={!!errors.email?.message}
-                        hint={errors.email?.message}
+                        placeholder="Enter your password"
+                        type={showPassword ? 'text' : 'password'}
+                        error={!!errors.password?.message}
+                        hint={errors.password?.message}
                       />
                     )}
                   />
+                  <span
+                    tabIndex={0}
+                    role="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setShowPassword(!showPassword);
+                      }
+                    }}
+                    className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+                  >
+                    {showPassword
+                      ? (
+                          <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+                        )
+                      : (
+                          <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                        )}
+                  </span>
                 </div>
-                <div>
-                  <Label>
-                    Password
-                    {' '}
-                    <span className="text-error-500">*</span>
-                    {' '}
-                  </Label>
-                  <div className="relative">
-                    <Controller
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <Input
-                          {...field}
-                          placeholder="Enter your password"
-                          type={showPassword ? 'text' : 'password'}
-                          error={!!errors.password?.message}
-                          hint={errors.password?.message}
-                        />
-                      )}
-                    />
-                    <span
-                      tabIndex={0}
-                      role="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          setShowPassword(!showPassword);
-                        }
-                      }}
-                      className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                    >
-                      {showPassword
-                        ? (
-                            <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-                          )
-                        : (
-                            <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
-                          )}
-                    </span>
-                  </div>
-                </div>
+              </div>
 
-                {/* <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Checkbox checked={isChecked} onChange={setIsChecked} />
                     <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
@@ -156,30 +155,15 @@ export default function SignInForm() {
                   </Link>
                 </div> */}
 
-                {displayError && <Alert variant="error" title="Error" message={displayError} />}
+              {displayError && <Alert variant="error" title="Error" message={displayError} />}
 
-                <div>
-                  <Button className="w-full" size="sm" type="submit" disabled={isSubmitting || loading}>
-                    {loading ? 'Logging in...' : 'Log In'}
-                  </Button>
-                </div>
+              <div>
+                <Button className="w-full" size="sm" type="submit" disabled={isSubmitting || loading}>
+                  {loading ? 'Logging in...' : 'Log In'}
+                </Button>
               </div>
-            </form>
-
-            <div className="mt-5">
-              <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
-                Don&apos;t have an account?
-                {' '}
-
-                <Link
-                  href="/signup"
-                  className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                >
-                  Sign Up
-                </Link>
-              </p>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import ComponentCard from '@/shared/components/common/ComponentCard';
 import PageBreadcrumb from '@/shared/components/common/PageBreadCrumb';
-import Button from '@/shared/components/ui/button/Button';
-import { BoxIcon } from '@/shared/icons';
+import { Button } from '@/shared/components/ui/button';
 import React from 'react';
 
 export const metadata: Metadata = {
@@ -19,10 +18,10 @@ export default function Buttons() {
         {/* Primary Button */}
         <ComponentCard title="Primary Button">
           <div className="flex items-center gap-5">
-            <Button size="sm" variant="primary">
+            <Button size="sm" variant="default">
               Button Text
             </Button>
-            <Button size="md" variant="primary">
+            <Button size="lg" variant="default">
               Button Text
             </Button>
           </div>
@@ -30,10 +29,10 @@ export default function Buttons() {
         {/* Primary Button with Start Icon */}
         <ComponentCard title="Primary Button with Left Icon">
           <div className="flex items-center gap-5">
-            <Button size="sm" variant="primary" startIcon={<BoxIcon className="size-4" />}>
+            <Button size="sm" variant="default">
               Button Text
             </Button>
-            <Button size="md" variant="primary" startIcon={<BoxIcon className="size-4" />}>
+            <Button size="lg" variant="default">
               Button Text
             </Button>
           </div>
@@ -42,10 +41,10 @@ export default function Buttons() {
         {/* Primary Button with Start Icon */}
         <ComponentCard title="Primary Button with Right Icon">
           <div className="flex items-center gap-5">
-            <Button size="sm" variant="primary" endIcon={<BoxIcon className="size-4" />}>
+            <Button size="sm" variant="default">
               Button Text
             </Button>
-            <Button size="md" variant="primary" endIcon={<BoxIcon className="size-4" />}>
+            <Button size="lg" variant="default">
               Button Text
             </Button>
           </div>
@@ -57,7 +56,7 @@ export default function Buttons() {
             <Button size="sm" variant="outline">
               Button Text
             </Button>
-            <Button size="md" variant="outline">
+            <Button size="lg" variant="outline">
               Button Text
             </Button>
           </div>
@@ -65,10 +64,10 @@ export default function Buttons() {
         {/* Outline Button with Start Icon */}
         <ComponentCard title="Outline Button with Left Icon">
           <div className="flex items-center gap-5">
-            <Button size="sm" variant="outline" startIcon={<BoxIcon className="size-4" />}>
+            <Button size="sm" variant="outline">
               Button Text
             </Button>
-            <Button size="md" variant="outline" startIcon={<BoxIcon className="size-4" />}>
+            <Button size="lg" variant="outline">
               Button Text
             </Button>
           </div>
@@ -77,10 +76,10 @@ export default function Buttons() {
         {/* Outline Button with Start Icon */}
         <ComponentCard title="Outline Button with Right Icon">
           <div className="flex items-center gap-5">
-            <Button size="sm" variant="outline" endIcon={<BoxIcon className="size-4" />}>
+            <Button size="sm" variant="outline">
               Button Text
             </Button>
-            <Button size="md" variant="outline" endIcon={<BoxIcon className="size-4" />}>
+            <Button size="lg" variant="outline">
               Button Text
             </Button>
           </div>

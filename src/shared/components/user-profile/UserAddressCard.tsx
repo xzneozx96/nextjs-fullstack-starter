@@ -3,7 +3,7 @@ import React from 'react';
 import { useModal } from '../../hooks/useModal';
 import Input from '../form/input/InputField';
 import Label from '../form/Label';
-import Button from '../ui/button/Button';
+import { Button } from '../ui/button';
 import { Modal } from '../ui/modal';
 
 export default function UserAddressCard() {

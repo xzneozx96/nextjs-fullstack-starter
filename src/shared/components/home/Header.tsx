@@ -11,7 +11,7 @@ import {
 } from '@/shared/components/ui/resizable-header';
 import Link from 'next/link';
 import { useState } from 'react';
-import Button from '../ui/button/Button';
+import { Button } from '../ui/button';
 
 export function HomeNav() {
   const navItems = [
@@ -76,20 +76,20 @@ export function HomeNav() {
             <div className="flex w-full flex-col gap-4">
               {/* <NavbarButton
                 onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
+                variant="default"
                 className="w-full"
               >
                 Login
               </NavbarButton> */}
               {/* <NavbarButton
                 onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
+                variant="default"
                 className="w-full"
               >
                 Book a call
               </NavbarButton> */}
               <Link href="/mock-test" className="w-full">
-                <Button variant="primary" className="w-full">
+                <Button variant="default" className="w-full">
                   Get Started
                 </Button>
               </Link>

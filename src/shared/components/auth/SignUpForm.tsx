@@ -1,7 +1,7 @@
 'use client';
 import type { z } from 'zod';
 import { signUp } from '@/features/auth/actions/auth-actions';
-import { signUpSchema } from '@/features/auth/services/auth.validation';
+import { signUpSchema } from '@/features/auth/actions/auth-actions.validation';
 import Checkbox from '@/shared/components/form/input/Checkbox';
 import Input from '@/shared/components/form/input/InputField';
 import Label from '@/shared/components/form/Label';
@@ -11,7 +11,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Alert from '../ui/alert/Alert';
-import Button from '../ui/button/Button';
+import { Button } from '../ui/button';
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);

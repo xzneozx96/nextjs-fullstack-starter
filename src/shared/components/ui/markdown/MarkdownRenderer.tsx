@@ -71,7 +71,7 @@ export const MarkdownRenderer = memo(({ content, className }: MarkdownRendererPr
           ),
           a: ({ node, href, ...props }) => (
             <a
-              className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+              className="text-brand-600 dark:text-brand-400 hover:underline font-medium"
               href={href}
               target="_blank"
               rel="noopener noreferrer"

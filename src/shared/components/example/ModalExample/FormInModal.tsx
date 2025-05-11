@@ -4,7 +4,7 @@ import React from 'react';
 import ComponentCard from '../../common/ComponentCard';
 import Input from '../../form/input/InputField';
 import Label from '../../form/Label';
-import Button from '../../ui/button/Button';
+import { Button } from '../../ui/button';
 import { Modal } from '../../ui/modal';
 
 export default function FormInModal() {

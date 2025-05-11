@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from '@/shared/components/ui/accordion';
 import Image from 'next/image';
-import Button from '../ui/button/Button';
+import { Button } from '../ui/button';
 
 type FaqItem = {
   id: string;
@@ -40,7 +40,7 @@ const faqItems = [
     id: 'faq-3',
     question: 'Is the platform suitable for beginners?',
     answer:
-        'IELTS MentorPro is designed for test-takers of all levels. Beginners will benefit from our detailed feedback system that identifies areas for improvement and provides targeted practice. The platform adapts to your level and helps you progress at your own pace.',
+        'SNP is designed for test-takers of all levels. Beginners will benefit from our detailed feedback system that identifies areas for improvement and provides targeted practice. The platform adapts to your level and helps you progress at your own pace.',
   },
   {
     id: 'faq-4',
@@ -58,14 +58,14 @@ const faqItems = [
     id: 'faq-6',
     question: 'Can I integrate this with my school\'s existing LMS?',
     answer:
-        'Yes, IELTS MentorPro offers API integration with popular Learning Management Systems like Canvas, Moodle, and Blackboard. We also provide SSO options and can work with your IT team to ensure seamless integration with your existing systems.',
+        'Yes, SNP offers API integration with popular Learning Management Systems like Canvas, Moodle, and Blackboard. We also provide SSO options and can work with your IT team to ensure seamless integration with your existing systems.',
   },
 ];
 
 const faqHeadline: FaqProps = {
   heading: 'Frequently asked questions',
   items: faqItems,
-  description: 'Everything you need to know about IELTS MentorPro and how it can help you achieve your goals.',
+  description: 'Everything you need to know about SNP and how it can help you achieve your goals.',
   supportHeading: 'Need more support?',
   supportDescription: 'Our dedicated support team is here to help you with any questions or concerns. Get in touch with us for personalized assistance.',
   supportButtonText: 'Contact Support',
@@ -105,15 +105,15 @@ const Faq = () => {
         <div className="mx-auto flex max-w-4xl flex-col items-center rounded-lg bg-brand-500 text-white p-4 text-center md:rounded-xl md:p-6 lg:p-8" id="contact">
           <div className="relative mb-12">
             <Image
-              width={32}
-              height={32}
+              width={80}
+              height={80}
               className="inline-block dark:hidden"
-              src="./images/logo/logo.svg"
+              src="/images/logo/mvv-logo.png"
               alt="Logo"
             />
             <Image
-              width={32}
-              height={32}
+              width={80}
+              height={80}
               className="hidden dark:inline-block"
               src="./images/logo/logo-dark.svg"
               alt="Logo"

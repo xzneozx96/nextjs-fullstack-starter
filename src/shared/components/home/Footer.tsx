@@ -35,20 +35,19 @@ const Footer = () => {
         <Link href="/" aria-label="go home" className="mx-auto block size-fit">
           {/* <Logo /> */}
           <Image
-            width={32}
-            height={32}
+            width={80}
+            height={80}
             className="inline-block dark:hidden"
-            src="./images/logo/logo.svg"
+            src="/images/logo/mvv-logo.png"
             alt="Logo"
           />
           <Image
-            width={32}
-            height={32}
+            width={80}
+            height={80}
             className="hidden dark:inline-block"
             src="./images/logo/logo-dark.svg"
             alt="Logo"
           />
-          <span className="text-lg font-medium dark:text-white align-middle ml-3">IELTS MentorPro</span>
         </Link>
 
         <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">

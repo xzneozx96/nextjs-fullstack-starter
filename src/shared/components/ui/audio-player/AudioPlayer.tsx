@@ -1,4 +1,4 @@
-import Button from '@/shared/components/ui/button/Button';
+import { Button } from '@/shared/components/ui/button';
 import { PauseIcon, PlayIcon } from '@/shared/icons';
 import { cn } from '@/shared/utils/utils';
 import React, { useEffect, useRef, useState } from 'react';
@@ -112,9 +112,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, className, title }) => {
         <Button
           onClick={togglePlayPause}
           disabled={isLoading || !!error}
-          variant="icon"
+          variant="ghost"
           className={cn(
-            '!bg-blue-500/[0.08] rounded-full min-w-10 min-h-10',
+            '!bg-brand-500/[0.08] rounded-full min-w-10 min-h-10',
             (isLoading || !!error) && 'opacity-50 cursor-not-allowed',
           )}
           aria-label={isPlaying ? 'Pause' : 'Play'}
@@ -122,15 +122,15 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, className, title }) => {
           {isLoading
             ? (
                 <span>
-                  <div className="size-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                  <div className="size-4 border-2 border-brand-600 border-t-transparent rounded-full animate-spin" />
                 </span>
               )
             : isPlaying
               ? (
-                  <span><PauseIcon className="size-5 text-blue-600" /></span>
+                  <span><PauseIcon className="size-5 text-brand-600" /></span>
                 )
               : (
-                  <span><PlayIcon className="size-5 text-blue-600" /></span>
+                  <span><PlayIcon className="size-5 text-brand-600" /></span>
                 )}
         </Button>
 

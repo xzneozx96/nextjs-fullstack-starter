@@ -1,7 +1,7 @@
 'use client';
 import { ArrowDownIcon, ArrowUpIcon, BoxIconLine, GroupIcon } from '@/shared/icons';
 import React from 'react';
-import Badge from '../ui/badge/Badge';
+import { Badge } from '../ui/badge';
 
 export default function EcommerceMetrics() {
   return (

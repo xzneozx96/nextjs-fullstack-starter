@@ -4,7 +4,7 @@ import { AngleRightIcon } from '@/shared/icons';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import Button from '../ui/button/Button';
+import { Button } from '../ui/button';
 
 const transitionVariants = {
   item: {
@@ -69,7 +69,7 @@ export default function Hero() {
                 as="p"
                 className="mx-auto mt-8 max-w-2xl text-balance text-lg"
               >
-                IELTS MentorPro helps teachers create mock tests in minutes, students get AI-powered insights instantly, and track real progress together
+                SNP helps teachers create mock tests in minutes, students get AI-powered insights instantly, and track real progress together
               </TextEffect>
 
               <AnimatedGroup
